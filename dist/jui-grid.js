@@ -290,9 +290,9 @@ jui.define("grid.row", [ "jquery" ], function($) {
 
     return Row;
 });
-jui.define("grid.builder", [ "jquery", "util.base", "grid.column", "grid.row" ], function($, _, Column, Row) {
+jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], function($, _, Column, Row) {
 
-    var Builder = function(handler, fields) {
+    var Base = function(handler, fields) {
         var self = this;
 
         var $obj = handler.$obj,
@@ -784,9 +784,22 @@ jui.define("grid.builder", [ "jquery", "util.base", "grid.column", "grid.row" ],
         init();
     }
 
-    return Builder;
+    Base.scrollWidth = function() {
+        var isJUI = ($(".jui").size() > 0 && _.browser.webkit) ? true : false;
+
+        var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div></div>');
+        $('body').append(div);
+        var w1 = $('div', div).innerWidth();
+        div.css('overflow-y', 'auto');
+        var w2 = $('div', div).innerWidth();
+        $(div).remove();
+
+        return (isJUI) ? 10 : (w1 - w2);
+    }
+
+    return Base;
 });
-jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder" ], function($, _, dropdown, Builder) {
+jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ], function($, _, dropdown, Base) {
 
     _.resize(function() {
         var call_list = jui.get("table");
@@ -906,7 +919,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
                 if($(colInfo.element).css("display") == "none") {}
                 else {
                     if(!isLastCheck) {
-                        thWidth = thWidth - _.scrollWidth();
+                        thWidth = thWidth - Base.scrollWidth();
                         isLastCheck = true;
                     }
                 }
@@ -1185,7 +1198,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
 
                 // 스크롤 옵션일 경우, 별도 처리
                 if(self.options.scroll) {
-                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? _.scrollWidth() : 0);
+                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? Base.scrollWidth() : 0);
 
                     $(col.list[0]).outerWidth($(col.element).outerWidth());
                     $(colNext.list[0]).outerWidth(colLastWidth);
@@ -1217,7 +1230,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
             };
 
             // UITable 객체 생성
-            this.uit = new Builder({
+            this.uit = new Base({
                 $obj: $obj, $tpl: this.tpl
             }, opts.fields); // 신규 테이블 클래스 사용
 
@@ -2366,7 +2379,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
 
     return UI;
 });
-jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table" ], function($, _, modal, table) {
+jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.base" ], function($, _, modal, table, Base) {
 	_.resize(function() {
 		var call_list = jui.get("uix.xtable");
 		
@@ -2714,7 +2727,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table" ],
 		}
 
 		function getScrollBarWidth(self) {
-			return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
+			return self.options.buffer == "page" ? 0 : Base.scrollWidth() + 1;
 		}
 
 		this.init = function() {
