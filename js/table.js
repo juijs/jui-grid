@@ -1,4 +1,4 @@
-jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder" ], function($, _, dropdown, Builder) {
+jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ], function($, _, dropdown, Base) {
 
     _.resize(function() {
         var call_list = jui.get("table");
@@ -118,7 +118,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
                 if($(colInfo.element).css("display") == "none") {}
                 else {
                     if(!isLastCheck) {
-                        thWidth = thWidth - _.scrollWidth();
+                        thWidth = thWidth - Base.scrollWidth();
                         isLastCheck = true;
                     }
                 }
@@ -397,7 +397,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
 
                 // 스크롤 옵션일 경우, 별도 처리
                 if(self.options.scroll) {
-                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? _.scrollWidth() : 0);
+                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? Base.scrollWidth() : 0);
 
                     $(col.list[0]).outerWidth($(col.element).outerWidth());
                     $(colNext.list[0]).outerWidth(colLastWidth);
@@ -429,7 +429,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.builder
             };
 
             // UITable 객체 생성
-            this.uit = new Builder({
+            this.uit = new Base({
                 $obj: $obj, $tpl: this.tpl
             }, opts.fields); // 신규 테이블 클래스 사용
 

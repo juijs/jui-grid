@@ -3,17 +3,13 @@
 <head>
 <meta charset="utf-8">
 <title>[JENNIFER UI Test] - XTable</title>
-<link rel="stylesheet" href="../../lib/qunit-1.14.0.css">
-
-<script src="../../lib/qunit-1.14.0.js"></script>
-<script src="../../lib/jquery-1.8.0.min.js"></script>
-
-<script src="../../js/base.js"></script>
-<script src="../../js/core.js"></script>
-<script src="../../js/ui/dropdown.js"></script>
-<script src="../../js/ui/modal.js"></script>
-<script src="../../js/uix/table.js"></script>
-<script src="../../js/uix/xtable.js"></script>
+<link rel="stylesheet" href="../lib/qunit-1.14.0.css">
+<script src="../lib/qunit-1.14.0.js"></script>
+<link rel="stylesheet" href="../dist/jui-grid.css" />
+<link rel="stylesheet" href="../dist/jui-grid-jennifer.css" />
+<script src="../lib/jquery-1.8.0.min.js"></script>
+<script src="../lib/jui-core.js"></script>
+<script src="../dist/jui-grid.js"></script>
 
 <script>
 var table_data = [
@@ -24,7 +20,7 @@ var table_data = [
 
 var t1;
 
-jui.ready([ "uix.xtable" ], function(xtable) {
+jui.ready([ "grid.xtable" ], function(xtable) {
     t1 = xtable("#t1", {
         fields: [ "name", "age", "location", "etc" ],
         sort: true,

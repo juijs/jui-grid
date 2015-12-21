@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     var table_src = [
         "js/column.js",
         "js/row.js",
-        "js/builder.js",
+        "js/base.js",
         "js/table.js",
         "js/xtable.js"
     ];
