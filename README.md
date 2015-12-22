@@ -4,25 +4,26 @@
 JUI library only requires the user to load a single package file.
 Access to the jui class must then be configured in the markup.
 ```html
-<link rel="stylesheet" href="dist/jui.min.css" />
-<link rel="stylesheet" href="dist/jennifer.theme.min.css" />
+<link rel="stylesheet" href="dist/grid.min.css" />
+<link rel="stylesheet" href="dist/grid-jennifer.min.css" />
 <body class="jui">...</body>
 ```
 
 As the script works only with jQuery 1.8 or higher, it is necessary to load the jQuery library first.
 ```html
-<script src="lib/jquery.min.js"></script>
-<script src="dist/jui.min.js"></script>
+<script src="lib/jquery-1.8.0.min.js"></script>
+<script src="lib/core.min.js"></script>
+<script src="dist/grid.min.js"></script>
 ```
 
 #### Install with Bower
 ```
-bower install jui
+bower install jui-grid
 ```
 
 #### Install with JamJS
 ```
-jamjs install jui
+jamjs install jui-grid
 ```
 
 #### Build
@@ -35,67 +36,14 @@ grunt test  // Unit Tests
 ```
 After the build output is shown below.
 ```
-dist/jui.js
-dist/jui.min.js
-dist/jui.table.js
-dist/jui.table.min.js
-dist/jui.chart.js
-dist/jui.chart.min.js
-dist/jui.css
-dist/jui.min.css
-dist/jennifer.theme.css
-dist/jennifer.theme.min.css
-dist/dark.theme.css
-dist/dark.theme.min.css
-```
-
-## Using in NodeJS
-You can use the JUI chart in server as well as client.
-Get started right now in NodeJS.
-
-#### Install
-```
-npm install jui
-```
-
-#### Example
-```js
-var jui = require("jui");   // use jui package 
-var fs = require("fs");
-
-// create jui chart 
-var chart = jui.create("chart.builder", $("<div></div>"), {
-    width : 800,
-    height : 800,
-    axis : {
-        x : {
-           type : "block",
-           domain : "quarter",
-           line : true
-        },
-        y : {
-            type : "range",
-            domain : [ -100, 50 ],
-            step : 10,
-            line : true,
-            orient : "right"
-        },
-        data : [
-          { quarter : "1Q", sales : 50, profit : 35 },
-          { quarter : "2Q", sales : -20, profit : -100 },
-          { quarter : "3Q", sales : 10, profit : -5 },
-          { quarter : "4Q", sales : 30, profit : 25 }
-        ]
-
-    }, 
-    brush : {
-        type : "column",
-        target : [ "sales", "profit" ]
-    }
-});
-
-// save file as xml  
-fs.writeFileSync("test.svg", chart.svg.toXml());
+dist/grid.js
+dist/grid.min.js
+dist/grid.css
+dist/grid.min.css
+dist/grid-jennifer.css
+dist/grid-jennifer.min.css
+dist/grid-dark.css
+dist/grid-dark.min.css
 ```
 
 ## Documentation
@@ -112,7 +60,7 @@ Created by Alvin and Jayden, Yoha
 
 MIT License 
 
-Copyright (C) 2015 (```JenniferSoft Inc.```)
+Copyright (C) 2016 (```JenniferSoft Inc.```)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

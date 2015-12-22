@@ -1,7 +1,7 @@
 {
   "name": "jui-grid",
   "version": "2.0.0",
-  "main": "jui-grid.min.js",
+  "main": "dist/grid.min.js",
   "ignore": [
     ".jshintrc",
     "**/*.txt"

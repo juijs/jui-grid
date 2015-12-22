@@ -1,16 +1,4 @@
-var css = require("css"),
-    fs = require("fs");
-
 module.exports = function(grunt) {
-
-    var table_src = [
-        "js/column.js",
-        "js/row.js",
-        "js/base.js",
-        "js/table.js",
-        "js/xtable.js"
-    ];
-
     grunt.initConfig({
         watch : {
             scripts : {
@@ -37,7 +25,13 @@ module.exports = function(grunt) {
         concat : {
             // jui all 
             dist : {
-                src : table_src,
+                src : [
+                    "js/column.js",
+                    "js/row.js",
+                    "js/base.js",
+                    "js/table.js",
+                    "js/xtable.js"
+                ],
                 dest : "dist/grid.js"
             }
         },
