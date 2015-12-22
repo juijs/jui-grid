@@ -38,35 +38,35 @@ module.exports = function(grunt) {
             // jui all 
             dist : {
                 src : table_src,
-                dest : "dist/jui-grid.js"
+                dest : "dist/grid.js"
             }
         },
         uglify: {
             dist : {
                 files : {
-                    "dist/jui-grid.min.js" : [ "dist/jui-grid.js" ]
+                    "dist/grid.min.js" : [ "dist/grid.js" ]
                 }
             }
         },
         cssmin: {
             dist: {
                 files: {
-                    "dist/jui-grid.min.css": "dist/jui-grid.css",
-                    "dist/jui-grid-jennifer.min.css": "dist/jui-grid-jennifer.css",
-                    "dist/jui-grid-dark.min.css": "dist/jui-grid-dark.css"
+                    "dist/grid.min.css": "dist/grid.css",
+                    "dist/grid-jennifer.min.css": "dist/grid-jennifer.css",
+                    "dist/grid-dark.min.css": "dist/grid-dark.css"
                 }
             }
         },
         less: {
             dist: {
                 files: {
-                    "dist/jui-grid.css" : [
+                    "dist/grid.css" : [
                         "less/main.less"
                     ],
-                    "dist/jui-grid-jennifer.css" : [
+                    "dist/grid-jennifer.css" : [
                         "less/theme/jennifer.less"
                     ],
-                    "dist/jui-grid-dark.css" : [
+                    "dist/grid-dark.css" : [
                         "less/theme/dark.less"
                     ]
                 }
