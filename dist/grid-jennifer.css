@@ -364,7 +364,7 @@
   color: #333333;
 }
 .jui .xtable > .loading {
-  background-image: url("img/theme/jennifer/xtable-loading.gif");
+  background-image: url("../img/theme/jennifer/xtable-loading.gif");
 }
 .jui .xtable > .body::-webkit-scrollbar {
   width: 10px;
