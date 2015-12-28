@@ -784,19 +784,6 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         init();
     }
 
-    Base.scrollWidth = function() {
-        var isJUI = ($(".jui").size() > 0 && _.browser.webkit) ? true : false;
-
-        var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div></div>');
-        $('body').append(div);
-        var w1 = $('div', div).innerWidth();
-        div.css('overflow-y', 'auto');
-        var w2 = $('div', div).innerWidth();
-        $(div).remove();
-
-        return (isJUI) ? 10 : (w1 - w2);
-    }
-
     return Base;
 });
 jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ], function($, _, dropdown, Base) {
@@ -919,7 +906,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 if($(colInfo.element).css("display") == "none") {}
                 else {
                     if(!isLastCheck) {
-                        thWidth = thWidth - Base.scrollWidth();
+                        thWidth = thWidth - _.scrollWidth();
                         isLastCheck = true;
                     }
                 }
@@ -1198,7 +1185,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
                 // 스크롤 옵션일 경우, 별도 처리
                 if(self.options.scroll) {
-                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? Base.scrollWidth() : 0);
+                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? _.scrollWidth() : 0);
 
                     $(col.list[0]).outerWidth($(col.element).outerWidth());
                     $(colNext.list[0]).outerWidth(colLastWidth);
@@ -2727,7 +2714,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		function getScrollBarWidth(self) {
-			return self.options.buffer == "page" ? 0 : Base.scrollWidth() + 1;
+			return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
 		}
 
 		this.init = function() {

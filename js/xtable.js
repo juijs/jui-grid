@@ -346,7 +346,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		function getScrollBarWidth(self) {
-			return self.options.buffer == "page" ? 0 : Base.scrollWidth() + 1;
+			return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
 		}
 
 		this.init = function() {

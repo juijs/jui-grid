@@ -118,7 +118,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 if($(colInfo.element).css("display") == "none") {}
                 else {
                     if(!isLastCheck) {
-                        thWidth = thWidth - Base.scrollWidth();
+                        thWidth = thWidth - _.scrollWidth();
                         isLastCheck = true;
                     }
                 }
@@ -397,7 +397,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
                 // 스크롤 옵션일 경우, 별도 처리
                 if(self.options.scroll) {
-                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? Base.scrollWidth() : 0);
+                    var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? _.scrollWidth() : 0);
 
                     $(col.list[0]).outerWidth($(col.element).outerWidth());
                     $(colNext.list[0]).outerWidth(colLastWidth);

@@ -492,18 +492,5 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         init();
     }
 
-    Base.scrollWidth = function() {
-        var isJUI = ($(".jui").size() > 0 && _.browser.webkit) ? true : false;
-
-        var div = $('<div style="width:50px;height:50px;overflow:hidden;position:absolute;top:-200px;left:-200px;"><div style="height:100px;"></div></div>');
-        $('body').append(div);
-        var w1 = $('div', div).innerWidth();
-        div.css('overflow-y', 'auto');
-        var w2 = $('div', div).innerWidth();
-        $(div).remove();
-
-        return (isJUI) ? 10 : (w1 - w2);
-    }
-
     return Base;
 });
