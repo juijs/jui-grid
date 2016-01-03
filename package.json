@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "main": [
-    "dist/grid.min.js"
+    "dist/grid.min.js",
+    "dist/grid.min.css",
+    "dist/grid-jennifer.css"
   ],
   "repository": {
     "type": "git",
@@ -41,8 +43,6 @@
     "grunt-contrib-watch": "~0.6.1",
     "load-grunt-tasks": "~3.4.0"
   },
-
-
   "categories": [
     "Frameworks",
     "UI"
@@ -68,7 +68,9 @@
       "jquery": ">=1.8.0"
     },
     "main": [
-      "dist/grid.min.js"
+      "dist/grid.min.js",
+      "dist/grid.min.css",
+      "dist/grid-jennifer.css"
     ],
     "shim": {
       "deps": [
