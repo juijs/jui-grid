@@ -1,12 +1,14 @@
 {
   "name": "jui-grid",
   "version": "2.0.0",
-  "main": "dist/grid.min.js",
+  "main": [
+    "dist/grid.min.js"
+  ],
   "ignore": [
     ".jshintrc",
     "**/*.txt"
   ],
   "dependencies": {
-    "jquery": ">1.8.0"
+    "jquery": ">=1.8.0"
   }
 }

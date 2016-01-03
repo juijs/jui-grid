@@ -8,12 +8,12 @@
   border-bottom: 1px solid #404040;
 }
 .jui table.table > tbody::-webkit-scrollbar-track {
-  background-color: #000000;
-  background-image: -moz-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -webkit-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -o-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -ms-linear-gradient(left, #000000 0%, #272727 100%);
+  background-color: #000;
+  background-image: -moz-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -webkit-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -o-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -ms-linear-gradient(left, #000 0%, #272727 100%);
   border: 1px solid #404040;
 }
 .jui table.table > tbody::-webkit-scrollbar-thumb {
@@ -31,7 +31,7 @@
   border-bottom: 1px solid #404040;
 }
 .jui .table.classic > thead th {
-  color: #d5d5d5;
+  color: #D5D5D5;
   border-left: 1px solid #353535;
   border-right: 1px solid #151515;
   border-top: 1px solid #404040;
@@ -49,11 +49,11 @@
   border-right: 1px solid #404040;
 }
 .jui .table.classic > tbody > tr {
-  background: #2c2c2c;
+  background: #2C2C2C;
 }
 .jui .table.classic > tbody > tr > td {
-  color: #d5d5d5;
-  border-top: 1px solid #3b3b3b;
+  color: #D5D5D5;
+  border-top: 1px solid #3B3B3B;
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
 }
@@ -64,7 +64,7 @@
   border-right: 1px solid #404040;
 }
 .jui .table.classic > tbody > tr > td.none {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.classic > tbody > tr > td.none > .msg {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -76,46 +76,46 @@
   background: #624499;
 }
 .jui .table.classic > tbody > tr.selected > td {
-  color: #d5d5d5;
+  color: #D5D5D5;
 }
 .jui .table.classic > tbody > tr.checked {
   background: #624499;
 }
 .jui .table.classic > tbody > tr.checked > td {
-  color: #d5d5d5;
+  color: #D5D5D5;
 }
 .jui .table.classic > tbody tr.open,
 .jui .table.classic > tbody tr.expand {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.classic > tbody tr.open:hover,
 .jui .table.classic > tbody tr.expand:hover {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.classic > tbody tr.open > td {
   font-weight: bold;
 }
 .jui .table.classic > tbody tr.expand > td {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.classic > tbody tr.expand > td:hover {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.classic.table.stripe tr:nth-child(even) {
   background: #262626;
 }
 .jui .table.classic.table.stripeless tr {
-  background: #2c2c2c !important;
+  background: #2C2C2C !important;
 }
 .jui .table.classic tr:nth-child(even) {
   background: #262626;
@@ -127,7 +127,7 @@
   border-bottom: 1px solid #404040;
 }
 .jui .table.expand > thead th {
-  color: #d5d5d5;
+  color: #D5D5D5;
   border-left: 1px solid #353535;
   border-right: 1px solid #151515;
   border-top: 1px solid #404040;
@@ -145,11 +145,11 @@
   border-right: 1px solid #404040;
 }
 .jui .table.expand > tbody > tr {
-  background: #2c2c2c;
+  background: #2C2C2C;
 }
 .jui .table.expand > tbody > tr > td {
-  color: #d5d5d5;
-  border-top: 1px solid #3b3b3b;
+  color: #D5D5D5;
+  border-top: 1px solid #3B3B3B;
   border-bottom: 1px solid #000000;
   border-left: 1px solid #000000;
 }
@@ -160,7 +160,7 @@
   border-right: 1px solid #404040;
 }
 .jui .table.expand > tbody > tr > td.none {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.expand > tbody > tr > td.none > .msg {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -172,102 +172,102 @@
   background: #624499;
 }
 .jui .table.expand > tbody > tr.selected > td {
-  color: #d5d5d5;
+  color: #D5D5D5;
 }
 .jui .table.expand > tbody > tr.checked {
   background: #624499;
 }
 .jui .table.expand > tbody > tr.checked > td {
-  color: #d5d5d5;
+  color: #D5D5D5;
 }
 .jui .table.expand > tbody tr.open,
 .jui .table.expand > tbody tr.expand {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.expand > tbody tr.open:hover,
 .jui .table.expand > tbody tr.expand:hover {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.expand > tbody tr.open > td {
   font-weight: bold;
 }
 .jui .table.expand > tbody tr.expand > td {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.expand > tbody tr.expand > td:hover {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.expand.table.stripe tr:nth-child(even) {
   background: #262626;
 }
 .jui .table.expand.table.stripeless tr {
-  background: #2c2c2c !important;
+  background: #2C2C2C !important;
 }
 .jui .table.expand tr:nth-child(even) {
   background: #262626;
 }
 .jui .table.expand > tbody > tr {
-  background-color: #2f2f2f !important;
-  background-image: -moz-linear-gradient(top, #2f2f2f 0%, #292929 100%) !important;
-  background-image: linear-gradient(top, #2f2f2f 0%, #292929 100%) !important;
-  background-image: -webkit-linear-gradient(top, #2f2f2f 0%, #292929 100%) !important;
-  background-image: -o-linear-gradient(top, #2f2f2f 0%, #292929 100%) !important;
-  background-image: -ms-linear-gradient(top, #2f2f2f 0%, #292929 100%) !important;
+  background-color: #2F2F2F !important;
+  background-image: -moz-linear-gradient(top, #2F2F2F 0%, #292929 100%) !important;
+  background-image: linear-gradient(top, #2F2F2F 0%, #292929 100%) !important;
+  background-image: -webkit-linear-gradient(top, #2F2F2F 0%, #292929 100%) !important;
+  background-image: -o-linear-gradient(top, #2F2F2F 0%, #292929 100%) !important;
+  background-image: -ms-linear-gradient(top, #2F2F2F 0%, #292929 100%) !important;
 }
 .jui .table.expand > tbody > tr.selected {
-  background-color: #2c2c2c !important;
-  background-image: -moz-linear-gradient(top, #2c2c2c 0%, #262626 100%) !important;
-  background-image: linear-gradient(top, #2c2c2c 0%, #262626 100%) !important;
-  background-image: -webkit-linear-gradient(top, #2c2c2c 0%, #262626 100%) !important;
-  background-image: -o-linear-gradient(top, #2c2c2c 0%, #262626 100%) !important;
-  background-image: -ms-linear-gradient(top, #2c2c2c 0%, #262626 100%) !important;
+  background-color: #2C2C2C !important;
+  background-image: -moz-linear-gradient(top, #2C2C2C 0%, #262626 100%) !important;
+  background-image: linear-gradient(top, #2C2C2C 0%, #262626 100%) !important;
+  background-image: -webkit-linear-gradient(top, #2C2C2C 0%, #262626 100%) !important;
+  background-image: -o-linear-gradient(top, #2C2C2C 0%, #262626 100%) !important;
+  background-image: -ms-linear-gradient(top, #2C2C2C 0%, #262626 100%) !important;
 }
 .jui .table.expand > tbody > tr.selected > td {
-  color: #d5d5d5 !important;
+  color: #D5D5D5 !important;
 }
 .jui .table.expand > tbody > tr.checked {
   background-color: #624499 !important;
-  background-image: -moz-linear-gradient(top, #624499 0%, #4d3280 100%) !important;
-  background-image: linear-gradient(top, #624499 0%, #4d3280 100%) !important;
-  background-image: -webkit-linear-gradient(top, #624499 0%, #4d3280 100%) !important;
-  background-image: -o-linear-gradient(top, #624499 0%, #4d3280 100%) !important;
-  background-image: -ms-linear-gradient(top, #624499 0%, #4d3280 100%) !important;
+  background-image: -moz-linear-gradient(top, #624499 0%, #4D3280 100%) !important;
+  background-image: linear-gradient(top, #624499 0%, #4D3280 100%) !important;
+  background-image: -webkit-linear-gradient(top, #624499 0%, #4D3280 100%) !important;
+  background-image: -o-linear-gradient(top, #624499 0%, #4D3280 100%) !important;
+  background-image: -ms-linear-gradient(top, #624499 0%, #4D3280 100%) !important;
 }
 .jui .table.expand > tbody > tr.checked > td {
-  color: #000000 !important;
+  color: #000 !important;
 }
 .jui .table.expand.hover > tbody > tr:hover {
-  background-color: #3c3c3c !important;
-  background-image: -moz-linear-gradient(top, #3c3c3c 0%, #2f2f2f 100%) !important;
-  background-image: linear-gradient(top, #3c3c3c 0%, #2f2f2f 100%) !important;
-  background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #2f2f2f 100%) !important;
-  background-image: -o-linear-gradient(top, #3c3c3c 0%, #2f2f2f 100%) !important;
-  background-image: -ms-linear-gradient(top, #3c3c3c 0%, #2f2f2f 100%) !important;
+  background-color: #3C3C3C !important;
+  background-image: -moz-linear-gradient(top, #3C3C3C 0%, #2F2F2F 100%) !important;
+  background-image: linear-gradient(top, #3C3C3C 0%, #2F2F2F 100%) !important;
+  background-image: -webkit-linear-gradient(top, #3C3C3C 0%, #2F2F2F 100%) !important;
+  background-image: -o-linear-gradient(top, #3C3C3C 0%, #2F2F2F 100%) !important;
+  background-image: -ms-linear-gradient(top, #3C3C3C 0%, #2F2F2F 100%) !important;
 }
 .jui .table.simple {
   border-bottom: 1px solid #313131 !important;
 }
 .jui .table.simple > thead th {
-  color: #d5d5d5;
+  color: #D5D5D5;
   background: #151515;
-  border-top: 1px solid #4b4b4b;
-  border-bottom: 1px solid #4b4b4b;
+  border-top: 1px solid #4B4B4B;
+  border-bottom: 1px solid #4B4B4B;
 }
 .jui .table.simple > tbody > tr {
-  background: #2c2c2c;
+  background: #2C2C2C;
 }
 .jui .table.simple > tbody > tr > td {
-  color: #d5d5d5;
+  color: #D5D5D5;
   border-bottom: 1px solid #404040;
   border-left: 1px solid #404040;
 }
@@ -288,40 +288,40 @@
   background: #624499;
 }
 .jui .table.simple > tbody > tr.selected > td {
-  color: #ffffff;
+  color: #FFFFFF;
 }
 .jui .table.simple > tbody > tr.checked {
   background: #624499;
 }
 .jui .table.simple > tbody > tr.checked > td {
-  color: #ffffff;
+  color: #FFFFFF;
 }
 .jui .table.simple > tbody tr.open,
 .jui .table.simple > tbody tr.expand {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.simple > tbody tr.open:hover,
 .jui .table.simple > tbody tr.expand:hover {
-  background-color: #1e1e1e !important;
-  background-image: -moz-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -webkit-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -o-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
-  background-image: -ms-linear-gradient(top, #1e1e1e 0%, #1e1e1e 100%) !important;
+  background-color: #1E1E1E !important;
+  background-image: -moz-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -webkit-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -o-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
+  background-image: -ms-linear-gradient(top, #1E1E1E 0%, #1E1E1E 100%) !important;
 }
 .jui .table.simple > tbody tr.open > td {
   font-weight: bold;
 }
 .jui .table.simple > tbody tr.expand > td {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.simple > tbody tr.expand > td:hover {
-  background: #1e1e1e;
+  background: #1E1E1E;
 }
 .jui .table.simple.table.stripe tr:nth-child(even) {
   background: #262626;
@@ -330,24 +330,24 @@
   background: #232323 !important;
 }
 .jui .table.simple.table.headline > thead tr > th:not(:first-child) {
-  border-left: 1px solid #5c5c5c;
+  border-left: 1px solid #5C5C5C;
 }
 .jui .table.simple tr:nth-child(even) {
   background: #262626;
 }
 .jui .table.simple.hover > tbody > tr:hover {
-  background: #3c3c3c;
+  background: #3C3C3C;
 }
 .jui .table > tbody td > .edit {
-  background-color: #1a1a1a;
-  border: 1px solid #6c6c6c;
+  background-color: #1A1A1A;
+  border: 1px solid #6C6C6C;
   -webkit-box-shadow: "0 4px 5px -5px rgba(0,0,0,0.6) inset";
   -moz-box-shadow: "0 4px 5px -5px rgba(0,0,0,0.6) inset";
   box-shadow: "0 4px 5px -5px rgba(0,0,0,0.6) inset";
-  color: #d5d5d5;
+  color: #D5D5D5;
 }
 .jui .table > tbody td > .edit:focus {
-  border-color: #9358ff;
+  border-color: #9358FF;
   outline: 0;
   -webkit-box-shadow: inset 0 4px 5px -5px rgba(0,0,0,0.3), 0 0 1px 1px rgba(136,74,228,.095);
   -moz-box-shadow: inset 0 4px 5px -5px rgba(0,0,0,0.3), 0 0 1px 1px rgba(136,74,228,.095);
@@ -360,8 +360,8 @@
 .jui .table > tbody td > .edit[disabled],
 .jui .table > tbody td > .edit[readonly] {
   cursor: not-allowed;
-  background-color: #2a2a2a;
-  color: #d5d5d5;
+  background-color: #2A2A2A;
+  color: #D5D5D5;
 }
 .jui .xtable > .loading {
   background-image: url("../img/theme/dark/xtable-loading.gif");
@@ -376,12 +376,12 @@
   border-bottom: 1px solid #404040;
 }
 .jui .xtable > .body::-webkit-scrollbar-track {
-  background-color: #000000;
-  background-image: -moz-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -webkit-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -o-linear-gradient(left, #000000 0%, #272727 100%);
-  background-image: -ms-linear-gradient(left, #000000 0%, #272727 100%);
+  background-color: #000;
+  background-image: -moz-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -webkit-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -o-linear-gradient(left, #000 0%, #272727 100%);
+  background-image: -ms-linear-gradient(left, #000 0%, #272727 100%);
   border: 1px solid #404040;
 }
 .jui .xtable > .body::-webkit-scrollbar-thumb {
