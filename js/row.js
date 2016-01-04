@@ -1,13 +1,16 @@
 jui.define("grid.row", [ "jquery" ], function($) {
 
     /**
-     * @class uix.table.row
+     * @class grid.row
+     *
+     * Grid's Row Class
+     *
      * @alias Table Row
      * @requires jquery
      */
     var Row = function(data, tplFunc, pRow) {
         var self = this,
-            cellkeys = {}; // ¼û°ÜÁø ÄÃ·³ ÀÎµ¦½º Å°
+            cellkeys = {};
 
         /** @property {Array} data Data of a specifiedrow. */
         this.data = data;
@@ -16,13 +19,13 @@ jui.define("grid.row", [ "jquery" ], function($) {
         this.rownum = null;
 
         /** @property {String/Integer} [index=null] Index of a specified row. In the case of a tree structure, a depth is given. */
-        this.index = null;		// °èÃþÀû ±¸Á¶¸¦ ¼ö¿ëÇÒ ¼ö ÀÖ´Â Å°°ª
+        this.index = null;
 
         /** @property {HTMLElement} [element=null] TR element of a specified row. */
         this.element = null;
 
         /** @property {Array} list List of TD elements of a specified row. */
-        this.list = [];			// ÀÚ½ÅÀÇ ·Î¿ì¿¡ Æ÷ÇÔµÈ TD ÅÂ±× ¸ñ·Ï
+        this.list = [];
 
         /** @property {uix.table.row} parent Variable that refers to the parent row. */
         this.parent = (pRow) ? pRow : null;
@@ -42,12 +45,10 @@ jui.define("grid.row", [ "jquery" ], function($) {
             if(!self.parent) self.index = "" + self.rownum;
             else self.index = self.parent.index + "." + self.rownum;
 
-            // µª½º Ã¼Å©
             if(self.parent && typeof(self.index) == "string") {
                 self.depth = self.index.split(".").length - 1;
             }
 
-            // ÀÚ½Ä ÀÎµ¦½º Ã¼Å©
             if(!self.isLeaf()) {
                 setIndexChild(self);
             }
@@ -108,7 +109,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
         }
 
         this.reload = function(rownum, isUpdate, columns) {
-            if(!isUpdate) setIndex(rownum); // ³ëµå ÀÎµ¦½º ¼³Á¤
+            if(!isUpdate) setIndex(rownum); // ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
             if(this.element != null) {
                 var newElem = getElement(),
@@ -122,7 +123,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 this.element = getElement();
             }
 
-            if(columns != null) { // ÄÃ·³ Á¤º¸°¡ ÀÖÀ» °æ¿ì, ¼û±â±â ¼³Á¤
+            if(columns != null) { // ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 this.hideCells(columns);
             }
 
@@ -130,7 +131,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
         }
 
         this.destroy = function() {
-            if(this.parent != null) { // ºÎ¸ð°¡ ÀÖÀ» °æ¿ì, ¿¬°á°ü°è ²÷±â
+            if(this.parent != null) { // ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 this.parent.removeChild(this.index);
             } else {
                 removeChildAll(this);
@@ -177,7 +178,6 @@ jui.define("grid.row", [ "jquery" ], function($) {
             if(rownum > 0) {
                 var cRow = this.children[rownum - 1];
 
-                // ¸¶Áö¸· ÀÚ½ÄÀÌ°Å³ª ´ë»ó ·Î¿ì°¡ ÀÚ½ÄÀÌ ÀÖÀ» °æ¿ì
                 if(!cRow.isLeaf() || this.children.length == rownum + 1) {
                     lastElem = cRow.lastChildLeaf().element;
                 } else {
@@ -200,7 +200,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 var row = this.children[i];
 
                 if(row.index == index) {
-                    this.children.splice(i, 1); // ¹è¿­¿¡¼­ Á¦°Å
+                    this.children.splice(i, 1); // ï¿½è¿­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     removeChildAll(row);
                 }
             }
