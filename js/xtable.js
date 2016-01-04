@@ -12,12 +12,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 	}, 1000);
 
     /**
-     * @class uix.xtable
+     * @class grid.xtable
      * @extends core
      * @alias X-Table
      * @requires util.base
      * @requires ui.modal
-     * @requires uix.table
+     * @requires grid.table
      *
      */
 	var UI = function() {

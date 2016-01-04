@@ -1,5 +1,14 @@
 jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], function($, _, Column, Row) {
 
+    /**
+     * @class grid.base
+     *
+     * Grid Base Class
+     *
+     * @param handler
+     * @param fields
+     * @constructor
+     */
     var Base = function(handler, fields) {
         var self = this;
 

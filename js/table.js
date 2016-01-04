@@ -13,13 +13,13 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
     }, 1000);
 
     /**
-     * @class uix.table
+     * @class grid.table
      * @extends core
      * @alias Table
      * @requires jquery
      * @requires util.base
      * @requires ui.dropdown
-     * @requires uix.table.base
+     * @requires grid.table.base
      *
      */
     var UI = function() {
