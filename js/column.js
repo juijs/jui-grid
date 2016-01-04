@@ -1,7 +1,7 @@
 jui.define("grid.column", [ "jquery" ], function($) {
 
     /**
-     * @class uix.table.column
+     * @class grid.column
      * @alias Table Column
      * @requires jquery
      */
