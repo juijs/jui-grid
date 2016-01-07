@@ -1,6 +1,7 @@
 jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.base" ], function($, _, modal, table, Base) {
+
 	_.resize(function() {
-		var call_list = jui.get("uix.xtable");
+		var call_list = jui.get("grid.xtable");
 		
 		for(var i = 0; i < call_list.length; i++) {
 			var ui_list = call_list[i];

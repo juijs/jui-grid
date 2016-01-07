@@ -1,7 +1,7 @@
 jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ], function($, _, dropdown, Base) {
 
     _.resize(function() {
-        var call_list = jui.get("table");
+        var call_list = jui.get("grid.table");
 
         for(var i = 0; i < call_list.length; i++) {
             var ui_list = call_list[i].list;
