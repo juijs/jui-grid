@@ -24,7 +24,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
      */
     var UI = function() {
         var $obj = null, ddUi = null; // table/thead/tbody 구성요소, 컬럼 설정 UI (Dropdown)
-        var selectedIndex = null, expandedIndex = null, editableIndex = null, checkedIndexes = {};
+        var selectedIndex = null, expandedIndex = null, editableIndex = null, dragIndex = null, checkedIndexes = {};
         var is_resize = false;
 
 
@@ -206,12 +206,115 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 return false;
             });
 
+
+            // 로우 수정 이벤트 설정
             if(self.options.editRow && self.options.editEvent) {
                 self.addEvent(row.element, "dblclick", function(e) {
                     if(e.target.tagName == "TD" || e.target.tagName == "TR") {
                         self.showEditRow(row.index, e);
                     }
                 });
+            }
+
+            // 로우 이동 이벤트 설정
+            if(self.options.moveRow) {
+                self.addEvent(row.element, "mousedown", function(e) {
+                    if(dragIndex !== null) return;
+
+                    self.emit("dragstart", [ row, e ]);
+                    dragIndex = row.index;
+
+                    $(row.element).addClass("dragtarget");
+                    $("body").append(createRow(row.element));
+
+                    return false;
+                });
+
+                self.addEvent(row.element, "mouseover", function(e) {
+                    if(dragIndex === null) return;
+
+                    $obj.tbody.find(".dragline").remove();
+                    createLine().insertBefore(row.element);
+                });
+
+                self.addEvent(row.element, "mousemove", function(e) {
+                    if(dragIndex === null) return;
+
+                    $("#TABLE_LAYER_" + self.timestamp).css({
+                        left: e.pageX + 2,
+                        top: e.pageY + 2
+                    });
+                });
+
+                self.addEvent(row.element, "mouseup", function(e) {
+                    if(dragIndex === null) return;
+
+                    moveDragEnd(dragIndex, row.index, e);
+                    resetEffect();
+
+                    dragIndex = null;
+                });
+
+                self.addEvent($obj.thead, "mouseover", function(e) {
+                    if(dragIndex === null) return;
+
+                    moveDragEnd(dragIndex, 0, e);
+                    resetEffect();
+
+                    dragIndex = null;
+                });
+
+                self.addEvent(document, "mouseover", function(e) {
+                    if(dragIndex === null || e.target.tagName == "TD" || e.target.tagName == "TR") return;
+
+                    $obj.tbody.find(".dragline").remove();
+                    $obj.tbody.append(createLine());
+                });
+
+                self.addEvent(document, "mouseup", function(e) {
+                    if(dragIndex === null) return;
+
+                    moveDragEnd(dragIndex, self.count(), e);
+                    resetEffect();
+
+                    dragIndex = null;
+                });
+
+                function resetEffect() {
+                    $(self.get(dragIndex).element).removeClass("dragtarget");
+                    $obj.tbody.find(".dragline").remove();
+                }
+
+                function createLine() {
+                    return $("<tr class='dragline'><td colspan='" + row.list.length + "'></td></tr>");
+                }
+
+                function createRow(element) {
+                    var $clone = $("<table id='TABLE_LAYER_" + self.timestamp + "' class='" + $(self.root).attr("class") + "'></table>"),
+                        $cloneRow = $(element).clone();
+
+                    $clone.css({
+                        position: "absolute",
+                        width: $(self.root).width()
+                    });
+
+                    $cloneRow.attr({
+                        "class": "dragclone"
+                    });
+
+                    $clone.append($cloneRow);
+
+                    return $clone;
+                }
+
+                function moveDragEnd(start, end, e) {
+                    $("#TABLE_LAYER_" + self.timestamp).remove();
+
+                    self.move(start, end);
+
+                    var newRow = self.select((end < 2) ? end : end - 1);
+                    self.emit("dragend", [ newRow, e ]);
+                }
             }
         }
 
@@ -1438,6 +1541,12 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
              * Determines whether to use the sort function when you click on a column.
              */
             sortEvent: true,
+
+            /**
+             * @cfg {Boolean} [moveRow=false]
+             * Determines whether to use the move function when you fire row draggable event.
+             */
+            moveRow: false,
 
             /**
              * @cfg {Boolean} [animate=false]

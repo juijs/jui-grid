@@ -253,6 +253,56 @@ table.table {
 }
 
 
+// Table Draggable-Row
+// --------------------------------------------------
+.table {
+  > tbody > tr {
+    &.dragtarget {
+      background-color: @tableDragTargetRowBackgroundColor !important;
+      background-image: none !important;
+    }
+
+    &.dragclone {
+      background-color: @tableDragCloneRowBackgroundColor !important;
+      background-image: none !important;
+      color: @tableDragCloneRowFontColor !important;
+      border: @tableDragCloneRowBorderColor !important;
+
+      > td {
+        border-top: @tableDragCloneRowBorderColor !important;
+        border-bottom: @tableDragCloneRowBorderColor !important;
+
+        &:first-child {
+          border-left: @tableDragCloneRowBorderColor !important;
+          .border-bottom-left-radius(0px) !important;
+        }
+
+        &:last-child {
+          border-right: @tableDragCloneRowBorderColor !important;
+          .border-bottom-right-radius(0px) !important;
+        }
+
+        &:not(:first-child) {
+          border-left-width: 0px !important;
+        }
+
+        &:not(:last-child) {
+          border-right-width: 0px !important;
+        }
+      }
+    }
+
+    &.dragline {
+      > td {
+        padding: 0px !important;
+        height: 2px !important;
+        background: @tableDragLineRowBackgroundColor !important;
+      }
+    }
+  }
+}
+
+
 // Table Expend Row
 // --------------------------------------------------
 .expand-row() {
