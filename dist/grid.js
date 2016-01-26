@@ -1102,10 +1102,10 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 function moveDragEnd(start, end, e) {
                     $("#TABLE_LAYER_" + self.timestamp).remove();
 
-                    self.move(start, end);
-
-                    var newRow = self.select((end < 2) ? end : end - 1);
-                    self.emit("dragend", [ newRow, e ]);
+                    if(self.emit("dragend", [ self.get(start), e ]) !== false) {
+                        self.move(start, end);
+                        self.select((end < 2) ? end : end - 1);
+                    }
                 }
             }
         }

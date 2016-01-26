@@ -99,6 +99,9 @@ jui.ready([ "grid.table" ], function(tableUI) {
                 console.log("expandend ----- end");
 
                 $(row.list[0]).html("<i class='icon-left'></i>");
+            },
+            dragend: function(row, e) {
+                return confirm("drag ok?");
             }
         }
     });
