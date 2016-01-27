@@ -1013,10 +1013,14 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 self.addEvent(row.element, "mousedown", function(e) {
                     if(dragIndex !== null) return;
 
+                    // 테이블 상태 초기화
+                    $obj.tbody.find("tr").removeClass("dragtarget");
+                    self.hideExpand();
+
                     self.emit("dragstart", [ row, e ]);
                     dragIndex = row.index;
 
-                    $(row.element).removeClass("selected").addClass("dragtarget");
+                    $(row.element).addClass("dragtarget");
                     $("body").append(createRow(row.element));
 
                     return false;
@@ -1035,7 +1039,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                     $("#TABLE_LAYER_" + self.timestamp).css({
                         left: e.pageX + 2,
                         top: e.pageY + 2,
-                        display: "block"
+                        display: "table"
                     });
                 });
 

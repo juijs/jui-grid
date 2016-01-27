@@ -365,6 +365,10 @@
 }
 .jui .table.layer {
   z-index: 5001;
+  border-bottom-width: 0px !important;
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
 }
 .jui .table > tbody > tr.dragtarget {
   background-color: #d4d4d4 !important;
