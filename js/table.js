@@ -225,21 +225,22 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
                     // 테이블 상태 초기화
                     $obj.tbody.find("tr").removeClass("dragtarget");
-                    self.emit("dragstart", [ row, e ]);
-
                     $(row.element).addClass("dragtarget");
+
                     $("body").append(createRow(row.element));
                 });
 
                 // 마우스 오버시 라인 위치 변경 이벤트
                 self.addEvent(row.element, "mouseover", function(e) {
                     if(dragIndex == null) return;
+                    self.emit("move", [ row, e ]);
 
                     $obj.tbody.find(".dragline").remove();
                     createLine().insertBefore(row.element);
                 });
                 self.addEvent(document, "mouseover", function(e) {
                     if(dragIndex == null || e.target.tagName == "TD" || e.target.tagName == "TR") return;
+                    self.emit("move", [ row, e ]);
 
                     $obj.tbody.find(".dragline").remove();
                     $obj.tbody.append(createLine());
@@ -297,7 +298,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                         $("#TABLE_LAYER_" + self.timestamp).remove();
 
                         if (dragIndex != end) {
-                            if (self.emit("dragend", [self.get(dragIndex), e]) !== false) {
+                            if (self.emit("moveend", [ self.get(dragIndex), e ]) !== false) {
                                 self.move(dragIndex, end);
 
                                 var row = self.get((end < 2) ? end : end - 1);

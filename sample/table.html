@@ -100,7 +100,10 @@ jui.ready([ "grid.table" ], function(tableUI) {
 
                 $(row.list[0]).html("<i class='icon-left'></i>");
             },
-            dragend: function(row, e) {
+            move: function(row, e) {
+                console.log(123123);
+            },
+            moveend: function(row, e) {
                 return confirm("drag ok?");
             }
         }
