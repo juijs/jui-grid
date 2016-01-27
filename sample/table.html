@@ -101,10 +101,10 @@ jui.ready([ "grid.table" ], function(tableUI) {
                 $(row.list[0]).html("<i class='icon-left'></i>");
             },
             move: function(row, e) {
-                console.log(123123);
+                return confirm("drag ok?");
             },
             moveend: function(row, e) {
-                return confirm("drag ok?");
+                console.log(this.listData());
             }
         }
     });
