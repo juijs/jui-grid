@@ -1107,7 +1107,9 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                     if(dragIndex === null || start == end) return;
                     if(self.emit("dragend", [ self.get(start), e ]) !== false) {
                         self.move(start, end);
-                        self.select((end < 2) ? end : end - 1);
+
+                        var row = self.get((end < 2) ? end : end - 1);
+                        $(row.element).addClass("dragtarget");
                     }
                 }
             }
