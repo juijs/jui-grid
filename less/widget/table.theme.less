@@ -98,7 +98,7 @@ table.table {
   .table.stripe;
 }
 .table.classic.hover {
-  > tbody > tr:hover {
+  > tbody > tr:hover:not(.selected) {
     background: @tableClassicHoverRowBackgroundColor;
   }
 }
@@ -129,7 +129,7 @@ table.table {
   }
 }
 .table.expand.hover {
-  > tbody > tr:hover {
+  > tbody > tr:hover:not(.selected) {
     .btn-bgcolor-2(@tableExpandHoverRowBackgroundColor1, @tableExpandHoverRowBackgroundColor2) !important;
   }
 }
@@ -222,7 +222,7 @@ table.table {
   .table.stripe;
 }
 .table.simple.hover {
-  > tbody > tr:hover {
+  > tbody > tr:hover:not(.selected) {
     background: @tableSimpleHoverRowBackgroundColor;
   }
 }
@@ -256,6 +256,10 @@ table.table {
 // Table Draggable-Row
 // --------------------------------------------------
 .table {
+  &.layer {
+    z-index: 5001;
+  }
+
   > tbody > tr {
     &.dragtarget {
       background-color: @tableDragTargetRowBackgroundColor !important;

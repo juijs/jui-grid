@@ -120,7 +120,7 @@
 .jui .table.classic tr:nth-child(even) {
   background: #f6f5f8;
 }
-.jui .table.classic.hover > tbody > tr:hover {
+.jui .table.classic.hover > tbody > tr:hover:not(.selected) {
   background: #efebf5;
 }
 .jui .table.expand {
@@ -246,7 +246,7 @@
 .jui .table.expand > tbody > tr.checked > td {
   color: #000 !important;
 }
-.jui .table.expand.hover > tbody > tr:hover {
+.jui .table.expand.hover > tbody > tr:hover:not(.selected) {
   background-color: #faf8ff !important;
   background-image: -moz-linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
   background-image: linear-gradient(top, #faf8ff 0%, #efebf5 100%) !important;
@@ -335,7 +335,7 @@
 .jui .table.simple tr:nth-child(even) {
   background: #fafafa;
 }
-.jui .table.simple.hover > tbody > tr:hover {
+.jui .table.simple.hover > tbody > tr:hover:not(.selected) {
   background: #efebf5;
 }
 .jui .table > tbody td > .edit {
@@ -362,6 +362,9 @@
   cursor: not-allowed;
   background-color: #eee;
   color: #333;
+}
+.jui .table.layer {
+  z-index: 5001;
 }
 .jui .table > tbody > tr.dragtarget {
   background-color: #d4d4d4 !important;

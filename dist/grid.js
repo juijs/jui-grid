@@ -1082,7 +1082,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 }
 
                 function createRow(element) {
-                    var $clone = $("<table id='TABLE_LAYER_" + self.timestamp + "' class='" + $(self.root).attr("class") + "'></table>"),
+                    var $clone = $("<table id='TABLE_LAYER_" + self.timestamp + "' class='" + $(self.root).attr("class") + " layer'></table>"),
                         $cloneRow = $(element).clone();
 
                     $clone.css({
@@ -1102,6 +1102,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 function moveDragEnd(start, end, e) {
                     $("#TABLE_LAYER_" + self.timestamp).remove();
 
+                    if(dragIndex === null || start == end) return;
                     if(self.emit("dragend", [ self.get(start), e ]) !== false) {
                         self.move(start, end);
                         self.select((end < 2) ? end : end - 1);
