@@ -98,7 +98,7 @@ table.table {
   .table.stripe;
 }
 .table.classic.hover {
-  > tbody > tr:hover:not(.selected) {
+  > tbody > tr:hover:not(.selected):not(.dragtarget) {
     background: @tableClassicHoverRowBackgroundColor;
   }
 }
@@ -129,7 +129,7 @@ table.table {
   }
 }
 .table.expand.hover {
-  > tbody > tr:hover:not(.selected) {
+  > tbody > tr:hover:not(.selected):not(.dragtarget) {
     .btn-bgcolor-2(@tableExpandHoverRowBackgroundColor1, @tableExpandHoverRowBackgroundColor2) !important;
   }
 }
@@ -222,7 +222,7 @@ table.table {
   .table.stripe;
 }
 .table.simple.hover {
-  > tbody > tr:hover:not(.selected) {
+  > tbody > tr:hover:not(.selected):not(.dragtarget) {
     background: @tableSimpleHoverRowBackgroundColor;
   }
 }

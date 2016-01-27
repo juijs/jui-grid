@@ -1016,7 +1016,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                     self.emit("dragstart", [ row, e ]);
                     dragIndex = row.index;
 
-                    $(row.element).addClass("dragtarget");
+                    $(row.element).removeClass("selected").addClass("dragtarget");
                     $("body").append(createRow(row.element));
 
                     return false;
@@ -1034,7 +1034,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
                     $("#TABLE_LAYER_" + self.timestamp).css({
                         left: e.pageX + 2,
-                        top: e.pageY + 2
+                        top: e.pageY + 2,
+                        display: "block"
                     });
                 });
 
@@ -1087,7 +1088,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
                     $clone.css({
                         position: "absolute",
-                        width: $(self.root).width()
+                        width: $(self.root).width(),
+                        display: "none"
                     });
 
                     $cloneRow.attr({
