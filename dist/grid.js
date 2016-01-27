@@ -1010,31 +1010,36 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
             // 로우 이동 이벤트 설정
             if(self.options.moveRow) {
+                // 드래그 시작 이벤트
                 self.addEvent(row.element, "mousedown", function(e) {
-                    if(dragIndex !== null) return;
+                    if(dragIndex != null) return;
+                    dragIndex = row.index;
 
                     // 테이블 상태 초기화
                     $obj.tbody.find("tr").removeClass("dragtarget");
-                    self.hideExpand();
-
                     self.emit("dragstart", [ row, e ]);
-                    dragIndex = row.index;
 
                     $(row.element).addClass("dragtarget");
                     $("body").append(createRow(row.element));
-
-                    return false;
                 });
 
+                // 마우스 오버시 라인 위치 변경 이벤트
                 self.addEvent(row.element, "mouseover", function(e) {
-                    if(dragIndex === null) return;
+                    if(dragIndex == null) return;
 
                     $obj.tbody.find(".dragline").remove();
                     createLine().insertBefore(row.element);
                 });
+                self.addEvent(document, "mouseover", function(e) {
+                    if(dragIndex == null || e.target.tagName == "TD" || e.target.tagName == "TR") return;
 
+                    $obj.tbody.find(".dragline").remove();
+                    $obj.tbody.append(createLine());
+                });
+
+                // 마우스 이동시 클론 로우 위치 변경 이벤트
                 self.addEvent(row.element, "mousemove", function(e) {
-                    if(dragIndex === null) return;
+                    if(dragIndex == null) return;
 
                     $("#TABLE_LAYER_" + self.timestamp).css({
                         left: e.pageX + 2,
@@ -1043,44 +1048,16 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                     });
                 });
 
+                // 마우스 드래그 완료시 처리 이벤트
                 self.addEvent(row.element, "mouseup", function(e) {
-                    if(dragIndex === null) return;
-
-                    moveDragEnd(dragIndex, row.index, e);
-                    resetEffect();
-
-                    dragIndex = null;
+                    moveDragEnd(row.index, e);
                 });
-
                 self.addEvent($obj.thead, "mouseover", function(e) {
-                    if(dragIndex === null) return;
-
-                    moveDragEnd(dragIndex, 0, e);
-                    resetEffect();
-
-                    dragIndex = null;
+                    moveDragEnd(0, e);
                 });
-
-                self.addEvent(document, "mouseover", function(e) {
-                    if(dragIndex === null || e.target.tagName == "TD" || e.target.tagName == "TR") return;
-
-                    $obj.tbody.find(".dragline").remove();
-                    $obj.tbody.append(createLine());
-                });
-
                 self.addEvent(document, "mouseup", function(e) {
-                    if(dragIndex === null) return;
-
-                    moveDragEnd(dragIndex, self.count(), e);
-                    resetEffect();
-
-                    dragIndex = null;
+                    moveDragEnd(self.count(), e);
                 });
-
-                function resetEffect() {
-                    $(self.get(dragIndex).element).removeClass("dragtarget");
-                    $obj.tbody.find(".dragline").remove();
-                }
 
                 function createLine() {
                     return $("<tr class='dragline'><td colspan='" + row.list.length + "'></td></tr>");
@@ -1105,15 +1082,24 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                     return $clone;
                 }
 
-                function moveDragEnd(start, end, e) {
-                    $("#TABLE_LAYER_" + self.timestamp).remove();
+                function moveDragEnd(end, e) {
+                    $obj.tbody.find(".dragline").remove();
 
-                    if(dragIndex === null || start == end) return;
-                    if(self.emit("dragend", [ self.get(start), e ]) !== false) {
-                        self.move(start, end);
+                    if(dragIndex != null) {
+                        $("#TABLE_LAYER_" + self.timestamp).remove();
 
-                        var row = self.get((end < 2) ? end : end - 1);
-                        $(row.element).addClass("dragtarget");
+                        if (dragIndex != end) {
+                            if (self.emit("dragend", [self.get(dragIndex), e]) !== false) {
+                                self.move(dragIndex, end);
+
+                                var row = self.get((end < 2) ? end : end - 1);
+                                $(row.element).addClass("dragtarget");
+
+                                self.hideExpand(e);
+                            }
+                        }
+
+                        dragIndex = null;
                     }
                 }
             }
@@ -1344,6 +1330,16 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
             this.uit = new Base({
                 $obj: $obj, $tpl: this.tpl
             }, opts.fields); // 신규 테이블 클래스 사용
+
+            if(opts.moveRow) {
+                $obj.tbody.css({
+                    "-webkit-user-select": "none",
+                    "-moz-user-select": "none",
+                    "-ms-user-select": "none",
+                    "-o-user-select": "none",
+                    "user-select": "none"
+                });
+            }
 
             if(opts.fields && opts.colshow) { // 컬럼 보이기 초기값 설정
                 setColumnStatus(this);

@@ -79,9 +79,9 @@ jui.ready([ "grid.table" ], function(tableUI) {
                 }
             },
             editend: function(row) {
-                console.log("editend ----- start");
-                console.log(row.data);
-                console.log("editend ----- end");
+                //console.log("editend ----- start");
+                //console.log(row.data);
+                //console.log("editend ----- end");
 
                 for(var key in row.data) {
                     if(key == "max" && isNaN(row.data[key])) {
@@ -94,9 +94,9 @@ jui.ready([ "grid.table" ], function(tableUI) {
                 $(row.list[0]).html("<i class='icon-right'></i>");
             },
             expandend: function(row, e) {
-                console.log("expandend ----- start");
-                console.log(row.data);
-                console.log("expandend ----- end");
+                //console.log("expandend ----- start");
+                //console.log(row.data);
+                //console.log("expandend ----- end");
 
                 $(row.list[0]).html("<i class='icon-left'></i>");
             },
@@ -116,7 +116,7 @@ jui.ready([ "grid.table" ], function(tableUI) {
 <body class="jui" style="background: #1c1c1c;">
 
 <input type="file" id="table_btn" /><br/><br/>
-<table id="table" class="table expand hover" style="width: 1024px;">
+<table id="table" class="table expand" style="width: 1024px;">
     <thead>
     <tr>
         <th></th>
