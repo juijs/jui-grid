@@ -299,7 +299,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                             if (self.emit("move", [ self.get(dragIndex), e ]) !== false) {
                                 self.move(dragIndex, end);
 
-                                var row = self.get((end < 2) ? end : end - 1);
+                                var row = self.get((dragIndex < end) ? end - 1 : end);
                                 $(row.element).addClass("dragtarget");
 
                                 self.hideExpand(e);
