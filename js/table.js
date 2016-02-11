@@ -1137,12 +1137,15 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
          * Shows the Show/Hide Column menu at specified coordinates.
          *
          * @param {Integer} x
+         * @param {Integer} y
          */
-        this.showColumnMenu = function(x) {
+        this.showColumnMenu = function(x, y) {
             if(!this.options.fields || !ddUi) return;
 
             var columns = this.listColumn(),
-                offset = $obj.thead.offset();
+                offset = $obj.thead.offset(),
+                cx = x || 0,
+                cy = y || offset.top + $obj.thead.outerHeight();
 
             // 현재 체크박스 상태 설정
             $(ddUi.root).find("input[type=checkbox]").each(function(i) {
@@ -1150,7 +1153,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                 else this.checked = false;
             });
 
-            ddUi.move(x, offset.top + $obj.thead.outerHeight());
+            ddUi.move(cx, cy);
             ddUi.show();
         }
 
@@ -1168,12 +1171,13 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
          * Shows or hides the Show/Hide Column menu.
          *
          * @param {Integer} x
+         * @param {Integer} y
          */
-        this.toggleColumnMenu = function(x) {
+        this.toggleColumnMenu = function(x, y) {
             if(!this.options.fields || !ddUi) return;
 
             if(ddUi.type == "show") this.hideColumnMenu();
-            else this.showColumnMenu(x);
+            else this.showColumnMenu(x, y);
         }
 
         /**
