@@ -1144,8 +1144,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
             var columns = this.listColumn(),
                 offset = $obj.thead.offset(),
-                cx = x || 0,
-                cy = y || offset.top + $obj.thead.outerHeight();
+                cx = _.typeCheck("integer", x) ? x : 0,
+                cy = _.typeCheck("integer", y) ? y : offset.top + $obj.thead.outerHeight();
 
             // 현재 체크박스 상태 설정
             $(ddUi.root).find("input[type=checkbox]").each(function(i) {
