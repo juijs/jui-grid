@@ -3277,9 +3277,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Shows the Show/Hide Column menu at specified coordinates.
 		 *
 		 * @param {Integer} x
+		 * @param {Integer} y
 		 */
-		this.showColumnMenu = function(x) {
-			head.showColumnMenu(x);
+		this.showColumnMenu = function(x, y) {
+			head.showColumnMenu(x, y);
 		}
 
 		/**
@@ -3295,9 +3296,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Shows or hides the Show/Hide Column menu.
 		 *
 		 * @param {Integer} x
+		 * @param {Integer} y
 		 */
-        this.toggleColumnMenu = function(x) {
-			head.toggleColumnMenu(x);
+        this.toggleColumnMenu = function(x, y) {
+			head.toggleColumnMenu(x, y);
         }
 
 		/**
