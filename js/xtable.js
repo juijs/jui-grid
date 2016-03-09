@@ -96,11 +96,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				// X-Table 바디 영역 스크롤 높이 설정
 				if (self.options.buffer != "page") {
 					if (self.options.buffer == "vscroll") {
+						rowCount = rows.length;
 						rowScrollCount = Math.floor(rowCount - Math.floor(self.options.scrollHeight / rowHeight));
 						contentHeight = rowCount * rowHeight;
 
 						$(body.root).wrap("<div class='body' style='max-height: " + self.options.scrollHeight +
-						"px'><div style='height: " + contentHeight + "px'></div></div>");
+						"px'><div class='content-layer' style='height: " + contentHeight + "px'></div></div>");
 
 						$(body.root).parent().parent().css({
 							"overflow-y": "scroll"
@@ -415,9 +416,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var endIndex = startIndex;
 			var endRowHeight = rowHeight;
 
-			console.log('view height', viewportHeight);
+			//console.log('view height', viewportHeight);
 
-			while(endRowHeight < viewportHeight && endIndex < rowCount - 1 ) {
+			while(endRowHeight < viewportHeight && endIndex < rowCount) {
 				endIndex++;
 				endRowHeight += rowHeight;
 			}
@@ -436,7 +437,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 			}
 
-			console.log('aaa', endIndex);
+			//console.log('aaa', endIndex);
 
 			if (startIndex < 0) {
 				prevScrollTop = 0;
@@ -453,21 +454,25 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 
 			var moveHeight = 0;
-			if (scrollTop >= scrollHeight - 400)  {
-				if (endRowHeight > viewportHeight) {
-					moveHeight = -Math.abs(endRowHeight - viewportHeight);
+
+			if (scrollTop >= scrollHeight - (viewportHeight + 17))  {
+				if (endRowHeight > viewportHeight + 17) {
+					moveHeight = -Math.abs(endRowHeight - (viewportHeight + 17));
 				}
 			}
 
-			// set real content height
-			$viewport.height(endRowHeight);
-			$(body.root).css("top", prevScrollTop + moveHeight + "px");
-
-			// refresh real content
 			// save prev scroll top
 			prevScrollTop = scrollTop;
 
-			console.log('start', startIndex, endIndex);
+			//console.log(prevScrollTop, moveHeight);
+
+			// set real content height
+			$viewport.height(endRowHeight);
+			body.root.style.top = (prevScrollTop + moveHeight) + "px";
+
+			// refresh real content
+
+			//console.log('start', startIndex, endIndex);
 			self.zoom(startIndex, endIndex);
 		};
 
@@ -540,7 +545,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.update = function(dataList) {
 			rows = dataList;
-			
+
+			rowCount = rows.length;
+			rowScrollCount = Math.floor(rowCount - Math.floor(this.options.scrollHeight / rowHeight));
+			contentHeight = rowCount * rowHeight;
+
+			// update content Height;
+			$(body.root).parent().height(contentHeight);
 			this.clear();
 			this.next();
 			this.emit("update");
