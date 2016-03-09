@@ -12,59 +12,15 @@
 <script src="../dist/grid.js"></script>
 
 <script>
-var table_data = [
-    {"min":21.55,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0},
-    {"min":0.004,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
-    {"min":0.062,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
-    {"min":0.03,"max":0.12,"count":6,"sumCpu":0,"hash":1888362476,"sd":0.033,"tpmc":0,"avgCpu":0,"failure":0,"rate":1.236,"sumTime":0.343,"name":"/oraclesql4.jsp","avgTime":0.057,"success":6},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.004,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
-    {"min":0.062,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
-    {"min":0.03,"max":0.12,"count":6,"sumCpu":0,"hash":1888362476,"sd":0.033,"tpmc":0,"avgCpu":0,"failure":0,"rate":1.236,"sumTime":0.343,"name":"/oraclesql4.jsp","avgTime":0.057,"success":6},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
-    {"min":0.014,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
-];
+function getRandomData(count) {
+    var data = [];
+
+    for(var i = 0; i < count; i++) {
+        data.push({ "min":i,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0 })
+    }
+
+    return data;
+}
 
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     var body_width = $("body").width();
@@ -93,7 +49,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    xtable.update(table_data);
+    xtable.update(getRandomData(100000));
 
     $("#xtable_btn").change(function(e) {
         xtable.setCsvFile(e.target.files[0]);
