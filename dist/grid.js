@@ -2532,10 +2532,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			count: 0,
 			scroll_count: 0,
 			prev_scroll_left: 0,
-			prev_scroll_top: -1,
+			prev_scroll_top: 0,
 			current_row_index: 0,
 			start_index: 0,
-			end_index: 0
+			end_index: 0,
+			is_focus: true
 		};
 
 		function createTableList(self) {
@@ -2720,7 +2721,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var $head = $(self.root).children(".head"),
 				$body = $(self.root).children(".body");
 
-			$body.off("scroll").scroll(function(e) {
+			self.addEvent($body, "scroll", function(e) {
 				// 컬럼 메뉴는 스크롤시 무조건 숨기기
 				self.hideColumnMenu();
 
@@ -2747,6 +2748,29 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 				return false;
 			});
+
+			// 스크롤 키보드 이벤트 설정
+			if(opts.buffer == "vscroll") {
+				$(self.root).hover(function() {
+					vscroll_info.is_focus = true;
+				}, function() {
+					vscroll_info.is_focus = false;
+				});
+
+				self.addEvent(document, "keydown", function (e) {
+					if(vscroll_info.is_focus) {
+						var top = $body.scrollTop(),
+							tick = self.options.rowHeight;
+
+						if (e.which == 38 || e.which == 40) {
+							$body.scrollTop(top + ((e.which == 38) ? -tick : tick));
+						} else if (e.which == 33 || e.which == 34) {
+							var newTick = tick * vscroll_info.scroll_count;
+							$body.scrollTop(top + ((e.which == 33) ? -newTick : newTick));
+						}
+					}
+				});
+			}
 		}
 
         function setScrollWidthResize(self) {
@@ -2913,8 +2937,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 			} else {
 				// move long dist
-				var rate = scrollTop / (scrollHeight - viewportHeight);
-				vscroll_info.current_row_index = Math.ceil(vscroll_info.scroll_count * rate);
+				var rate = scrollTop / (scrollHeight - viewportHeight),
+					limit = Math.floor(vscroll_info.count - vscroll_info.scroll_count);
+
+				vscroll_info.current_row_index = Math.ceil(limit * rate);
 			}
 
 			// traverse real content
@@ -3047,7 +3073,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(this.options.buffer == "vscroll") {
 				vscroll_info.height = this.options.rowHeight;
 				vscroll_info.count = rows.length;
-				vscroll_info.scroll_count = Math.floor(vscroll_info.count - Math.floor(this.options.scrollHeight / vscroll_info.height));
+				vscroll_info.scroll_count = Math.floor(this.options.scrollHeight / vscroll_info.height),
 				vscroll_info.content_height = vscroll_info.count * vscroll_info.height;
 
 				$(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
