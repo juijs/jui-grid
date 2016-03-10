@@ -28,18 +28,22 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
         var is_loading = false, is_resize = false;
 		var w_resize = 8;
 
-		// Temp
-		var rowHeight = 22,
-			rowCount = 200000,
-			rowScrollCount = 0,
-			prevScrollTop = -1,
-			currentRowIndex = 0,
-			contentHeight = 0;
+		var vscroll_info = {
+			height: 0,
+			content_height: 0,
+			count: 0,
+			scroll_count: 0,
+			prev_scroll_left: 0,
+			prev_scroll_top: -1,
+			current_row_index: 0,
+			start_index: 0,
+			end_index: 0
+		};
 
 		function createTableList(self) {
 			var exceptOpts = [ 
                "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-               "event", "rows", "scrollWidth", "width"
+               "event", "rows", "scrollWidth", "width", "rowHeight"
 			];
 			var $root = $(self.root);
 
@@ -95,19 +99,16 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 				// X-Table 바디 영역 스크롤 높이 설정
 				if (self.options.buffer != "page") {
-					if (self.options.buffer == "vscroll") {
-						rowCount = rows.length;
-						rowScrollCount = Math.floor(rowCount - Math.floor(self.options.scrollHeight / rowHeight));
-						contentHeight = rowCount * rowHeight;
+					var scrollHeight = self.options.scrollHeight;
 
-						$(body.root).wrap("<div class='body' style='max-height: " + self.options.scrollHeight +
-						"px'><div class='content-layer' style='height: " + contentHeight + "px'></div></div>");
+					if (self.options.buffer == "vscroll") {
+						$(body.root).wrap("<div class='body' style='max-height: " + scrollHeight + "px'><div></div></div>");
 
 						$(body.root).parent().parent().css({
 							"overflow-y": "scroll"
 						});
 					} else {
-						$(body.root).wrap("<div class='body' style='max-height: " + self.options.scrollHeight + "px'></div>");
+						$(body.root).wrap("<div class='body' style='max-height: " + scrollHeight + "px'></div>");
 
 						$(body.root).parent().css({
 							"overflow-y": "scroll"
@@ -225,6 +226,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				// 컬럼 메뉴는 스크롤시 무조건 숨기기
 				self.hideColumnMenu();
 
+				// 가로 스크롤
 				if(width > 0) {
 					$head.scrollLeft(this.scrollLeft);
 				}
@@ -235,7 +237,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 						self.emit("scroll", e);
 					}
 				} else if(opts.buffer == "vscroll") {
-					renderVirtualScroll(self);
+					if(vscroll_info.prev_scroll_left == this.scrollLeft) {
+						renderVirtualScroll(self);
+
+						self.next();
+						self.emit("scroll", e);
+					} else {
+						vscroll_info.prev_scroll_left = this.scrollLeft;
+					}
 				}
 
 				return false;
@@ -375,12 +384,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 		function renderVirtualScroll(self) {
 			var $viewport = $(self.root).find(".body");
-			var viewportHeight = self.options.scrollHeight;
-			var scrollTop = $viewport.scrollTop();
-			var scrollHeight = $viewport[0].scrollHeight;
+			var viewportHeight = self.options.scrollHeight,
+				scrollTop = $viewport.scrollTop(),
+				scrollHeight = $viewport[0].scrollHeight;
 
 			// calculate
-			var dist = prevScrollTop - scrollTop;
+			var dist = vscroll_info.prev_scroll_top - scrollTop;
 
 			if (dist == 0) {
 				return;
@@ -388,73 +397,66 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			var isBlock = false;
 			if (Math.abs(dist) < viewportHeight ) {
-
 				isBlock = true;
+
 				// move short dist
 				if (dist !== 0) {
-
-					if (dist < rowHeight) {
-						var distIndex = Math.ceil(Math.abs(dist) / rowHeight);
+					if (dist < vscroll_info.height) {
+						var distIndex = Math.ceil(Math.abs(dist) / vscroll_info.height);
 					} else {
-						var distIndex = Math.floor(Math.abs(dist) / rowHeight);
+						var distIndex = Math.floor(Math.abs(dist) / vscroll_info.height);
 					}
 
 					if (dist > 0) {
-						currentRowIndex -= distIndex;
+						vscroll_info.current_row_index -= distIndex;
 					} else {
-						currentRowIndex += distIndex;
+						vscroll_info.current_row_index += distIndex;
 					}
 				}
 			} else {
 				// move long dist
 				var rate = scrollTop / (scrollHeight - viewportHeight);
-				currentRowIndex = Math.ceil(rowScrollCount * rate);
+				vscroll_info.current_row_index = Math.ceil(vscroll_info.scroll_count * rate);
 			}
 
 			// traverse real content
-			var startIndex = currentRowIndex;
-			var endIndex = startIndex;
-			var endRowHeight = rowHeight;
+			var startIndex = vscroll_info.current_row_index,
+				endIndex = startIndex,
+				endRowHeight = vscroll_info.height;
 
-			//console.log('view height', viewportHeight);
-
-			while(endRowHeight < viewportHeight && endIndex < rowCount) {
+			while(endRowHeight < viewportHeight && endIndex < vscroll_info.count) {
 				endIndex++;
-				endRowHeight += rowHeight;
+				endRowHeight += vscroll_info.height;
 			}
 
 			// 전체 표시 길이가 높이 보다 작을 때
 			if (endRowHeight < viewportHeight) {
 				// 전체 content 자체가 작다면
-				if (viewportHeight > contentHeight) {
+				if (viewportHeight > vscroll_info.content_height) {
 
 				} else {
 					// 목록이 긴데 마지막이 짧다면
-					var hiddenRowCount = Math.ceil(Math.abs(viewportHeight - endRowHeight) / rowHeight);
+					var hiddenRowCount = Math.ceil(Math.abs(viewportHeight - endRowHeight) / vscroll_info.height);
 
 					startIndex -= hiddenRowCount;
-					endRowHeight += hiddenRowCount * rowHeight;
+					endRowHeight += hiddenRowCount * vscroll_info.height;
 				}
 			}
 
-			//console.log('aaa', endIndex);
-
 			if (startIndex < 0) {
-				prevScrollTop = 0;
-				// stop because invalid startIndex
+				vscroll_info.prev_scroll_top = 0;
 				return;
 			}
 
+			// 시작지점으로 스크롤탑 다시 보정.
 			if (isBlock) {
-				// 시작지점으로 스크롤탑 다시 보정.
-				if (endIndex !== rowCount -1) {
-					scrollTop = Math.ceil(startIndex / (rowCount) * scrollHeight);
+				if (endIndex !== vscroll_info.count -1) {
+					scrollTop = Math.ceil(startIndex / (vscroll_info.count) * scrollHeight);
 					$viewport.scrollTop(scrollTop);
 				}
 			}
 
 			var moveHeight = 0;
-
 			if (scrollTop >= scrollHeight - (viewportHeight + 17))  {
 				if (endRowHeight > viewportHeight + 17) {
 					moveHeight = -Math.abs(endRowHeight - (viewportHeight + 17));
@@ -462,19 +464,16 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 
 			// save prev scroll top
-			prevScrollTop = scrollTop;
-
-			//console.log(prevScrollTop, moveHeight);
+			vscroll_info.prev_scroll_top = scrollTop;
 
 			// set real content height
 			$viewport.height(endRowHeight);
-			body.root.style.top = (prevScrollTop + moveHeight) + "px";
-
-			// refresh real content
+			body.root.style.top = (vscroll_info.prev_scroll_top + moveHeight) + "px";
 
 			//console.log('start', startIndex, endIndex);
-			self.zoom(startIndex, endIndex);
-		};
+			vscroll_info.start_index = startIndex;
+			vscroll_info.end_index = endIndex;
+		}
 
 		this.init = function() {
 			var opts = this.options;
@@ -546,12 +545,16 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.update = function(dataList) {
 			rows = dataList;
 
-			rowCount = rows.length;
-			rowScrollCount = Math.floor(rowCount - Math.floor(this.options.scrollHeight / rowHeight));
-			contentHeight = rowCount * rowHeight;
+			// 가상스크롤 설정
+			if(this.options.buffer == "vscroll") {
+				vscroll_info.height = this.options.rowHeight;
+				vscroll_info.count = rows.length;
+				vscroll_info.scroll_count = Math.floor(vscroll_info.count - Math.floor(this.options.scrollHeight / vscroll_info.height));
+				vscroll_info.content_height = vscroll_info.count * vscroll_info.height;
 
-			// update content Height;
-			$(body.root).parent().height(contentHeight);
+				$(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
+			}
+
 			this.clear();
 			this.next();
 			this.emit("update");
@@ -567,30 +570,23 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @method next
 		 * Changes to the next page.
 		 */
-		this.zoom = function(start, end) {
-			// 마지막 페이지 처리
-			end = (end > rows.length) ? rows.length : end;
-
-			var tmpDataList = [];
-			for(var i = start; i < end; i++) {
-				tmpDataList.push(rows[i]);
-			}
-
-			body.update(tmpDataList);
-		}
-
-		/**
-		 * @method next
-		 * Changes to the next page.
-		 */
 		this.next = function() {
-			var start = (page - 1) * this.options.bufferCount,
+			var start = 0,
 				end = start + this.options.bufferCount;
+
+			if(this.options.buffer == "vscroll") {
+				body.reset();
+
+				if(vscroll_info.start_index < vscroll_info.end_index) {
+					start = vscroll_info.start_index;
+					end = vscroll_info.end_index;
+				}
+			} else {
+				start = (page - 1) * this.options.bufferCount;
+				end = (end > rows.length) ? rows.length : end; // 마지막 페이지 처리
+			}
 			
-			// 마지막 페이지 처리
-			end = (end > rows.length) ? rows.length : end;
-			
-			if(end <= rows.length) { 
+			if(end <= rows.length) {
 				var tmpDataList = [];
 				for(var i = start; i < end; i++) {
 					tmpDataList.push(rows[i]);
@@ -662,7 +658,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				
 				// 정렬
 				qs.run();
-				
+
 				// 데이터 초기화 및 입력, 그리고 로딩
 				self.emit("sortend", [ column, e ]);
 				self.clear();
@@ -1223,6 +1219,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			 * Determines whether to use the column resizing function.
 			 */
 			resize: false,
+
+			/**
+			 * @cfg {Integer} [rowHeight=26]
+			 * Sets the reference height of a body area when using a table scroll.
+			 */
+			rowHeight: 26,
 
 			/**
 			 * @cfg {Integer} [scrollHeight=200]

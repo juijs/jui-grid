@@ -32,8 +32,9 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         sortLoading: true,
         width: body_width + body_width * 0.15,
         scrollWidth: body_width,
+        scrollHeight: 400,
+        rowHeight: 26,
         buffer: "vscroll",
-        bufferCount: 10,
         resize: true,
         colshow: [ 0, 2, 4, 6, 7 ],
         event: {
@@ -49,7 +50,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    xtable.update(getRandomData(100000));
+    xtable.update(getRandomData(10000));
 
     $("#xtable_btn").change(function(e) {
         xtable.setCsvFile(e.target.files[0]);
@@ -66,7 +67,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 
 <input type="file" id="xtable_btn" /><br/><br/>
 <div id="xtable" class="xtable scroll">
-    <table class="table classic small">
+    <table class="table classic">
         <thead>
         <tr>
             <th width="50%">Min</th>
