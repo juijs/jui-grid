@@ -609,9 +609,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 			} else {
 				start = (page - 1) * this.options.bufferCount;
-				end = (end > rows.length) ? rows.length : end; // 마지막 페이지 처리
 			}
-			
+
+			// 마지막 페이지 처리
+			end = (end > rows.length) ? rows.length : end;
+
 			if(end <= rows.length) {
 				var tmpDataList = [];
 				for(var i = start; i < end; i++) {
