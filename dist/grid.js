@@ -3095,7 +3095,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Changes to the next page.
 		 */
 		this.next = function() {
-			var start = 0,
+			var start = (page - 1) * this.options.bufferCount,
 				end = start + this.options.bufferCount;
 
 			if(this.options.buffer == "vscroll") {
@@ -3105,14 +3105,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					start = vscroll_info.start_index;
 					end = vscroll_info.end_index;
 				}
-			} else {
-				start = (page - 1) * this.options.bufferCount;
 			}
 
 			// 마지막 페이지 처리
 			end = (end > rows.length) ? rows.length : end;
-
-			console.log(start + ", " + end);
 
 			if(end <= rows.length) {
 				var tmpDataList = [];
