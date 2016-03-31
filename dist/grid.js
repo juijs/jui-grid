@@ -2540,11 +2540,25 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		};
 
 		function createTableList(self) {
-			var exceptOpts = [ 
-               "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-               "event", "rows", "scrollWidth", "width", "rowHeight"
+			var exceptOpts = [
+			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
+			   "event", "rows", "scrollWidth", "width", "rowHeight"
 			];
+
 			var $root = $(self.root);
+
+			// 루트 기본 스타일 설정
+			if(self.options.buffer != "page") {
+				if(!$root.hasClass("scroll")) {
+					$root.addClass("scroll");
+				}
+
+				if(self.options.buffer == "vscroll") {
+					if(!$root.hasClass("nowrap")) {
+						$root.addClass("nowrap");
+					}
+				}
+			}
 
 			// 기본 테이블 마크업 복사해서 추가하기
 			$root.append($root.children("table").clone());
