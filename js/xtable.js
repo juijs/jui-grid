@@ -512,7 +512,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			//console.log('start', startIndex, endIndex);
 			vscroll_info.start_index = startIndex;
-			vscroll_info.end_index = endIndex;
+			vscroll_info.end_index = endIndex + 1;
 		}
 
 		this.init = function() {
