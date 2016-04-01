@@ -2548,15 +2548,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var $root = $(self.root);
 
 			// 루트 기본 스타일 설정
-			if(self.options.buffer != "page") {
-				if(!$root.hasClass("scroll")) {
-					$root.addClass("scroll");
-				}
-
-				if(self.options.buffer == "vscroll") {
-					if(!$root.hasClass("nowrap")) {
-						$root.addClass("nowrap");
-					}
+			if(self.options.buffer == "vscroll") {
+				if(!$root.hasClass("nowrap")) {
+					$root.addClass("nowrap");
 				}
 			}
 
