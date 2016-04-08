@@ -3325,7 +3325,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.scrollHeight = function(h) {
 			if(this.options.buffer == "page") return;
+
 			$(this.root).find(".body").css("max-height", h + "px");
+			this.setOption("scrollHeight", h);
 
 			setScrollEvent(this, this.options.scrollWidth, h);
 		}
