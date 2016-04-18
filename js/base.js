@@ -85,6 +85,8 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         function createRow(data, no, pRow) {
+            if(data instanceof Row) return data;
+
             var row = new Row(data, $tpl.row, pRow);
             row.reload(no, false, columns);
 

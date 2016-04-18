@@ -41,6 +41,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			is_focus: true
 		};
 
+		function createRows(data) {
+			for(var i = 0; i < data.length; i++) {
+				var row = new Row(data, head.tpl["row"], null);
+				row.reload(i, false, head.uit.columns);
+			}
+		}
+
 		function createTableList(self) {
 			var exceptOpts = [
 			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
@@ -534,8 +541,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 			
 			// 로딩 템플릿 체크 (opts.sortLoading으로 체크하지 않음)
-			if(opts.tpl.loading && modal != null) {
-				var $loading = $(opts.tpl.loading);
+			if(head.tpl["loading"] && modal != null) {
+				var $loading = $(head.tpl["loading"]);
 				$(this.root).append($loading);
 				
 				ui_modal = modal($loading, { 
@@ -577,7 +584,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Array} rows
 		 */
 		this.update = function(dataList) {
-			rows = dataList;
+			//rows = dataList;
+			rows = createRows(data);
 
 			// 가상스크롤 설정
 			if(this.options.buffer == "vscroll") {
