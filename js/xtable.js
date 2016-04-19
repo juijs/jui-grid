@@ -1,4 +1,4 @@
-jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.base" ], function($, _, modal, table, Base) {
+jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.row" ], function($, _, modal, table, Row) {
 
 	_.resize(function() {
 		var call_list = jui.get("grid.xtable");
@@ -42,9 +42,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		};
 
 		function createRows(data) {
+			rows = [];
+
 			for(var i = 0; i < data.length; i++) {
-				var row = new Row(data, head.tpl["row"], null);
+				var row = new Row(data[i], head.tpl["row"], null);
 				row.reload(i, false, head.uit.columns);
+
+				rows.push(row);
 			}
 		}
 
@@ -585,7 +589,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.update = function(dataList) {
 			//rows = dataList;
-			rows = createRows(data);
+			createRows(dataList);
 
 			// 가상스크롤 설정
 			if(this.options.buffer == "vscroll") {

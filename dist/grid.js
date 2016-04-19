@@ -377,6 +377,8 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         function createRow(data, no, pRow) {
+            if(data instanceof Row) return data;
+
             var row = new Row(data, $tpl.row, pRow);
             row.reload(no, false, columns);
 
@@ -2496,7 +2498,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
     return UI;
 });
-jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.base" ], function($, _, modal, table, Base) {
+jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "grid.row" ], function($, _, modal, table, Row) {
 
 	_.resize(function() {
 		var call_list = jui.get("grid.xtable");
@@ -2538,6 +2540,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			end_index: 0,
 			is_focus: true
 		};
+
+		function createRows(data) {
+			rows = [];
+
+			for(var i = 0; i < data.length; i++) {
+				var row = new Row(data[i], head.tpl["row"], null);
+				row.reload(i, false, head.uit.columns);
+
+				rows.push(row);
+			}
+		}
 
 		function createTableList(self) {
 			var exceptOpts = [
@@ -3032,8 +3045,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 			
 			// 로딩 템플릿 체크 (opts.sortLoading으로 체크하지 않음)
-			if(opts.tpl.loading && modal != null) {
-				var $loading = $(opts.tpl.loading);
+			if(head.tpl["loading"] && modal != null) {
+				var $loading = $(head.tpl["loading"]);
 				$(this.root).append($loading);
 				
 				ui_modal = modal($loading, { 
@@ -3075,7 +3088,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Array} rows
 		 */
 		this.update = function(dataList) {
-			rows = dataList;
+			//rows = dataList;
+			createRows(dataList);
 
 			// 가상스크롤 설정
 			if(this.options.buffer == "vscroll") {
