@@ -27,8 +27,8 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 
     xtable = xtableUI("#xtable", {
         fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
-        csvNumber: [ 0, 1, 2, 3, 4, 5, "avgTime" ],
-        sort: true,
+        csvNumber: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
+        sort: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
         width: body_width + body_width * 0.15,
         scrollWidth: body_width,
@@ -36,7 +36,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         rowHeight: 26,
         buffer: "vscroll",
         resize: true,
-        colshow: [ 0, 2, 4, 6, 7 ],
+        colshow: [ 0, 1, 2, 4, 6, 7 ],
         event: {
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);
@@ -46,11 +46,21 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
             },
             select: function(row, e) {
                 console.log(row);
+
+                if(row.children.length > 0) {
+                    if (row.type == "fold") {
+                        this.open(row.index);
+                    } else {
+                        this.fold(row.index);
+                    }
+                }
             }
         }
     });
 
     xtable.update(getRandomData(10000));
+    xtable.append("3", getRandomData(3));
+    xtable.append("3.1", getRandomData(2));
 
     $("#xtable_btn").change(function(e) {
         xtable.setCsvFile(e.target.files[0]);
@@ -100,7 +110,12 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 
 <script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>
-        <td><!= min !></td>
+        <td>
+            <! if(row.depth > 0) { !>
+            <span style="padding-left: <!= row.depth * 10 !>px"></span>
+            <! } !>
+            <!= min !>
+        </td>
         <td><!= max !></td>
         <td><!= count !></td>
         <td><!= hash !></td>
