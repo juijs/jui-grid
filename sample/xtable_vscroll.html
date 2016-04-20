@@ -45,7 +45,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
                 console.log("resize");
             },
             select: function(row, e) {
-                console.log(row);
+                //console.log(row);
 
                 if(row.children.length > 0) {
                     if (row.type == "fold") {
@@ -111,9 +111,12 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 <script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>
         <td>
-            <! if(row.depth > 0) { !>
-            <span style="padding-left: <!= row.depth * 10 !>px"></span>
-            <! } !>
+
+            <span style="padding-left: <!= row.depth * 20 !>px">
+                <! if(row.children.length > 0) { !>
+                    <! if(row.type == "fold") { !>+<! } else { !>-<! } !>
+                <! } !>
+            </span>
             <!= min !>
         </td>
         <td><!= max !></td>

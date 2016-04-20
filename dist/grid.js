@@ -84,21 +84,6 @@ jui.define("grid.row", [ "jquery" ], function($) {
         /** @property {"open"/"fold"} [type="fold"] State value that indicates whether a child row is shown or hidden. */
         this.type = "fold";
 
-        function setIndex(rownum) {
-            self.rownum = (!isNaN(rownum)) ? rownum : self.rownum;
-
-            if(!self.parent) self.index = "" + self.rownum;
-            else self.index = self.parent.index + "." + self.rownum;
-
-            if(self.parent && typeof(self.index) == "string") {
-                self.depth = self.index.split(".").length - 1;
-            }
-
-            if(!self.isLeaf()) {
-                setIndexChild(self);
-            }
-        }
-
         function setIndexChild(row) {
             var clist = row.children;
 
@@ -127,7 +112,15 @@ jui.define("grid.row", [ "jquery" ], function($) {
             if(!tplFunc) return self.element;
 
             var element = $(tplFunc(
-                    $.extend({ row: { index: self.index, data: self.data, depth: self.depth } }, self.data))
+                $.extend({
+                    row: {
+                        type: self.type,
+                        index: self.index,
+                        data: self.data,
+                        depth: self.depth,
+                        children: self.children
+                    }
+                }, self.data))
             ).get(0);
 
             return element;
@@ -153,8 +146,23 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
+        this.setIndex = function(rownum) {
+            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+
+            if(!this.parent) this.index = "" + this.rownum;
+            else this.index = this.parent.index + "." + this.rownum;
+
+            if(this.parent && typeof(this.index) == "string") {
+                this.depth = this.index.split(".").length - 1;
+            }
+
+            if(!this.isLeaf()) {
+                setIndexChild(this);
+            }
+        }
+
         this.reload = function(rownum, isUpdate, columns) {
-            if(!isUpdate) setIndex(rownum); // ��� �ε��� ����
+            if(!isUpdate) this.setIndex(rownum);
 
             if(this.element != null) {
                 var newElem = getElement(),
@@ -168,7 +176,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 this.element = getElement();
             }
 
-            if(columns != null) { // �÷� ������ ���� ���, ����� ����
+            if(columns != null) {
                 this.hideCells(columns);
             }
 
@@ -176,7 +184,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
         }
 
         this.destroy = function() {
-            if(this.parent != null) { // �θ� ���� ���, ������� ����
+            if(this.parent != null) {
                 this.parent.removeChild(this.index);
             } else {
                 removeChildAll(this);
@@ -2548,7 +2556,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			for(var i = 0; i < data.length; i++) {
 				var row = new Row(data[i], head.tpl["row"], pRow);
-				row.reload(no + i, false, head.uit.columns);
+				row.setIndex(no + i);
 
 				tmp_rows.push(row);
 			}
@@ -3108,6 +3116,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(isTree) {
 				t_rows = [];
 				setOpenChildRows(rows);
+			} else {
+				t_rows = rows;
 			}
 
 			if(this.options.buffer == "vscroll") { // 가상 스크롤 설정
@@ -3136,12 +3146,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Array} rows
 		 */
 		this.update = function(dataList) {
-			rows = t_rows = createRows(dataList, 0, null);
+			rows = createRows(dataList, 0, null);
 
 			this.render();
 			this.emit("update");
 			head.emit("colresize");
-			
+
 			// 정렬 인덱스가 옵션에 있을 경우, 해당 인덱스의 컬럼 정렬 (not loading)
 			if(this.options.sortIndex) {
 				this.sort(this.options.sortIndex, this.options.sortOrder, undefined, true);
@@ -3221,8 +3231,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			if(end <= t_rows.length) {
 				var tmpDataList = [];
+
 				for(var i = start; i < end; i++) {
-					tmpDataList.push(t_rows[i]);
+					var r = t_rows[i];
+
+					r.reload(null, true, head.uit.getColumn());
+					tmpDataList.push(r);
 				}
 				
 				body.append(tmpDataList);
@@ -3293,9 +3307,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				qs.run();
 
 				// 데이터 초기화 및 입력, 그리고 로딩
+				self.render(true);
 				self.emit("sortend", [ column, e ]);
-				self.clear();
-				self.next();
 				self.hideLoading();
 			}
 			
@@ -3324,20 +3337,22 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
         this.filter = function(callback) {
             if(typeof(callback) != "function") return;
 
-            if(o_rows == null) o_rows = rows;
-            else rows = o_rows;
+            if(o_rows == null) o_rows = t_rows;
+            else t_rows = o_rows;
 
-            var t_rows = rows.slice(),
-                s_rows = [];
+            var a_rows = t_rows.slice(),
+                f_data = [];
 
-            for(var i = 0, len = t_rows.length; i < len; i++) {
-                if(callback(t_rows[i]) === true) {
-                    s_rows.push(t_rows[i]);
+            for(var i = 0, len = a_rows.length; i < len; i++) {
+				var d = a_rows[i].data;
+
+                if(callback(d) === true) {
+					f_data.push(d);
                 }
             }
 
-            this.update(s_rows);
-            this.emit("filter", [ s_rows ]);
+            this.update(f_data);
+            this.emit("filter", [ f_data ]);
         }
 
 		/**
@@ -3507,10 +3522,23 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			} else {
 				if(iParser.isIndexDepth(index)) {
 					var keys = iParser.getIndexList(index);
-					return getRowChildLeaf(keys, rows[keys.shift()]);
+					return getRowChildLeaf(keys, getRow(keys.shift()));
 				} else {
-					return (rows[index]) ? rows[index] : null;
+					return getRow(index);
 				}
+			}
+
+			function getRow(no) {
+				var row = null;
+
+				for(var i = 0; i < rows.length; i++) {
+					if(rows[i].rownum == parseInt(no)) {
+						row = rows[i];
+						break;
+					}
+				}
+
+				return row;
 			}
 		}
 

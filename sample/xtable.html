@@ -102,6 +102,16 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     _.resize(function() {
         xtable.scrollWidth($("body").width(), true);
     });
+
+    /*/
+    setTimeout(function() {
+        xtable.filter(function(d) {
+            if(d.count > 10) {
+                return true;
+            }
+        })
+    }, 1000);
+    /**/
 });
 
 </script>
