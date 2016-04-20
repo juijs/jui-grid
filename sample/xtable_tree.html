@@ -82,7 +82,9 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     <tr>
         <td><!= row.index !></td>
         <td style="padding-left: <!= 5 + (row.depth * 20) !>px">
-            <! if(row.children.length > 0) { !>+<! } !>
+            <! if(row.children.length > 0) { !>
+                <! if(row.type == "open") { !>-<! } else { !>+<! } !>
+            <! } !>
             <!= name !>
         </td>
         <td><!= age !></td>
