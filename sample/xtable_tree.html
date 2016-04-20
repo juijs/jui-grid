@@ -1,0 +1,93 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<META charset="UTF-8">
+<title>[JUI Library] - JavaScript/Tooltip</title>
+
+<link rel="stylesheet" href="../dist/grid.css" />
+<link rel="stylesheet" href="../dist/grid-jennifer.css" />
+<script src="../lib/jquery-1.8.0.min.js"></script>
+<script src="../lib/core.js"></script>
+<script src="../dist/grid.js"></script>
+
+<script>
+function updateTreeData(ui, depth) {
+    var key = "0",
+        data = [];
+
+    for(var i = 0; i < depth; i++) {
+        data.push({ index: key, data: { name: "Hong" + i, age: Math.floor(Math.random() * 100) } });
+        key += ".0";
+    }
+
+    ui.updateTree(data);
+}
+
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
+    xtable = xtableUI("#xtable", {
+        fields: [ null, "name", "age" ],
+        sort: true,
+        scrollHeight: 400,
+        rowHeight: 26,
+        buffer: "vscroll",
+        resize: true,
+        event: {
+            select: function(row, e) {
+                if(row.type == "fold") {
+                    this.open(row.index);
+                } else {
+                    this.fold(row.index);
+                }
+            }
+        }
+    });
+
+    updateTreeData(xtable, 10);
+});
+
+</script>
+</head>
+<body class="jui" style="background-color: #fff;">
+
+<input type="file" id="xtable_btn" /><br/><br/>
+<div id="xtable" class="xtable scroll" style="width: 800px;">
+    <table class="table classic">
+        <thead>
+        <tr>
+            <th style="width: 200px;">Index</th>
+            <th>Column. Name</th>
+            <th style="width: 100px;">Column. Age</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script data-jui="#xtable" data-tpl="menu" type="text/template">
+    <div class="dropdown">
+        <div class="anchor"></div>
+
+        <ul style="width: 150px">
+            <! for(var i = 0; i < columns.length; i++) { !>
+            <li>
+                <input type="checkbox" />  <!= columns[i] !>
+            </li>
+            <! } !>
+        </ul>
+    </div>
+</script>
+
+<script data-jui="#xtable" data-tpl="row" type="text/template">
+    <tr>
+        <td><!= row.index !></td>
+        <td style="padding-left: <!= 5 + (row.depth * 20) !>px">
+            <! if(row.children.length > 0) { !>+<! } !>
+            <!= name !>
+        </td>
+        <td><!= age !></td>
+    </tr>
+</script>
+
+</body>
+</html>

@@ -3159,6 +3159,24 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		/**
+		 * @method updateTree
+		 * It is possible to configure a tree table using an object array with the index and data properties.
+		 *
+		 * @param {Array} rows
+		 */
+		this.updateTree = function(tree) {
+			for(var i = 0; i < tree.length; i++) {
+				var pIndex = iParser.getParentIndex(tree[i].index);
+
+				if(pIndex == null) {
+					rows.push(createRows([ tree[i].data ], 0, null)[0]);
+				} else {
+					this.append(pIndex, tree[i].data);
+				}
+			}
+		}
+
+		/**
 		 * @method append
 		 * Add a row or a child row to at a specified index.
 		 *
@@ -3175,6 +3193,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 
 			this.render(true);
+			this.emit("append");
 		}
 
 		/**
@@ -3184,13 +3203,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Integer} index
 		 */
 		this.open = function(index) { // 로트 제외, 하위 모든 노드 대상
-			if(index == null) return;
-
 			var row = this.get(index);
-			row.type = "open";
 
-			this.render(true);
-			this.emit("open", [ row ]);
+			if(row) {
+				row.type = "open";
+				this.render(true);
+				this.emit("open", [row]);
+			}
 		}
 
 		/**
@@ -3200,13 +3219,47 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Integer} index
 		 */
 		this.fold = function(index) {
-			if(index == null) return;
-
 			var row = this.get(index);
-			row.type = "fold";
 
-			this.render(true);
-			this.emit("fold", [ row ]);
+			if(row) {
+				row.type = "fold";
+				this.render(true);
+				this.emit("fold", [row]);
+			}
+		}
+
+		/**
+		 * @method openAll
+		 * Shows all child rows of a specified index.
+		 */
+		this.openAll = function(index) {
+			var list = this.getAll(index);
+
+			if(list) {
+				for(var i = 0; i < list.length; i++) {
+					list[i].type = "open";
+				}
+
+				this.render(true);
+				this.emit("openall");
+			}
+		}
+
+		/**
+		 * @method foldAll
+		 * Hides all child rows of a specified index.
+		 */
+		this.foldAll = function(index) {
+			var list = this.getAll(index);
+
+			if(list) {
+				for(var i = 0; i < list.length; i++) {
+					list[i].type = "fold";
+				}
+
+				this.render(true);
+				this.emit("foldall");
+			}
 		}
 
 		/**
@@ -3256,9 +3309,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(this.options.buffer == "scroll") return false;
 			if(this.getPage() == pNo) return false;
 			
-			this.clear();
 			page = (pNo < 1) ? 1 : pNo;
-			this.next();
+			this.render();
 		}
 
 		/**
@@ -3361,8 +3413,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
         this.rollback = function() {
             if(o_rows != null) {
-                this.update(o_rows);
-
+				t_rows = o_rows;
+				this.render();
                 o_rows = null;
             }
         }
@@ -3385,6 +3437,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			this.clear();
 
 			rows = [];
+			t_rows = [];
 			o_rows = null;
 		}
 
@@ -3486,7 +3539,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @return {Array} rows
 		 */
 		this.list = function() {
-			return body.list();
+			return rows;
 		}
 
 		/**
@@ -3506,7 +3559,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @return {Array} datas
 		 */
 		this.listData = function() {
-			return rows;
+			var datas = [];
+
+			for(var i = 0; i < rows.length; i++) {
+				datas.push(rows[i].data);
+			}
+
+			return datas;
 		}
 
 		/**
@@ -3543,6 +3602,34 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		/**
+		 * @method getAll
+		 * Gets all rows of at the specified index including child rows.
+		 *
+		 * @param {Integer} index
+		 * @return {Array} rows
+		 */
+		this.getAll = function(index, result) {
+			var row = this.get(index);
+
+			if(row != null) {
+				if(!_.typeCheck("array", result)) {
+					result = [ row ];
+				}
+
+				for(var i = 0; i < row.children.length; i++) {
+					var child = row.children[i];
+					result.push(child);
+
+					if(child.children.length > 0) {
+						return this.getAll(child.index, result);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		/**
 		 * @method getColumn
 		 * Gets the column at the specified index.
 		 *
@@ -3552,9 +3639,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.getColumn = function(index) {
 			return head.getColumn(index);
 		}
-		
+
+		/**
+		 * @method getData
+		 * Gets the data at the specified index.
+		 *
+		 * @param {"Integer"/"String"} key index
+		 * @return {ColumnObject} data
+		 */
 		this.getData = function(index) {
-			return rows[index];
+			var row = this.get(index);
+			return (row) ? row.data : null;
 		}
 
 		/**
@@ -3722,7 +3817,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			return _.dataToCsv2({
 				fields: fields,
-				rows: rows,
+				rows: this.listData(),
 				count: len,
 				names: this.options.csvNames
 			});
@@ -3780,8 +3875,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			
 			if(column.name) {
 				for(var i = 0; i < rows.length; i++) {
-					var value = rows[i][column.name];
-					
+					var data = rows[i].data,
+						value = data[column.name];
+
 					if(!isNaN(value)) {
 						if(isCallback) {
 							if(callback(rows[i])) {
@@ -3806,7 +3902,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @method getPage
 		 * Gets the current page of a table.
 		 *
-		 * @return {Ingeger} page
+		 * @return {Integer} page
 		 */
 		this.getPage = function() {
 			return page - 1;
