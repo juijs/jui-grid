@@ -12,6 +12,8 @@
 <script src="../dist/grid.js"></script>
 
 <script>
+var xtable;
+
 function updateTreeData(ui, depth) {
     var key = "0",
         data = [];
@@ -22,6 +24,10 @@ function updateTreeData(ui, depth) {
     }
 
     ui.updateTree(data);
+}
+
+function openAll() {
+    xtable.openAll("0");
 }
 
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
@@ -43,14 +49,16 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    updateTreeData(xtable, 10);
+    updateTreeData(xtable, 10000);
 });
 
 </script>
 </head>
 <body class="jui" style="background-color: #fff;">
 
-<input type="file" id="xtable_btn" /><br/><br/>
+<a href="javascript:openAll()">Open</a>
+<br/><br/>
+
 <div id="xtable" class="xtable scroll" style="width: 800px;">
     <table class="table classic">
         <thead>
@@ -63,20 +71,6 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         <tbody></tbody>
     </table>
 </div>
-
-<script data-jui="#xtable" data-tpl="menu" type="text/template">
-    <div class="dropdown">
-        <div class="anchor"></div>
-
-        <ul style="width: 150px">
-            <! for(var i = 0; i < columns.length; i++) { !>
-            <li>
-                <input type="checkbox" />  <!= columns[i] !>
-            </li>
-            <! } !>
-        </ul>
-    </div>
-</script>
 
 <script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>

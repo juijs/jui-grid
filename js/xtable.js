@@ -23,7 +23,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
      */
 	var UI = function() {
 		var head = null, body = null;
-		var rows = [], t_rows = [], o_rows = null; // 자식 제외 rows, 자식 포함 rows, 자식 제외 + 필터 rows
+		var rows = [], c_rows = [],	t_rows = [], o_rows = null; // 루트 rows, 루트 rows 인덱스, 자식 포함 rows, 자식 제외 + 필터 rows (리펙토링 필요함!!!)
 		var ui_modal = null, page = 1;
         var is_loading = false, is_resize = false;
 		var w_resize = 8;
@@ -47,8 +47,15 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var tmp_rows = [];
 
 			for(var i = 0; i < data.length; i++) {
-				var row = new Row(data[i], head.tpl["row"], pRow);
-				row.setIndex(no + i);
+				var row = new Row(data[i], head.tpl["row"], pRow),
+					rownum = no + i;
+
+				row.setIndex(rownum);
+
+				// 루트 row만 캐싱함
+				if(pRow == null) {
+					c_rows[rownum] = row;
+				}
 
 				tmp_rows.push(row);
 			}
@@ -554,6 +561,15 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 		}
 
+		function appendChildRows(p_row, data) {
+			var no = p_row.children.length,
+				c_rows = createRows(_.typeCheck("array", data) ? data : [ data ], no, p_row);
+
+			for(var i = 0; i < c_rows.length; i++) {
+				p_row.children.push(c_rows[i]);
+			}
+		}
+
 		this.init = function() {
 			var opts = this.options;
 
@@ -663,9 +679,16 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				if(pIndex == null) {
 					rows.push(createRows([ tree[i].data ], 0, null)[0]);
 				} else {
-					this.append(pIndex, tree[i].data);
+					var pRow = this.get(pIndex);
+
+					if(pRow) {
+						appendChildRows(pRow, tree[i].data);
+					}
 				}
 			}
+
+			this.render(true);
+			this.emit("updateTree");
 		}
 
 		/**
@@ -676,16 +699,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {RowObject} row
 		 */
 		this.append = function(index, data) {
-			var p_row = this.get(index),
-				no = p_row.children.length,
-				c_rows = createRows(_.typeCheck("array", data) ? data : [ data ], no, p_row);
+			var row = this.get(index);
 
-			for(var i = 0; i < c_rows.length; i++) {
-				p_row.children.push(c_rows[i]);
+			if(row) {
+				appendChildRows(row, data);
+
+				this.render(true);
+				this.emit("append");
 			}
-
-			this.render(true);
-			this.emit("append");
 		}
 
 		/**
@@ -783,7 +804,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					r.reload(null, true, head.uit.getColumn());
 					tmpDataList.push(r);
 				}
-				
+
 				body.append(tmpDataList);
 				this.emit("next", [ page ]);
 
@@ -1073,23 +1094,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			} else {
 				if(iParser.isIndexDepth(index)) {
 					var keys = iParser.getIndexList(index);
-					return getRowChildLeaf(keys, getRow(keys.shift()));
+					return getRowChildLeaf(keys, c_rows[keys.shift()]);
 				} else {
-					return getRow(index);
+					return c_rows[parseInt(index)];
 				}
-			}
-
-			function getRow(no) {
-				var row = null;
-
-				for(var i = 0; i < rows.length; i++) {
-					if(rows[i].rownum == parseInt(no)) {
-						row = rows[i];
-						break;
-					}
-				}
-
-				return row;
 			}
 		}
 
@@ -1100,25 +1108,25 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Integer} index
 		 * @return {Array} rows
 		 */
-		this.getAll = function(index, result) {
+		this.getAll = function(index, _result) {
 			var row = this.get(index);
 
 			if(row != null) {
-				if(!_.typeCheck("array", result)) {
-					result = [ row ];
+				if(!_.typeCheck("array", _result)) {
+					_result = [ row ];
 				}
 
 				for(var i = 0; i < row.children.length; i++) {
 					var child = row.children[i];
-					result.push(child);
+					_result.push(child);
 
 					if(child.children.length > 0) {
-						return this.getAll(child.index, result);
+						return this.getAll(child.index, _result);
 					}
 				}
 			}
 
-			return result;
+			return _result;
 		}
 
 		/**

@@ -165,6 +165,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
             for(var i = 0; i < rows.length; i++) {
                 (function(row) {
+                    if(row.element == null) return;
+
                     if(row.children.length > 0) {
                         setEventRow(self, row);
                         setEventRows(self, row.children);
