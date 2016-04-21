@@ -58,12 +58,14 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    xtable.update(getRandomData(500000));
-    xtable.append("3", getRandomData(3));
-    xtable.append("3.1", getRandomData(2));
-
     $("#xtable_btn").change(function(e) {
         xtable.setCsvFile(e.target.files[0]);
+    });
+
+    $("#btn").on("click", function(e) {
+        xtable.update(getRandomData(1000000));
+        xtable.append("3", getRandomData(3));
+        xtable.append("3.1", getRandomData(2));
     });
 
     _.resize(function() {
@@ -74,6 +76,8 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 </script>
 </head>
 <body class="jui" style="background-color: #fff;">
+
+<button id="btn">Run</button><br/><br/>
 
 <input type="file" id="xtable_btn" /><br/><br/>
 <div id="xtable" class="xtable scroll">

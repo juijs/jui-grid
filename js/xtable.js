@@ -46,7 +46,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function createRows(data, no, pRow) {
 			var tmp_rows = [];
 
-			for(var i = 0; i < data.length; i++) {
+			for(var i = 0, len = data.length; i < len; i++) {
 				var row = new Row(data[i], head.tpl["row"], pRow),
 					rownum = no + i;
 
@@ -1023,11 +1023,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.scrollTop = function(index) {
 			if(this.options.buffer != "vscroll") return;
 
+			var $viewport = $(this.root).children(".body");
+
 			for(var i = 0, len = t_rows.length; i < len; i++) {
 				var row = t_rows[i];
 
 				if(("" + index) == row.index) {
-					// i가 스크롤 인덱스가 됨
+					$viewport.scrollTop((i - 1) * vscroll_info.height);
+					this.render(true);
 
 					break;
 				}
@@ -1112,11 +1115,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(index == null) {
 				return null;
 			} else {
-				if(iParser.isIndexDepth(index)) {
+				var row = c_rows[index];
+
+				if(!row) {
 					var keys = iParser.getIndexList(index);
 					return getRowChildLeaf(keys, c_rows[keys.shift()]);
 				} else {
-					return c_rows[parseInt(index)];
+					return row;
 				}
 			}
 		}
