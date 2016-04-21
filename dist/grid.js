@@ -3525,6 +3525,26 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		/**
+		 * @method scrollTop
+		 * Sets the scroll based on the height of a table.
+		 *
+		 * @param {Integer|String} index
+		 */
+		this.scrollTop = function(index) {
+			if(this.options.buffer != "vscroll") return;
+
+			for(var i = 0, len = t_rows.length; i < len; i++) {
+				var row = t_rows[i];
+
+				if(("" + index) == row.index) {
+					// i가 스크롤 인덱스가 됨
+
+					break;
+				}
+			}
+		}
+
+		/**
 		 * @deprecated
 		 * @method height
 		 * Sets the scroll based on the height of a table.
