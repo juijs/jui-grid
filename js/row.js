@@ -1,14 +1,14 @@
 jui.define("grid.row", [ "jquery" ], function($) {
 
     var Base = function() {
-        var self = this,
-            cellkeys = {};
+        var cellkeys = {};
 
         function setIndexChild(row) {
             var clist = row.children;
 
             for(var i = 0; i < clist.length; i++) {
-                clist[i].reload(i);
+                clist[i].setIndex(i);
+                clist[i].reload();
 
                 if(!clist[i].isLeaf()) {
                     setIndexChild(clist[i]);
@@ -16,7 +16,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        function setElementCells() {
+        function setElementCells(self) {
             self.list = [];
 
             $(self.element).find("td").each(function(i) {
@@ -60,19 +60,23 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        function reloadChildAll() {
-            for(var i = 0; i < self.children.length; i++) {
-                self.children[i].reload(i);
+        function reloadChildAll(children) {
+            for(var i = 0; i < children.length; i++) {
+                children[i].setIndex(i);
+                children[i].reload();
             }
         }
 
-        this.setIndex = function() {
-            if(!this.parent) this.index = "" + this.rownum;
-            else this.index = this.parent.index + "." + this.rownum;
+        this.setIndex = function(rownum) {
+            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+
+            if(!this.parent) {
+                this.index = "" + this.rownum;
+            } else {
+                this.index = this.parent.index + "." + this.rownum;
+            }
 
             if(this.parent && typeof(this.index) == "string") {
-                //this.depth = this.index.split(".").length - 1;
-
                 for(var i = 0, len = this.index.length; i < len; i++){
                     if(this.index.charAt(i) == ".")
                         ++this.depth;
@@ -84,9 +88,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        this.reload = function(rownum, isUpdate, columns) {
-            if(!isUpdate) this.setIndex(rownum);
-
+        this.reload = function(columns) {
             if(this.element != null) {
                 var newElem = getElement(this),
                     clsValue = $(this.element).attr("class");
@@ -103,7 +105,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 this.hideCells(columns);
             }
 
-            setElementCells();
+            setElementCells(this);
         }
 
         this.destroy = function() {
@@ -168,7 +170,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             preRows.push(row);
 
             this.children = preRows.concat(this.children);
-            reloadChildAll();
+            reloadChildAll(this.children);
         }
 
         this.removeChild = function(index) {
@@ -181,7 +183,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 }
             }
 
-            reloadChildAll();
+            reloadChildAll(this.children);
         }
 
         this.lastChild = function() {
@@ -258,12 +260,10 @@ jui.define("grid.row", [ "jquery" ], function($) {
         /** @property {Function} [type="null"] State value that indicates whether a child row is shown or hidden. */
         this.tpl = null;
 
-        this.init = function(rownum, data, tplFunc, pRow) {
-            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+        this.init = function(data, tplFunc, pRow) {
             this.data = data;
             this.tpl = tplFunc;
             this.parent = pRow;
-            this.setIndex();
         }
     }
 

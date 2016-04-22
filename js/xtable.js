@@ -51,7 +51,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					rownum = no + i;
 
 				// row 객체 초기화
-				row.init(rownum, data[i], head.tpl["row"], pRow);
+				row.init(data[i], head.tpl["row"], pRow);
+				row.setIndex(rownum);
 
 				// 루트 row만 캐싱함
 				if(pRow == null) {
@@ -791,7 +792,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				for(var i = start; i < end; i++) {
 					var r = t_rows[i];
 
-					r.reload(null, true, head.uit.getColumn());
+					r.reload(head.uit.getColumn());
 					tmpDataList.push(r);
 				}
 

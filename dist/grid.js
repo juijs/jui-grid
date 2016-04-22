@@ -46,14 +46,14 @@ jui.define("grid.column", [ "jquery" ], function($) {
 jui.define("grid.row", [ "jquery" ], function($) {
 
     var Base = function() {
-        var self = this,
-            cellkeys = {};
+        var cellkeys = {};
 
         function setIndexChild(row) {
             var clist = row.children;
 
             for(var i = 0; i < clist.length; i++) {
-                clist[i].reload(i);
+                clist[i].setIndex(i);
+                clist[i].reload();
 
                 if(!clist[i].isLeaf()) {
                     setIndexChild(clist[i]);
@@ -61,7 +61,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        function setElementCells() {
+        function setElementCells(self) {
             self.list = [];
 
             $(self.element).find("td").each(function(i) {
@@ -105,19 +105,23 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        function reloadChildAll() {
-            for(var i = 0; i < self.children.length; i++) {
-                self.children[i].reload(i);
+        function reloadChildAll(children) {
+            for(var i = 0; i < children.length; i++) {
+                children[i].setIndex(i);
+                children[i].reload();
             }
         }
 
-        this.setIndex = function() {
-            if(!this.parent) this.index = "" + this.rownum;
-            else this.index = this.parent.index + "." + this.rownum;
+        this.setIndex = function(rownum) {
+            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+
+            if(!this.parent) {
+                this.index = "" + this.rownum;
+            } else {
+                this.index = this.parent.index + "." + this.rownum;
+            }
 
             if(this.parent && typeof(this.index) == "string") {
-                //this.depth = this.index.split(".").length - 1;
-
                 for(var i = 0, len = this.index.length; i < len; i++){
                     if(this.index.charAt(i) == ".")
                         ++this.depth;
@@ -129,9 +133,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        this.reload = function(rownum, isUpdate, columns) {
-            if(!isUpdate) this.setIndex(rownum);
-
+        this.reload = function(columns) {
             if(this.element != null) {
                 var newElem = getElement(this),
                     clsValue = $(this.element).attr("class");
@@ -148,7 +150,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 this.hideCells(columns);
             }
 
-            setElementCells();
+            setElementCells(this);
         }
 
         this.destroy = function() {
@@ -213,7 +215,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             preRows.push(row);
 
             this.children = preRows.concat(this.children);
-            reloadChildAll();
+            reloadChildAll(this.children);
         }
 
         this.removeChild = function(index) {
@@ -226,7 +228,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                 }
             }
 
-            reloadChildAll();
+            reloadChildAll(this.children);
         }
 
         this.lastChild = function() {
@@ -303,12 +305,10 @@ jui.define("grid.row", [ "jquery" ], function($) {
         /** @property {Function} [type="null"] State value that indicates whether a child row is shown or hidden. */
         this.tpl = null;
 
-        this.init = function(rownum, data, tplFunc, pRow) {
-            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+        this.init = function(data, tplFunc, pRow) {
             this.data = data;
             this.tpl = tplFunc;
             this.parent = pRow;
-            this.setIndex();
         }
     }
 
@@ -355,7 +355,7 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             for(var i = 0; i < tmpColumns.length; i++) {
                 var column = new Column(i);
 
-                if(columns[i]) { // ������ �÷� ������ ���� ��쿡�� ����Ʈ�� �ʱ�ȭ �Ѵ�.
+                if(columns[i]) {
                     column.element = columns[i].element;
                     column.order = columns[i].order;
                     column.name = columns[i].name;
@@ -405,8 +405,10 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         function createRow(data, no, pRow) {
             if(data instanceof Row) return data;
 
-            var row = new Row(data, $tpl.row, pRow);
-            row.reload(no, false, columns);
+            var row = new Row();
+            row.init(data, $tpl.row, pRow);
+            row.setIndex(no);
+            row.reload(columns);
 
             return row;
         }
@@ -447,7 +449,8 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             }
 
             for(var i = index; i < rows.length; i++) {
-                rows[i].reload(i);
+                rows[i].setIndex(i);
+                rows[i].reload();
                 initColumnRows("reload", rows[i]);
 
                 if(typeof(callback) == "function") {
@@ -470,7 +473,7 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             preRows.push(row);
             rows = preRows.concat(rows);
 
-            // Rows UI ����
+            // Rows UI
             reloadRows(index);
 
             return row;
@@ -489,14 +492,10 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         function appendRowData(data) {
-            // Row �迭 ����
             var row = createRow(data, rows.length);
             rows.push(row);
 
-            // ���� HTML�� �߰�
             $obj.tbody.append(row.element);
-
-            // Column �迭 ����
             initColumnRows("append", row);
 
             return row;
@@ -564,7 +563,7 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
                 row.data[key] = data[key];
             }
 
-            row.reload(null, true);
+            row.reload();
             initColumnRows("reload", row);
 
             return row;
@@ -590,7 +589,7 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         this.removeRow = function(index) {
-            var row = this.getRow(index);		// �ڽ� ��ü
+            var row = this.getRow(index);
 
             if(!iParser.isIndexDepth(index)) {
                 row.destroy();
@@ -795,7 +794,7 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             return dataList;
         }
 
-        this.getRowParent = function(index) { // Ʈ�� ������ Ű���� Ű �ο��� �θ� �������� �Լ�
+        this.getRowParent = function(index) {
             if(!iParser.isIndexDepth(index)) return null;
             return this.getRow(iParser.getParentIndex(index));
         }
@@ -2579,7 +2578,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					rownum = no + i;
 
 				// row 객체 초기화
-				row.init(rownum, data[i], head.tpl["row"], pRow);
+				row.init(data[i], head.tpl["row"], pRow);
+				row.setIndex(rownum);
 
 				// 루트 row만 캐싱함
 				if(pRow == null) {
@@ -3319,7 +3319,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				for(var i = start; i < end; i++) {
 					var r = t_rows[i];
 
-					r.reload(null, true, head.uit.getColumn());
+					r.reload(head.uit.getColumn());
 					tmpDataList.push(r);
 				}
 
