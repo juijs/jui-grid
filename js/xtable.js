@@ -47,10 +47,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var tmp_rows = [];
 
 			for(var i = 0, len = data.length; i < len; i++) {
-				var row = new Row(data[i], head.tpl["row"], pRow),
+				var row = new Row(),
 					rownum = no + i;
 
-				row.setIndex(rownum);
+				// row 객체 초기화
+				row.init(rownum, data[i], head.tpl["row"], pRow);
 
 				// 루트 row만 캐싱함
 				if(pRow == null) {

@@ -1,43 +1,8 @@
 jui.define("grid.row", [ "jquery" ], function($) {
 
-    /**
-     * @class grid.row
-     *
-     * Grid's Row Class
-     *
-     * @alias Table Row
-     * @requires jquery
-     */
-    var Row = function(data, tplFunc, pRow) {
+    var Base = function() {
         var self = this,
             cellkeys = {};
-
-        /** @property {Array} data Data of a specifiedrow. */
-        this.data = data;
-
-        /** @property {Integer} [rownum=null] The unique number of a child row under the specified parent row if a parent row exists. */
-        this.rownum = null;
-
-        /** @property {String/Integer} [index=null] Index of a specified row. In the case of a tree structure, a depth is given. */
-        this.index = null;
-
-        /** @property {HTMLElement} [element=null] TR element of a specified row. */
-        this.element = null;
-
-        /** @property {Array} list List of TD elements of a specified row. */
-        this.list = [];
-
-        /** @property {uix.table.row} parent Variable that refers to the parent row. */
-        this.parent = (pRow) ? pRow : null;
-
-        /** @property {Array} children List of child rows. */
-        this.children = [];
-
-        /** @property {Integer} [depth=0] The depth of the current row in the case of a tree structure. */
-        this.depth = 0;
-
-        /** @property {"open"/"fold"} [type="fold"] State value that indicates whether a child row is shown or hidden. */
-        this.type = "fold";
 
         function setIndexChild(row) {
             var clist = row.children;
@@ -63,10 +28,10 @@ jui.define("grid.row", [ "jquery" ], function($) {
             });
         }
 
-        function getElement() {
-            if(!tplFunc) return self.element;
+        function getElement(self) {
+            if(!self.tpl) return self.element;
 
-            var element = $(tplFunc(
+            var element = $(self.tpl(
                 $.extend({
                     row: {
                         type: self.type,
@@ -101,9 +66,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        this.setIndex = function(rownum) {
-            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
-
+        this.setIndex = function() {
             if(!this.parent) this.index = "" + this.rownum;
             else this.index = this.parent.index + "." + this.rownum;
 
@@ -120,7 +83,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             if(!isUpdate) this.setIndex(rownum);
 
             if(this.element != null) {
-                var newElem = getElement(),
+                var newElem = getElement(this),
                     clsValue = $(this.element).attr("class");
 
                 $(newElem).addClass(clsValue).insertAfter(this.element);
@@ -128,7 +91,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
 
                 this.element = newElem;
             } else {
-                this.element = getElement();
+                this.element = getElement(this);
             }
 
             if(columns != null) {
@@ -250,6 +213,56 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
     }
+
+    /**
+     * @class grid.row
+     *
+     * Grid's Row Class
+     *
+     * @alias Table Row
+     * @requires jquery
+     */
+    var Row = function() {
+        /** @property {Array} data Data of a specifiedrow. */
+        this.data = null;
+
+        /** @property {Integer} [rownum=null] The unique number of a child row under the specified parent row if a parent row exists. */
+        this.rownum = null;
+
+        /** @property {String/Integer} [index=null] Index of a specified row. In the case of a tree structure, a depth is given. */
+        this.index = null;
+
+        /** @property {HTMLElement} [element=null] TR element of a specified row. */
+        this.element = null;
+
+        /** @property {Array} list List of TD elements of a specified row. */
+        this.list = [];
+
+        /** @property {uix.table.row} parent Variable that refers to the parent row. */
+        this.parent = null;
+
+        /** @property {Array} children List of child rows. */
+        this.children = [];
+
+        /** @property {Integer} [depth=0] The depth of the current row in the case of a tree structure. */
+        this.depth = 0;
+
+        /** @property {"open"/"fold"} [type="fold"] State value that indicates whether a child row is shown or hidden. */
+        this.type = "fold";
+
+        /** @property {Function} [type="null"] State value that indicates whether a child row is shown or hidden. */
+        this.tpl = null;
+
+        this.init = function(rownum, data, tplFunc, pRow) {
+            this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+            this.data = data;
+            this.tpl = tplFunc;
+            this.parent = pRow;
+            this.setIndex();
+        }
+    }
+
+    Row.prototype = new Base;
 
     return Row;
 });

@@ -49,13 +49,16 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    updateTreeData(xtable, 5000);
+    $("#btn").on("click", function(e) {
+        updateTreeData(xtable, 50000);
+    });
 });
 
 </script>
 </head>
 <body class="jui" style="background-color: #fff;">
 
+<button id="btn">Run</button><br/><br/>
 <a href="javascript:openAll()">Open</a>
 <br/><br/>
 
