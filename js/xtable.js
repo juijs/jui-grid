@@ -541,17 +541,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			$(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
 		}
 
-		function getRowChildLeaf(keys, row) {
-			if(!row) return null;
-			var tmpKey = keys.shift();
-
-			if(tmpKey == undefined) {
-				return row;
-			} else {
-				return getRowChildLeaf(keys, row.children[tmpKey]);
-			}
-		}
-
 		function setOpenChildRows(rows) {
 			for(var i = 0; i < rows.length; i++) {
 				t_rows.push(rows[i]);
@@ -566,7 +555,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var no = p_row.children.length,
 				c_rows = createRows(_.typeCheck("array", data) ? data : [ data ], no, p_row);
 
-			for(var i = 0; i < c_rows.length; i++) {
+			for(var i = 0, len = c_rows.length; i < len; i++) {
 				p_row.children.push(c_rows[i]);
 			}
 		}
@@ -750,7 +739,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var list = this.getAll(index);
 
 			if(list) {
-				for(var i = 0; i < list.length; i++) {
+				for(var i = 0, len = list.length; i < len; i++) {
 					list[i].type = "open";
 				}
 
@@ -767,7 +756,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var list = this.getAll(index);
 
 			if(list) {
-				for(var i = 0; i < list.length; i++) {
+				for(var i = 0, len = list.length; i < len; i++) {
 					list[i].type = "fold";
 				}
 
@@ -1119,8 +1108,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				var row = c_rows[index];
 
 				if(!row) {
-					var keys = iParser.getIndexList(index);
-					return getRowChildLeaf(keys, c_rows[keys.shift()]);
+					var keys = iParser.getIndexList(index),
+						row = c_rows[keys[0]];
+
+					for(var i = 1, len = keys.length; i < len; i++) {
+						row = row.children[keys[i]];
+					}
+
+					return row;
 				} else {
 					return row;
 				}

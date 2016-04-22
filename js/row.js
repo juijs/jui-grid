@@ -71,7 +71,12 @@ jui.define("grid.row", [ "jquery" ], function($) {
             else this.index = this.parent.index + "." + this.rownum;
 
             if(this.parent && typeof(this.index) == "string") {
-                this.depth = this.index.split(".").length - 1;
+                //this.depth = this.index.split(".").length - 1;
+
+                for(var i = 0, len = this.index.length; i < len; i++){
+                    if(this.index.charAt(i) == ".")
+                        ++this.depth;
+                }
             }
 
             if(!this.isLeaf()) {
