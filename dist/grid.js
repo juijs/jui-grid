@@ -3173,6 +3173,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.update = function(dataList) {
 			rows = createRows(dataList, 0, null);
+			page = 1;
 
 			this.render();
 			this.emit("update");
@@ -3337,9 +3338,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Integer} index
 		 */
 		this.page = function(pNo) {
-			if(this.options.buffer == "scroll") return false;
+			if(this.options.buffer == "scroll" || this.options.buffer == "vscroll")
+				return false;
+
 			if(this.getPage() == pNo) return false;
-			
+
 			page = (pNo < 1) ? 1 : pNo;
 			this.render();
 		}
@@ -3390,6 +3393,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				qs.run();
 
 				// 데이터 초기화 및 입력, 그리고 로딩
+				page = 1;
 				self.render(true);
 				self.emit("sortend", [ column, e ]);
 				self.hideLoading();
@@ -3455,7 +3459,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Remove all row elements.
 		 */
 		this.clear = function() {
-			page = 1;
 			body.uit.removeRows();
 			body.scroll();
 		}
@@ -3467,6 +3470,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.reset = function() {
 			this.clear();
 
+			page = 1;
 			rows = [];
 			t_rows = [];
 			o_rows = null;

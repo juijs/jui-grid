@@ -67,7 +67,8 @@ var table_data = [
 ];
 
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
-    var body_width = $("body").width();
+    var body_width = $("body").width(),
+        page = 1;
 
     xtable = xtableUI("#xtable", {
         fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
@@ -76,7 +77,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         sortLoading: true,
         width: body_width + body_width * 0.15,
         scrollWidth: body_width,
-        buffer: "scroll",
+        buffer: "page",
         bufferCount: 10,
         resize: true,
         colshow: [ 0, 2, 4, 6, 7 ],
@@ -93,24 +94,19 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         }
     });
 
-    $("#xtable_btn").change(function(e) {
-        xtable.setCsvFile(e.target.files[0]);
-    });
+    xtable.update(table_data);
 
-    $("#btn_add").on("click", function(e) {
-        xtable.update(table_data);
-    });
+    xtable_page = function(no) {
+        page += no;
+        page = (page < 1) ? 1 : page;
 
-    _.resize(function() {
-        xtable.scrollWidth($("body").width(), true);
-    });
+        xtable.page(page);
+    }
 });
 
 </script>
 </head>
 <body class="jui" style="background-color: #fff;">
-<button id="btn_add">Add</button><br/><Br/>
-<input type="file" id="xtable_btn" /><br/><br/>
 
 <div id="xtable" class="xtable scroll">
     <table class="table classic small">
@@ -130,19 +126,12 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     </table>
 </div>
 
-<script data-jui="#xtable" data-tpl="menu" type="text/template">
-    <div class="dropdown">
-        <div class="anchor"></div>
-
-        <ul style="width: 150px">
-            <! for(var i = 0; i < columns.length; i++) { !>
-            <li>
-                <input type="checkbox" />  <!= columns[i] !>
-            </li>
-            <! } !>
-        </ul>
+<div class="row" align="right" style="text-align: right; margin-top: 3px;">
+    <div class="group">
+        <button onclick="xtable_page(-1);" class="btn mini">Prev</button>
+        <button onclick="xtable_page(1);" class="btn mini">Next</button>
     </div>
-</script>
+</div>
 
 <script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>
