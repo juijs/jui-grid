@@ -3114,7 +3114,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			
 			// 로딩 템플릿 체크 (opts.sortLoading으로 체크하지 않음)
 			if(head.tpl["loading"] && modal != null) {
-				var $loading = $(head.tpl["loading"]);
+				var $loading = $(head.tpl["loading"]());
 				$(this.root).append($loading);
 				
 				ui_modal = modal($loading, { 
