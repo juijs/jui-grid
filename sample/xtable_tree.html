@@ -19,7 +19,15 @@ function updateTreeData(ui, depth) {
         data = [];
 
     for(var i = 0; i < depth; i++) {
-        data.push({ index: key, data: { name: "Hong" + i, age: Math.floor(Math.random() * 100) } });
+        data.push({
+            index: key,
+            data: {
+                name: "Hong" + i,
+                age: Math.floor(Math.random() * 100)
+            },
+            type: "open"
+        });
+
         key += ".0";
     }
 

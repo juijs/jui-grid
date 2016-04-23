@@ -43,7 +43,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 		var iParser = _.index();
 
-		function createRows(data, no, pRow) {
+		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
 
 			for(var i = 0, len = data.length; i < len; i++) {
@@ -53,6 +53,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				// row 객체 초기화
 				row.init(data[i], head.tpl["row"], pRow);
 				row.setIndex(rownum);
+
+				// row 상태 설정
+				if(type == "open" || type == "fold") {
+					row.type = type;
+				}
 
 				// 루트 row만 캐싱함
 				if(pRow == null) {
@@ -552,9 +557,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 		}
 
-		function appendChildRows(p_row, data) {
+		function appendChildRows(p_row, data, type) {
 			var no = p_row.children.length,
-				c_rows = createRows(_.typeCheck("array", data) ? data : [ data ], no, p_row);
+				c_rows = createRows(_.typeCheck("array", data) ? data : [ data ], no, p_row, type);
 
 			for(var i = 0, len = c_rows.length; i < len; i++) {
 				p_row.children.push(c_rows[i]);
@@ -623,7 +628,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				setVirtualScrollInfo(this);
 			}
 
-			this.clear();
 			this.next();
 		}
 
@@ -645,8 +649,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Array} rows
 		 */
 		this.update = function(dataList) {
+			this.reset();
 			rows = createRows(dataList, 0, null);
-			page = 1;
 
 			this.render();
 			this.emit("update");
@@ -665,16 +669,18 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Array} rows
 		 */
 		this.updateTree = function(tree) {
+			this.reset();
+
 			for(var i = 0; i < tree.length; i++) {
 				var pIndex = iParser.getParentIndex(tree[i].index);
 
 				if(pIndex == null) {
-					rows.push(createRows([ tree[i].data ], 0, null)[0]);
+					rows.push(createRows([ tree[i].data ], 0, null, tree[i].type)[0]);
 				} else {
 					var pRow = this.get(pIndex);
 
 					if(pRow) {
-						appendChildRows(pRow, tree[i].data);
+						appendChildRows(pRow, tree[i].data, tree[i].type);
 					}
 				}
 			}
@@ -696,6 +702,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(row) {
 				appendChildRows(row, data);
 
+				this.clear();
 				this.render(true);
 				this.emit("append");
 			}
@@ -712,6 +719,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			if(row) {
 				row.type = "open";
+
+				this.clear();
 				this.render(true);
 				this.emit("open", [row]);
 			}
@@ -728,6 +737,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			if(row) {
 				row.type = "fold";
+
+				this.clear();
 				this.render(true);
 				this.emit("fold", [row]);
 			}
@@ -745,6 +756,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					list[i].type = "open";
 				}
 
+				this.clear();
 				this.render(true);
 				this.emit("openall");
 			}
@@ -762,6 +774,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					list[i].type = "fold";
 				}
 
+				this.clear();
 				this.render(true);
 				this.emit("foldall");
 			}
@@ -816,6 +829,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			if(this.getPage() == pNo) return false;
 
+			this.clear();
 			page = (pNo < 1) ? 1 : pNo;
 			this.render();
 		}
@@ -866,7 +880,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				qs.run();
 
 				// 데이터 초기화 및 입력, 그리고 로딩
-				page = 1;
+				self.clear();
 				self.render(true);
 				self.emit("sortend", [ column, e ]);
 				self.hideLoading();
@@ -922,6 +936,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
         this.rollback = function() {
             if(o_rows != null) {
 				t_rows = o_rows;
+				this.clear();
 				this.render();
                 o_rows = null;
             }
@@ -932,6 +947,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Remove all row elements.
 		 */
 		this.clear = function() {
+			page = 1;
 			body.uit.removeRows();
 			body.scroll();
 		}
@@ -943,7 +959,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.reset = function() {
 			this.clear();
 
-			page = 1;
 			rows = [];
 			t_rows = [];
 			o_rows = null;
@@ -1025,6 +1040,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 				if(("" + index) == row.index) {
 					$viewport.scrollTop((i - 1) * vscroll_info.height);
+
+					this.clear();
 					this.render(true);
 
 					break;
