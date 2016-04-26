@@ -26,7 +26,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		var rows = [], c_rows = [],	t_rows = [], o_rows = null; // 루트 rows, 루트 rows 인덱스, 자식 포함 rows, 자식 제외 + 필터 rows (리펙토링 필요함!!!)
 		var ui_modal = null, page = 1;
         var is_loading = false, is_resize = false;
-		var w_resize = 8;
+		var w_resize = 8, select_row = null;
+		var iParser = _.index();
 
 		var vscroll_info = {
 			height: 0,
@@ -40,8 +41,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			end_index: 0,
 			is_focus: true
 		};
-
-		var iParser = _.index();
 
 		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
@@ -566,6 +565,19 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 		}
 
+		function calculateRows(self, isTree) {
+			if(isTree) {
+				t_rows = [];
+				setOpenChildRows(rows);
+			} else {
+				t_rows = rows;
+			}
+
+			if(self.options.buffer == "vscroll") { // 가상 스크롤 설정
+				setVirtualScrollInfo(self);
+			}
+		}
+
 		this.init = function() {
 			var opts = this.options;
 
@@ -617,17 +629,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		this.render = function(isTree) {
-			if(isTree) {
-				t_rows = [];
-				setOpenChildRows(rows);
-			} else {
-				t_rows = rows;
-			}
-
-			if(this.options.buffer == "vscroll") { // 가상 스크롤 설정
-				setVirtualScrollInfo(this);
-			}
-
+			calculateRows(this, isTree);
 			this.next();
 		}
 
@@ -639,7 +641,31 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @return {RowObject} row
 		 */
 		this.select = function(index) {
-			return body.select(index);
+			if(select_row != null) {
+				$(select_row.element).removeClass("selected");
+			}
+
+			var row = this.get(index);
+			select_row = row;
+
+			if(row.element != null) {
+				$(row.element).addClass("selected");
+			}
+
+			return row;
+		}
+
+		/**
+		 * @method unselect
+		 * Removes a selected class from a selected row and gets an instance of the row in question.
+		 *
+		 * @return {RowObject} row
+		 */
+		this.unselect = function() {
+			if(select_row != null) {
+				$(select_row.element).removeClass("selected");
+				select_row = null;
+			}
 		}
 
 		/**
@@ -1035,6 +1061,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			var $viewport = $(this.root).children(".body");
 
+			// 기존의 로우 그릴 수 있는 형태로 계산하기
+			calculateRows(this, true);
+
 			for(var i = 0, len = t_rows.length; i < len; i++) {
 				var row = t_rows[i];
 
@@ -1042,7 +1071,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					$viewport.scrollTop((i - 1) * vscroll_info.height);
 
 					this.clear();
-					this.render(true);
+					this.next();
 
 					break;
 				}
