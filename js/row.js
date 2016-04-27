@@ -1,8 +1,6 @@
 jui.define("grid.row", [ "jquery" ], function($) {
 
     var Base = function() {
-        var cellkeys = {};
-
         function setIndexChild(row) {
             var clist = row.children;
 
@@ -22,7 +20,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             $(self.element).find("td").each(function(i) {
                 self.list[i] = this;
 
-                if(cellkeys[i]) {
+                if(self.hidden[i]) {
                     this.style.display = "none";
                 }
             });
@@ -203,12 +201,12 @@ jui.define("grid.row", [ "jquery" ], function($) {
         }
 
         this.showCell = function(index) {
-            cellkeys[index] = false;
+            this.hidden[index] = false;
             $(this.list[index]).show();
         }
 
         this.hideCell = function(index) {
-            cellkeys[index] = true;
+            this.hidden[index] = true;
             $(this.list[index]).hide();
         }
 
@@ -244,6 +242,9 @@ jui.define("grid.row", [ "jquery" ], function($) {
 
         /** @property {Array} list List of TD elements of a specified row. */
         this.list = [];
+
+        /** @property {Object} list List of hidden TD element. */
+        this.hidden = {};
 
         /** @property {uix.table.row} parent Variable that refers to the parent row. */
         this.parent = null;
