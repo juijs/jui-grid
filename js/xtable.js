@@ -1487,7 +1487,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @return {Integer} index
 		 */
 		this.activeIndex = function() {
-			return body.activeIndex();
+			if(!select_row) return null;
+			return select_row.index;
 		}
 	}
 
