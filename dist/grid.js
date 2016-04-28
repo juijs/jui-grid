@@ -3691,6 +3691,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 						row = c_rows[keys[0]];
 
 					for(var i = 1, len = keys.length; i < len; i++) {
+						if(!row) break;
 						row = row.children[keys[i]];
 					}
 
