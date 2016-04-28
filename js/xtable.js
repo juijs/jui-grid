@@ -1068,8 +1068,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				var row = t_rows[i];
 
 				if(("" + index) == row.index) {
+					vscroll_info.prev_scroll_top = 0;
+					vscroll_info.current_row_index = 0;
 					$viewport.scrollTop(i * vscroll_info.height);
-
 					this.clear();
 					this.next();
 
