@@ -3057,8 +3057,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			vscroll_info.prev_scroll_top = scrollTop;
 
 			// set real content height
-			//$viewport.height(endRowHeight);
-			body.root.style.top = (vscroll_info.prev_scroll_top + moveHeight) + "px";
+			$viewport.css({ "max-height": endRowHeight });
+			$(body.root).css({ top: (vscroll_info.prev_scroll_top + moveHeight) + "px" });
 
 			//console.log('start', startIndex, endIndex);
 			vscroll_info.start_index = startIndex;
