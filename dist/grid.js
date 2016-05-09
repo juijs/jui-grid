@@ -2556,19 +2556,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
         var is_loading = false, is_resize = false;
 		var w_resize = 8, select_row = null;
 		var iParser = _.index();
-
-		var vscroll_info = {
-			height: 0,
-			content_height: 0,
-			count: 0,
-			scroll_count: 0,
-			prev_scroll_left: 0,
-			prev_scroll_top: 0,
-			current_row_index: 0,
-			start_index: 0,
-			end_index: 0,
-			is_focus: true
-		};
+		var vscroll_info = null;
 
 		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
@@ -3060,7 +3048,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			$viewport.css({ "max-height": endRowHeight });
 			$(body.root).css({ top: (vscroll_info.prev_scroll_top + moveHeight) + "px" });
 
-			//console.log('start', startIndex, endIndex);
 			vscroll_info.start_index = startIndex;
 			vscroll_info.end_index = endIndex + 1;
 		}
@@ -3072,6 +3059,24 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			vscroll_info.content_height = vscroll_info.count * vscroll_info.height;
 
 			$(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
+		}
+
+		function resetVirtualScrollInfo(self) {
+			$(self.root).find(".body").scrollTop(0);
+			$(body.root).css({ top: "0px" });
+
+			vscroll_info = {
+				height: 0,
+				content_height: 0,
+				count: 0,
+				scroll_count: 0,
+				prev_scroll_left: 0,
+				prev_scroll_top: 0,
+				current_row_index: 0,
+				start_index: 0,
+				end_index: 0,
+				is_focus: true
+			};
 		}
 
 		function setOpenChildRows(rows) {
@@ -3342,6 +3347,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var start = (page - 1) * this.options.bufferCount,
 				end = start + this.options.bufferCount;
 
+			// 가상스크롤일 때만 처리
 			if(this.options.buffer == "vscroll") {
 				body.reset();
 
@@ -3365,9 +3371,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 
 				body.append(tmpDataList);
-				this.emit("next", [ page ]);
 
-				if(tmpDataList.length > 0) page++;
+				// 스크롤이 아닐 경우에만 추가
+				if(this.options.buffer != "scroll" && this.options.buffer != "vscroll") {
+					this.emit("next", [ page ]);
+					if (tmpDataList.length > 0) page++;
+				}
 			}
 		}
 
@@ -3463,10 +3472,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Function} callback
 		 */
         this.filter = function(callback) {
-            if(typeof(callback) != "function") return;
-
-            if(o_rows == null) o_rows = t_rows;
-            else t_rows = o_rows;
+            if(o_rows == null) {
+				o_rows = t_rows;
+			} else {
+				t_rows = o_rows;
+				o_rows = null;
+			}
 
             var a_rows = t_rows.slice(),
                 f_data = [];
@@ -3474,7 +3485,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
             for(var i = 0, len = a_rows.length; i < len; i++) {
 				var d = a_rows[i].data;
 
-                if(callback(d) === true) {
+                if((typeof(callback) == "function" && callback(d) === true) || !callback) {
 					f_data.push(d);
                 }
             }
@@ -3488,12 +3499,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Returns filtered rows to the original state.
 		 */
         this.rollback = function() {
-            if(o_rows != null) {
-				t_rows = o_rows;
-				this.clear();
-				this.render();
-                o_rows = null;
-            }
+            this.filter(null);
+			o_rows = null;
         }
 
 		/**
@@ -3511,11 +3518,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Remove all data
 		 */
 		this.reset = function() {
+			if(this.options.buffer == "vscroll") {
+				resetVirtualScrollInfo(this);
+			}
+
 			this.clear();
 
 			rows = [];
 			t_rows = [];
-			o_rows = null;
 		}
 
 		/**
