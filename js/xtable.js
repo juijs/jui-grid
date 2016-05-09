@@ -944,12 +944,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {Function} callback
 		 */
         this.filter = function(callback) {
-            if(o_rows == null) {
-				o_rows = t_rows;
-			} else {
-				t_rows = o_rows;
-				o_rows = null;
-			}
+			if(o_rows == null) o_rows = t_rows;
+			else t_rows = o_rows;
 
             var a_rows = t_rows.slice(),
                 f_data = [];
