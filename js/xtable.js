@@ -844,8 +844,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 				body.append(tmpDataList);
 
-				// 스크롤이 아닐 경우에만 추가
-				if(this.options.buffer != "scroll" && this.options.buffer != "vscroll") {
+				// 가상스크롤이 아닐 경우에만 추가
+				if(this.options.buffer != "vscroll") {
 					this.emit("next", [ page ]);
 					if (tmpDataList.length > 0) page++;
 				}
