@@ -993,7 +993,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			this.clear();
 
 			rows = [];
+			c_rows = [];
 			t_rows = [];
+			select_row = null;
 		}
 
 		/**
