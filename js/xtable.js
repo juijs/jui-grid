@@ -431,7 +431,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		function renderVirtualScroll(self) {
-			var $viewport = $(self.root).find(".body");
+			var $viewport = $(self.root).children(".body");
 			var viewportHeight = self.options.scrollHeight,
 				scrollTop = $viewport.scrollTop(),
 				scrollHeight = $viewport[0].scrollHeight;
@@ -1063,7 +1063,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Sets the scroll based on the height of a table.
 		 *
 		 * @param {Integer|String} index
-		 * @param {Integer|Function} dist
+		 * @param {Integer} dist
 		 */
 		this.scrollTop = function(index, dist) {
 			if(this.options.buffer != "vscroll") return;
@@ -1081,16 +1081,14 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					vscroll_info.current_row_index = 0;
 
 					var scrollTop = i * vscroll_info.height,
-						callbackTop = 0;
+						scrollHeight = $viewport.height(),
+						distTop = _.typeCheck("integer", dist) ? dist : 0;
 
-					// 스크롤 위치 보정할 값 가져오기
-					if(_.typeCheck("function", dist)) {
-						callbackTop = dist(scrollTop);
-					} else if(_.typeCheck("integer", dist)) {
-						callbackTop = dist;
+					if(scrollTop + distTop > scrollHeight) {
+						scrollTop += distTop;
 					}
-					
-					$viewport.scrollTop(scrollTop + callbackTop);
+
+					$viewport.scrollTop(scrollTop);
 					this.clear();
 					this.next();
 
