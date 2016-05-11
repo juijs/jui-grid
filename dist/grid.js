@@ -3591,7 +3591,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Sets the scroll based on the height of a table.
 		 *
 		 * @param {Integer|String} index
-		 * @param {Integer} dist
+		 * @param {Integer|Function} dist
 		 */
 		this.scrollTop = function(index, dist) {
 			if(this.options.buffer != "vscroll") return;
@@ -3607,8 +3607,18 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				if(("" + index) == row.index) {
 					vscroll_info.prev_scroll_top = 0;
 					vscroll_info.current_row_index = 0;
+
+					var scrollTop = i * vscroll_info.height,
+						callbackTop = 0;
+
+					// 스크롤 위치 보정할 값 가져오기
+					if(_.typeCheck("function", dist)) {
+						callbackTop = dist(scrollTop);
+					} else if(_.typeCheck("integer", dist)) {
+						callbackTop = dist;
+					}
 					
-					$viewport.scrollTop((i * vscroll_info.height) + (!dist ? 0 : dist));
+					$viewport.scrollTop(scrollTop + callbackTop);
 					this.clear();
 					this.next();
 
