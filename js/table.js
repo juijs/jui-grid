@@ -1,4 +1,4 @@
-jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ], function($, _, dropdown, Base) {
+jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", "grid.row" ], function($, _, dropdown, Base, Row) {
 
     _.resize(function() {
         var call_list = jui.get("grid.table");
@@ -194,7 +194,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
                             self.hideExpand(e);
                         }
 
-                        self.showExpand(row.index, undefined, e);
+                        self.showExpand(row, undefined, e);
                     }
                 }
             });
@@ -790,6 +790,12 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
          * Removes all rows.
          */
         this.reset = function() {
+            selectedIndex = null;
+            expandedIndex = null;
+            editableIndex = null;
+            dragIndex = null;
+            checkedIndexes = {};
+
             this.uit.removeRows();
             this.scroll();
         }
@@ -1195,8 +1201,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
             resetRowStatus(this);
 
             var expandSel = "#EXPAND_" + this.timestamp,
-                row = this.get(index),
-                obj = (typeof(obj) != "object") ? $.extend({ row: row }, row.data) : obj,
+                row = (index instanceof Row) ? index : this.get(index),
+                obj = (typeof(obj) != "object") ? $.extend({row: row}, row.data) : obj,
                 $expand = $(expandSel).parent().show();
 
             $obj.tbody.find("tr").removeClass("open");
@@ -1212,7 +1218,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base" ]
 
             // 커스텀 이벤트 호출
             expandedIndex = index;
-            this.emit("expand", [ row, e ]);
+            this.emit("expand", [row, e]);
         }
 
         /**
