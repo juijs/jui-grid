@@ -187,7 +187,10 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
                 if(self.options.expand) {
                     if(self.options.expandEvent === false) return;
 
-                    if(expandedIndex === row.index) {
+                    var expandedRow = self.get(expandedIndex);
+
+                    console.log(expandedIndex, expandedRow, row);
+                    if(expandedRow === row) {
                         self.hideExpand(e);
                     } else {
                         if(expandedIndex != null) {
@@ -1217,8 +1220,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
             this.setVo();
 
             // 커스텀 이벤트 호출
-            expandedIndex = index;
-            this.emit("expand", [row, e]);
+            expandedIndex = row.index;
+            this.emit("expand", [ row, e ]);
         }
 
         /**
