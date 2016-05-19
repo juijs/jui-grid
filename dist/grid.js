@@ -1007,9 +1007,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
                 if(self.options.expand) {
                     if(self.options.expandEvent === false) return;
 
-                    var expandedRow = self.get(expandedIndex);
+                    var expandedRow = (expandedIndex instanceof Row) ? expandedIndex : self.get(expandedIndex); // TODO: 가상스크롤 지원 이슈로 인한 사이드이펙트
 
-                    console.log(expandedIndex, expandedRow, row);
                     if(expandedRow === row) {
                         self.hideExpand(e);
                     } else {
@@ -2024,7 +2023,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
             resetRowStatus(this);
 
             var expandSel = "#EXPAND_" + this.timestamp,
-                row = (index instanceof Row) ? index : this.get(index),
+                row = (index instanceof Row) ? index : this.get(index), // TODO: 가상스크롤 지원 이슈로 인한 사이드이펙트
                 obj = (typeof(obj) != "object") ? $.extend({row: row}, row.data) : obj,
                 $expand = $(expandSel).parent().show();
 
@@ -2040,7 +2039,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
             this.setVo();
 
             // 커스텀 이벤트 호출
-            expandedIndex = row.index;
+            expandedIndex = index;
             this.emit("expand", [ row, e ]);
         }
 
@@ -2050,7 +2049,8 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
          */
         this.hideExpand = function(e) {
             if(expandedIndex == null) return;
-            var row = this.get(expandedIndex);
+
+            var row = (expandedIndex instanceof Row) ? expandedIndex : this.get(expandedIndex); // TODO: 가상스크롤 지원 이슈로 인한 사이드이펙트
 
             $('#EXPAND_' + this.timestamp).parent().hide();
             $obj.tbody.find("tr").removeClass("open");
