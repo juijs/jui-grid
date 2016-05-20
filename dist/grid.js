@@ -415,14 +415,14 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         function setRowChildAll(dataList, row) {
-            var c_rows = row.children;
+            var child_rows = row.children;
 
-            if(c_rows.length > 0) {
-                for(var i = 0; i < c_rows.length; i++) {
-                    dataList.push(c_rows[i]);
+            if(child_rows.length > 0) {
+                for(var i = 0; i < child_rows.length; i++) {
+                    dataList.push(child_rows[i]);
 
-                    if(c_rows[i].children.length > 0) {
-                        setRowChildAll(dataList, c_rows[i]);
+                    if(child_rows[i].children.length > 0) {
+                        setRowChildAll(dataList, child_rows[i]);
                     }
                 }
             }
@@ -484,8 +484,8 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             var keys = iParser.getIndexList(index);
 
             var pRow = self.getRowParent(index),
-                rownum = keys[keys.length - 1];
-            row = createRow(data, rownum, pRow);
+                rownum = keys[keys.length - 1],
+                row = createRow(data, rownum, pRow);
 
             pRow.insertChild(rownum, row);
 
@@ -527,6 +527,17 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
             }
 
             return true;
+        }
+
+        function getIndexToRow(index) {
+            for(var i = 0, len = rows.length; i < len; i++) {
+                if(rows[i].index == ("" + index)) {
+                    return rows[i];
+                    break;
+                }
+            }
+
+            return null;
         }
 
         this.appendRow = function() {
@@ -767,13 +778,23 @@ jui.define("grid.base", [ "jquery", "util.base", "grid.column", "grid.row" ], fu
         }
 
         this.getRow = function(index) {
-            if(index == null) return rows;
-            else {
-                if(iParser.isIndexDepth(index)) {
-                    var keys = iParser.getIndexList(index);
-                    return getRowChildLeaf(keys, rows[keys.shift()]);
+            if(index == null) {
+                return rows;
+            } else {
+                var row = getIndexToRow(index);
+
+                if(!row) {
+                    var keys = iParser.getIndexList(index),
+                        row = getIndexToRow(keys[0]);
+
+                    for(var i = 1, len = keys.length; i < len; i++) {
+                        if(!row) break;
+                        row = row.children[keys[i]];
+                    }
+
+                    return row;
                 } else {
-                    return (rows[index]) ? rows[index] : null;
+                    return row;
                 }
             }
         }

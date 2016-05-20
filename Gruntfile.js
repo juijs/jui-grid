@@ -75,5 +75,5 @@ module.exports = function(grunt) {
     grunt.registerTask("js", [ "concat", "uglify" ]);
     grunt.registerTask("css", [ "less", "cssmin" ]);
     grunt.registerTask("test", [ "qunit" ]);
-    grunt.registerTask("default", [ "css", "test", "js" ]);
+    grunt.registerTask("default", [ "css", "js", "test" ]);
 };
