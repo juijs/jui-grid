@@ -75,10 +75,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
 
             if(this.parent && typeof(this.index) == "string") {
-                for(var i = 0, len = this.index.length; i < len; i++){
-                    if(this.index.charAt(i) == ".")
-                        ++this.depth;
-                }
+                this.depth = this.index.split(".").length - 1;
             }
 
             if(!this.isLeaf()) {

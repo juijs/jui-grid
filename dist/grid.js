@@ -120,10 +120,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
 
             if(this.parent && typeof(this.index) == "string") {
-                for(var i = 0, len = this.index.length; i < len; i++){
-                    if(this.index.charAt(i) == ".")
-                        ++this.depth;
-                }
+                this.depth = this.index.split(".").length - 1;
             }
 
             if(!this.isLeaf()) {
@@ -2565,10 +2562,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 	_.resize(function() {
 		var call_list = jui.get("grid.xtable");
-		
+
 		for(var i = 0; i < call_list.length; i++) {
 			var ui_list = call_list[i];
-			
+
 			for(var j = 0; j < ui_list.length; j++) {
 				ui_list[j].resize();
 			}
@@ -2646,7 +2643,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			// 공통 테이블 스타일 정의
 			setTableAllStyle(self, head, body);
-			
+
 			// 테이블 옵션 필터링 함수
 			function getExceptOptions(self, exceptOpts) {
 				var options = {};
@@ -2664,7 +2661,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 				return options;
 			}
-			
+
 			function setTableAllStyle(self, head, body) {
 				var opts = self.options;
 
@@ -2715,16 +2712,16 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 			}
 		}
-		
+
 		function setCustomEvent(self) {
 			head.on("colresize", function(column, e) { // 컬럼 리사이징 관련
 				var cols = head.listColumn(),
 					bodyCols = body.listColumn(),
 					isLast = false;
-				
+
 				for(var j = cols.length - 1; j >= 0; j--) {
 					var hw = $(cols[j].element).outerWidth();
-					
+
 					if(self.options.buffer != "page" && cols[j].type == "show" && !isLast) {
 						if(_.browser.msie) {
 							$(bodyCols[j].element).outerWidth(hw - getScrollBarWidth(self));
@@ -2738,16 +2735,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 						$(bodyCols[j].element).outerWidth(hw);
 					}
 				}
-				
+
+				reloadScrollWidthResizeBar(500);
 				self.emit("colresize", [ column, e ]);
 			});
-			
+
 			head.on("colshow", function(column, e) {
 				body.uit.showColumn(column.index);
 				self.resize();
 				self.emit("colshow", [ column, e ]);
 			});
-			
+
 			head.on("colhide", function(column, e) {
 				body.uit.hideColumn(column.index);
 				self.resize();
@@ -2765,20 +2763,20 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			head.on("colmenu", function(column, e) {
 				self.emit("colmenu", [ column, e ]);
 			});
-			
+
 			head.on("sort", function(column, e) {
 				self.sort(column.index, column.order, e);
 				self.emit("sort", [ column, e ]);
-				
-				// 소팅 후, 현재 소팅 상태 캐싱 처리 
-				if(self.options.sortCache) { 
+
+				// 소팅 후, 현재 소팅 상태 캐싱 처리
+				if(self.options.sortCache) {
 					self.setOption({
 						sortIndex: column.index,
 						sortOrder: column.order
 					});
 				}
 			});
-			
+
 			body.on("select", function(obj, e) {
 				self.emit("select", [ obj, e ]);
 			});
@@ -2790,11 +2788,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			body.on("dblclick", function(obj, e) {
 				self.emit("dblclick", [ obj, e ]);
 			});
-			
+
 			body.on("rowmenu", function(obj, e) {
 				self.emit("rowmenu", [ obj, e ]);
 			});
-			
+
 			body.on("expand", function(obj, e) {
 				self.emit("expand", [ obj, e ]);
 			});
@@ -2803,7 +2801,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				self.emit("expandend", [ obj, e ]);
 			});
 		}
-		
+
 		function setScrollEvent(self, width, height) {
 			var opts = self.options;
 
@@ -3169,22 +3167,22 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			if(opts.data) {
 				this.update(opts.data);
 			}
-			
+
 			// 로딩 템플릿 체크 (opts.sortLoading으로 체크하지 않음)
 			if(head.tpl["loading"] && modal != null) {
 				var $loading = $(head.tpl["loading"]());
 				$(this.root).append($loading);
-				
-				ui_modal = modal($loading, { 
+
+				ui_modal = modal($loading, {
 					target: this.selector,
 					opacity: 0.1,
-					autoHide: false 
+					autoHide: false
 				});
-				
+
 				// 기본 로딩 시간 (ms)
-				opts.sortLoading = (opts.sortLoading === true) ? 500 : opts.sortLoading; 
+				opts.sortLoading = (opts.sortLoading === true) ? 500 : opts.sortLoading;
 			}
-			
+
 			// 컬럼 리사이징 (기본)
 			if(opts.resize) {
 				if(opts.scrollWidth > 0) {
@@ -3441,17 +3439,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.sort = function(index, order, e, isNotLoading) { // index는 컬럼 key 또는 컬럼 name
 			if(!this.options.fields || !this.options.sort || is_resize) return;
-			
-			var self = this, 
+
+			var self = this,
 				column = head.getColumn(index);
-			
-			if(typeof(column.name) == "string") {			
+
+			if(typeof(column.name) == "string") {
 				column.order = (order) ? order : (column.order == "asc") ? "desc" : "asc";
 				head.uit.setColumn(index, column);
-	
+
 				if(this.options.sortLoading && !isNotLoading) {
 					self.showLoading();
-					
+
 					setTimeout(function() {
 						process();
 					}, this.options.sortLoading);
@@ -3459,11 +3457,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					process();
 				}
 			}
-			
+
 			// 정렬 프로세싱 함수
 			function process() {
 				var qs = _.sort(rows);
-				
+
 				if(column.order == "desc") {
 					qs.setCompare(function(a, b) {
 						return (getValue(a) > getValue(b)) ? true : false;
@@ -3473,7 +3471,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 						return (getValue(a) < getValue(b)) ? true : false;
 					});
 				}
-				
+
 				// 정렬
 				qs.run();
 
@@ -3483,7 +3481,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				self.emit("sortend", [ column, e ]);
 				self.hideLoading();
 			}
-			
+
 		    // 해당 컬럼에 해당하는 값 가져오기
 			function getValue(row) {
 		    	var value = row.data[column.name];
@@ -3495,7 +3493,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
                         return value;
                     }
                 }
-    			
+
     			return "";
 		    }
 		}
@@ -3906,13 +3904,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.showLoading = function(delay) {
 			if(!ui_modal || is_loading) return;
-			
+
 			ui_modal.show();
 			is_loading = true;
-			
+
 			if(delay > 0) {
 				var self = this;
-				
+
 				setTimeout(function() {
 					self.hideLoading();
 				}, delay);
@@ -3925,7 +3923,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.hideLoading = function() {
 			if(!ui_modal || !is_loading) return;
-			
+
 			ui_modal.hide();
 			is_loading = false;
 		}
@@ -3937,7 +3935,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		this.setCsv = function(csv) {
             var opts = this.options;
 			if(!opts.fields && !opts.csv) return;
-			
+
 			var fields = _.getCsvFields(opts.fields, opts.csv),
                 csvNumber = (opts.csvNumber) ? _.getCsvFields(opts.fields, opts.csvNumber) : null;
 
@@ -3950,7 +3948,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.setCsvFile = function(file) {
 			if(!this.options.fields && !this.options.csv) return;
-			
+
 			var self = this;
 			_.fileToCsv(file, function(csv) {
 	            self.setCsv(csv);
@@ -3966,7 +3964,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.getCsv = function() {
 			if(!this.options.fields && !this.options.csv) return;
-			
+
 			var fields = _.getCsvFields(this.options.fields, this.options.csv),
 				len = (rows.length > this.options.csvCount) ? this.options.csvCount : rows.length;
 
@@ -3987,7 +3985,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.getCsvBase64 = function() {
 			if(!this.options.fields && !this.options.csv) return;
-			
+
 			return _.csvToBase64(this.getCsv());
 		}
 
@@ -4022,12 +4020,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 */
 		this.rowFunc = function(type, index, callback) {
 			if(!this.options.fields) return;
-			
+
 			var isCallback = (typeof(callback) == "function") ? true : false;
 			var result = 0,
 				count = (isCallback) ? 0 : rows.length,
 				column = head.getColumn(index);
-			
+
 			if(column.name) {
 				for(var i = 0; i < rows.length; i++) {
 					var data = rows[i].data,
@@ -4045,11 +4043,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					}
 				}
 			}
-			
+
 			// 현재는 합계와 평균만 지원함
 			if(type == "sum") return result;
 			else if(type == "avg") return result / count;
-			
+
 			return null;
 		}
 
