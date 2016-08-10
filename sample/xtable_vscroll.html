@@ -7,8 +7,11 @@
 
 <link rel="stylesheet" href="../dist/grid.css" />
 <link rel="stylesheet" href="../dist/grid-jennifer.css" />
+<link rel="stylesheet" href="ui.css" />
+<link rel="stylesheet" href="ui-jennifer.css" />
 <script src="../lib/jquery-1.8.0.min.js"></script>
 <script src="../lib/core.js"></script>
+<script src="ui.js"></script>
 <script src="../dist/grid.js"></script>
 
 <script>
@@ -30,13 +33,13 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         csvNumber: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
         sort: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
-        width: body_width + body_width * 0.15,
-        scrollWidth: body_width,
+        width: 800,
+        scrollWidth: 750,
         scrollHeight: 400,
         rowHeight: 26,
         buffer: "vscroll",
         resize: true,
-        colshow: [ 0, 1, 2, 4, 6, 7 ],
+        colshow: [ 0, 1, 2, 4, 7 ],
         event: {
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);

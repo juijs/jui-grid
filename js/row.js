@@ -97,7 +97,13 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
 
             if(columns != null) {
-                this.hideCells(columns);
+                for(var i = 0; i < columns.length; i++) {
+                    if(columns[i].type == "hide") {
+                        this.hideCell(i);
+                    } else {
+                        this.showCell(i);
+                    }
+                }
             }
 
             setElementCells(this);
@@ -205,14 +211,6 @@ jui.define("grid.row", [ "jquery" ], function($) {
         this.hideCell = function(index) {
             this.hidden[index] = true;
             $(this.list[index]).hide();
-        }
-
-        this.hideCells = function(columns) {
-            for(var i = 0; i < columns.length; i++) {
-                if(columns[i].type == "hide") {
-                    this.hideCell(i);
-                }
-            }
         }
     }
 
