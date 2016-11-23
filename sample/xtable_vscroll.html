@@ -29,9 +29,9 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     var body_width = $("body").width();
 
     xtable = xtableUI("#xtable", {
-        fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
-        csvNumber: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
-        sort: [ 0, 1, 2, 3, 4, 5, 6, "avgTime" ],
+        fields: [ null, "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
+        csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
+        sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
         width: 800,
         scrollWidth: 750,
@@ -87,6 +87,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     <table class="table classic">
         <thead>
         <tr>
+            <th width="100px"></th>
             <th width="50%">Min</th>
             <th>Max</th>
             <th>Count</th>
@@ -117,6 +118,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
 
 <script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>
+        <td><!= row.seq !></td>
         <td>
 
             <span style="padding-left: <!= row.depth * 20 !>px">

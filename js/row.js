@@ -34,6 +34,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
                     row: {
                         type: self.type,
                         index: self.index,
+                        seq: self.seq,
                         data: self.data,
                         depth: self.depth,
                         children: self.children
@@ -67,6 +68,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
 
         this.setIndex = function(rownum) {
             this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
+            this.seq = this.rownum + 1;
 
             if(!this.parent) {
                 this.index = "" + this.rownum;
@@ -83,7 +85,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        this.reload = function(columns) {
+        this.reload = function(columns, seq) {
             if(this.element != null) {
                 var newElem = getElement(this),
                     clsValue = $(this.element).attr("class");
@@ -104,6 +106,10 @@ jui.define("grid.row", [ "jquery" ], function($) {
                         this.showCell(i);
                     }
                 }
+            }
+
+            if(seq != null) {
+                this.seq = seq;
             }
 
             setElementCells(this);
@@ -225,6 +231,9 @@ jui.define("grid.row", [ "jquery" ], function($) {
     var Row = function() {
         /** @property {Array} data Data of a specifiedrow. */
         this.data = null;
+
+        /** @property {Integer} seq Data of a sequence. */
+        this.seq = 0;
 
         /** @property {Integer} [rownum=null] The unique number of a child row under the specified parent row if a parent row exists. */
         this.rownum = null;

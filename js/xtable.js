@@ -839,7 +839,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				for(var i = start; i < end; i++) {
 					var r = t_rows[i];
 
+					r.seq = i + 1;
 					r.reload(head.uit.getColumn());
+
 					tmpDataList.push(r);
 				}
 

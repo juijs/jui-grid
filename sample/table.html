@@ -139,7 +139,7 @@ jui.ready([ "grid.table" ], function(tableUI) {
 
 <script data-jui="#table" data-tpl="row" type="text/template">
     <tr>
-        <td><i class="icon-left"></i></td>
+        <td><?= row.seq ?></td>
         <td><?= row.data["min,m"] ?></td>
         <td><?= max ?> <i class="icon-edit"></i></td>
         <td><?= count ?></td>
