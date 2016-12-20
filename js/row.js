@@ -29,8 +29,10 @@ jui.define("grid.row", [ "jquery", "util.base" ], function($, _) {
         function getElement(self, xssFilter) {
             if(!self.tpl) return self.element;
 
-            // XSS Filter
-            replaceXssFilteredData(self, xssFilter);
+            // 로우 데이터 XSS 필터링
+            if(_.typeCheck("array", xssFilter)) {
+                replaceXssFilteredData(self, xssFilter);
+            }
 
             var element = $(self.tpl(
                 $.extend({
