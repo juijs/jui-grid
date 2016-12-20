@@ -43,7 +43,7 @@ jui.define("grid.column", [ "jquery" ], function($) {
 
     return Column;
 });
-jui.define("grid.row", [ "jquery" ], function($) {
+jui.define("grid.row", [ "jquery", "util.base" ], function($, _) {
 
     var Base = function() {
         function setIndexChild(row) {
@@ -71,8 +71,11 @@ jui.define("grid.row", [ "jquery" ], function($) {
             });
         }
 
-        function getElement(self) {
+        function getElement(self, xssFilter) {
             if(!self.tpl) return self.element;
+
+            // XSS Filter
+            replaceXssFilteredData(self, xssFilter);
 
             var element = $(self.tpl(
                 $.extend({
@@ -111,6 +114,16 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
+        function replaceXssFilteredData(self, xssFilter) {
+            for(var key in self.data) {
+                if(xssFilter[key]) {
+                    if(_.typeCheck("string", self.data[key])) {
+                        self.data[key] = self.data[key].replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    }
+                }
+            }
+        }
+
         this.setIndex = function(rownum) {
             this.rownum = (!isNaN(rownum)) ? rownum : this.rownum;
             this.seq = this.rownum + 1;
@@ -130,9 +143,9 @@ jui.define("grid.row", [ "jquery" ], function($) {
             }
         }
 
-        this.reload = function(columns, seq) {
+        this.reload = function(columns, seq, xssFilter) {
             if(this.element != null) {
-                var newElem = getElement(this),
+                var newElem = getElement(this, xssFilter),
                     clsValue = $(this.element).attr("class");
 
                 $(newElem).addClass(clsValue).insertAfter(this.element);
@@ -140,7 +153,7 @@ jui.define("grid.row", [ "jquery" ], function($) {
 
                 this.element = newElem;
             } else {
-                this.element = getElement(this);
+                this.element = getElement(this, xssFilter);
             }
 
             if(columns != null) {
@@ -2596,6 +2609,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		var w_resize = 8, select_row = null;
 		var iParser = _.index();
 		var vscroll_info = null;
+		var xss_filter_keys = {};
 
 		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
@@ -2627,7 +2641,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function createTableList(self) {
 			var exceptOpts = [
 			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-			   "event", "rows", "scrollWidth", "width", "rowHeight"
+			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter"
 			];
 
 			var $root = $(self.root);
@@ -3003,7 +3017,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var viewportHeight = self.options.scrollHeight,
 				scrollTop = $viewport.scrollTop(),
 				scrollHeight = $viewport[0].scrollHeight;
-			var ratio = window.devicePixelRatio;
 
 			// calculate
 			var dist = Math.abs(vscroll_info.prev_scroll_top - scrollTop);
@@ -3206,6 +3219,19 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					head.resizeColumns();
 					head.resize();
 				}
+			}
+
+			// XSS 필터 대상 컬럼 설정
+			if(opts.xssFilter) {
+                var filterIndexes = opts.xssFilter,
+                    len = (filterIndexes === true) ? head.uit.getColumnCount() : filterIndexes.length;
+
+                for(var i = 0; i < len; i++) {
+                    var colKey = (filterIndexes === true) ? i : filterIndexes[i],
+                        col = head.getColumn(colKey);
+
+                    xss_filter_keys[col.name] = true;
+                }
 			}
 		}
 
@@ -3415,7 +3441,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					var r = t_rows[i];
 
 					r.seq = i + 1;
-					r.reload(head.uit.getColumn());
+					r.reload(head.uit.getColumn(), null, xss_filter_keys);
 
 					tmpDataList.push(r);
 				}
@@ -4230,7 +4256,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			 */
 			sortEvent: true,
 
-			animate: false // @Deprecated
+            /**
+             * @cfg {Boolean} [xssFilter=false]
+             * Activate the xss filter to set the column value.
+             */
+            xssFilter: false,
+
+            /**
+             * @cfg {Boolean} [animate=false]
+             * @deprecated
+             */
+            animate: false
         }
     }
 

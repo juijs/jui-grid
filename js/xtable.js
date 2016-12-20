@@ -29,6 +29,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		var w_resize = 8, select_row = null;
 		var iParser = _.index();
 		var vscroll_info = null;
+		var xss_filter_keys = {};
 
 		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
@@ -60,7 +61,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function createTableList(self) {
 			var exceptOpts = [
 			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-			   "event", "rows", "scrollWidth", "width", "rowHeight"
+			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter"
 			];
 
 			var $root = $(self.root);
@@ -436,7 +437,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var viewportHeight = self.options.scrollHeight,
 				scrollTop = $viewport.scrollTop(),
 				scrollHeight = $viewport[0].scrollHeight;
-			var ratio = window.devicePixelRatio;
 
 			// calculate
 			var dist = Math.abs(vscroll_info.prev_scroll_top - scrollTop);
@@ -639,6 +639,19 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					head.resizeColumns();
 					head.resize();
 				}
+			}
+
+			// XSS 필터 대상 컬럼 설정
+			if(opts.xssFilter) {
+                var filterIndexes = opts.xssFilter,
+                    len = (filterIndexes === true) ? head.uit.getColumnCount() : filterIndexes.length;
+
+                for(var i = 0; i < len; i++) {
+                    var colKey = (filterIndexes === true) ? i : filterIndexes[i],
+                        col = head.getColumn(colKey);
+
+                    xss_filter_keys[col.name] = true;
+                }
 			}
 		}
 
@@ -848,7 +861,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					var r = t_rows[i];
 
 					r.seq = i + 1;
-					r.reload(head.uit.getColumn());
+					r.reload(head.uit.getColumn(), null, xss_filter_keys);
 
 					tmpDataList.push(r);
 				}
@@ -1663,7 +1676,17 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			 */
 			sortEvent: true,
 
-			animate: false // @Deprecated
+            /**
+             * @cfg {Boolean} [xssFilter=false]
+             * Activate the xss filter to set the column value.
+             */
+            xssFilter: false,
+
+            /**
+             * @cfg {Boolean} [animate=false]
+             * @deprecated
+             */
+            animate: false
         }
     }
 
