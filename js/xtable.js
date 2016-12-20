@@ -29,7 +29,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		var w_resize = 8, select_row = null;
 		var iParser = _.index();
 		var vscroll_info = null;
-		var xss_filter_keys = {};
+		var xss_filter_keys = null;
 
 		function createRows(data, no, pRow, type) {
 			var tmp_rows = [];
@@ -85,7 +85,21 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			// 공통 테이블 스타일 정의
 			setTableAllStyle(self, head, body);
 
-			// 테이블 옵션 필터링 함수
+            // TODO: XSS 필터 대상 컬럼 설정 리펙토링 필요
+            if(self.options.xssFilter) {
+                var filterIndexes = self.options.xssFilter,
+                    len = (filterIndexes === true) ? head.uit.getColumnCount() : filterIndexes.length;
+
+                xss_filter_keys = {};
+                for(var i = 0; i < len; i++) {
+                    var colKey = (filterIndexes === true) ? i : filterIndexes[i],
+                        col = head.getColumn(colKey);
+
+                    xss_filter_keys[col.name] = true;
+                }
+            }
+
+            // 테이블 옵션 필터링 함수
 			function getExceptOptions(self, exceptOpts) {
 				var options = {};
 
@@ -639,19 +653,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					head.resizeColumns();
 					head.resize();
 				}
-			}
-
-			// XSS 필터 대상 컬럼 설정
-			if(opts.xssFilter) {
-                var filterIndexes = opts.xssFilter,
-                    len = (filterIndexes === true) ? head.uit.getColumnCount() : filterIndexes.length;
-
-                for(var i = 0; i < len; i++) {
-                    var colKey = (filterIndexes === true) ? i : filterIndexes[i],
-                        col = head.getColumn(colKey);
-
-                    xss_filter_keys[col.name] = true;
-                }
 			}
 		}
 

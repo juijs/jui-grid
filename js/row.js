@@ -30,7 +30,7 @@ jui.define("grid.row", [ "jquery", "util.base" ], function($, _) {
             if(!self.tpl) return self.element;
 
             // 로우 데이터 XSS 필터링
-            if(_.typeCheck("array", xssFilter)) {
+            if(xssFilter != null) {
                 replaceXssFilteredData(self, xssFilter);
             }
 
