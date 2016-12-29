@@ -2855,7 +2855,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				}
 
 				if(opts.buffer == "scroll") { // 무조건 scroll 타입일 때
-					if ((this.scrollTop + height) >= $body.get(0).scrollHeight) {
+					var scrollTop = this.scrollTop + height,
+						scrollHeight = $body.get(0).scrollHeight;
+
+					if (scrollTop >= scrollHeight * 0.9) {
 						self.next();
 						self.emit("scroll", e);
 					}
