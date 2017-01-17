@@ -41,26 +41,26 @@
 // X-Table Scroll
 // --------------------------------------------------
 .xtable.scroll {
-  > .head {
-    > .table.classic, .table.expand { // 클래식 테이블일 경우
-      .border-top-radius(0px);
-
-      > thead {
-        > tr:first-child > th {
-          &:first-child {
-            .border-top-left-radius(0px);
-          }
-
-          &:last-child {
-            .border-top-right-radius(0px);
-          }
-        }
-      }
-    }
-  }
+  //> .head {
+  //  > .table.classic, .table.expand {
+  //    .border-top-radius(0px);
+  //
+  //    > thead {
+  //      > tr:first-child > th {
+  //        &:first-child {
+  //          .border-top-left-radius(0px);
+  //        }
+  //
+  //        &:last-child {
+  //          .border-top-right-radius(0px);
+  //        }
+  //      }
+  //    }
+  //  }
+  //}
 
   > .body {
-    .table.classic, .table.expand { // 클래식 테이블일 경우
+    table {
       .border-bottom-radius(0px);
 
       > tbody {

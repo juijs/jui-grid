@@ -66,12 +66,19 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			var $root = $(self.root);
 
-			// 루트 기본 스타일 설정
+			// 가상스크롤 모드일 때, 로우 높이는 고정되야 하므로 nowrap 클래스를 추가함
 			if(self.options.buffer == "vscroll") {
 				if(!$root.hasClass("nowrap")) {
 					$root.addClass("nowrap");
 				}
 			}
+
+			// 스크롤 모드일 때, 무조건 scroll 클래스를 추가함
+            if(self.options.buffer != "page") {
+                if(!$root.hasClass("scroll")) {
+                    $root.addClass("scroll");
+                }
+            }
 
 			// 기본 테이블 마크업 복사해서 추가하기
 			$root.append($root.children("table").clone());
@@ -1633,7 +1640,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			width: 0,
 
 			/**
-			 * @cfg {String} [buffer='scroll'/'page'/'s-page']
+			 * @cfg {String} [buffer='scroll'/'page'/'s-page'/'vscroll']
 			 * Sets the buffer type of a table.
 			 */
 			buffer: "scroll",
