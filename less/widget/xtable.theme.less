@@ -13,8 +13,19 @@
 // --------------------------------------------------
 .xtable.scroll {
   > .head {
-    border-left: 1px solid @xtableScrollBorderColor;
-    border-right: 1px solid @xtableScrollBorderColor;
+    > .table.simple {
+      > thead {
+        > tr:first-child {
+          > th:first-child {
+            border-left: 1px solid @xtableScrollBorderColor;
+          }
+
+          > th:last-child {
+            border-right: 1px solid @xtableScrollBorderColor;
+          }
+        }
+      }
+    }
   }
 
   > .body {

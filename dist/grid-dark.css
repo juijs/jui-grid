@@ -439,8 +439,10 @@
   background: #8a8a8a;
   border: 1px solid #737373;
 }
-.jui .xtable.scroll > .head {
+.jui .xtable.scroll > .head > .table.simple > thead > tr:first-child > th:first-child {
   border-left: 1px solid #5d5d5d;
+}
+.jui .xtable.scroll > .head > .table.simple > thead > tr:first-child > th:last-child {
   border-right: 1px solid #5d5d5d;
 }
 .jui .xtable.scroll > .body {
