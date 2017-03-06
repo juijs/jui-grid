@@ -3239,6 +3239,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 								}
 							}
 
+                            self.emit("multisort", [ column, e ]);
                             self.multiSort(sortedColumns, sortedOrders);
                             self.emit("colclick", [ column, e ]);
                         });
@@ -3579,7 +3580,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
                 // 데이터 초기화 및 입력, 그리고 로딩
                 self.update(f_data);
-                self.emit("multisort", [ f_data ]);
+                self.emit("multisortend");
                 self.hideLoading();
                 a_rows = null;
             }

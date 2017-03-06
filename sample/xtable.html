@@ -115,9 +115,12 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         colshow: [ 0, 1, 2, 4, 6, 7 ],
 //        xssFilter: [ "min" ],
         event: {
-            colclick: function(column, e) {
+            multisort: function(column, e) {
                 console.log(column)
                 setSortEff(column, e);
+            },
+            multisortend: function() {
+                alert("multisortend");
             },
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);
