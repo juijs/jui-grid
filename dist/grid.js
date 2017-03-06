@@ -9,8 +9,8 @@ jui.define("grid.column", [ "jquery" ], function($) {
         /** @property {HTMLElement} [element=null] TH element of a specified column */
         this.element = null;
 
-        /** @property {String} [order="asc"] Column sort state */
-        this.order = "asc";
+        /** @property {"asc"/"desc"/null} [order=null] Column sort state */
+        this.order = null;
 
         /** @property {Integer} [name=null] Column name */
         this.name = null;
@@ -1691,7 +1691,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
             var column = this.getColumn(index);
 
             if(typeof(column.name) == "string") {
-                column.order = (order) ? order : (column.order == "asc") ? "desc" : "asc";
+                column.order = (order) ? order : (column.order == "asc" || column.order == null) ? "desc" : "asc";
 
                 this.uit.setColumn(index, column);
                 this.uit.sortRows(column.name, (column.order == "desc") ? true : false);
@@ -2643,7 +2643,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function createTableList(self) {
 			var exceptOpts = [
 			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter"
+			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "multiSort"
 			];
 
 			var $root = $(self.root);
@@ -3198,6 +3198,58 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 		}
 
+        function setEventMultiSort(self) {
+            var sortIndexes = self.options.multiSort,
+                len = (sortIndexes === true) ? head.uit.getColumnCount() : sortIndexes.length,
+				sortedColumns = [],
+				sortedOrders = [];
+
+            for(var i = 0; i < len; i++) {
+                var colKey = (sortIndexes === true) ? i : sortIndexes[i],
+                    col = self.getColumn(colKey);
+
+                if(col.element != null) {
+                    (function(index, column) {
+						self.addEvent(column.element, "click", function(e) {
+                            if($(e.target).hasClass("resize")) return;
+
+							if(column.order == "asc") {
+                            	column.order = null;
+
+                            	for(var j = 0; j < sortedColumns.length; j++) {
+                            		if(column.name == sortedColumns[j]) {
+                            			sortedColumns.splice(j, 1);
+                                        sortedOrders.splice(j, 1);
+									}
+								}
+							} else {
+								var colIndex = _.inArray(column.name, sortedColumns);
+
+								if(column.order == null) {
+									column.order = "desc";
+								} else if(column.order == "desc") {
+									column.order = "asc";
+								}
+
+								if(colIndex == -1) {
+                                    sortedColumns.push(column.name);
+                                    sortedOrders.push(column.order);
+                                } else {
+									sortedOrders[colIndex] = column.order;
+								}
+							}
+
+                            self.multiSort(sortedColumns, sortedOrders);
+                            self.emit("colclick", [ column, e ]);
+                        });
+                    })(colKey, col);
+
+                    $(col.element).css("cursor", "pointer");
+                }
+            }
+        }
+
+
 		this.init = function() {
 			var opts = this.options;
 
@@ -3216,6 +3268,11 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			// 가로/세로 스크롤 설정
 			setScrollEvent(this, opts.scrollWidth, opts.scrollHeight);
+
+			// 멀티소트 이벤트 설정
+			if(opts.multiSort && opts.sortEvent) {
+                setEventMultiSort(this);
+			}
 
 			// 데이터가 있을 경우
 			if(opts.data) {
@@ -3486,6 +3543,67 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			this.render();
 		}
 
+        this.multiSort = function(columns, order_by) {
+            if(!this.options.fields || !this.options.multiSort || this.options.sort) return;
+            if(!_.typeCheck("array", columns) || !_.typeCheck("array", order_by) || columns.length != order_by.length) return;
+
+            if(o_rows == null) o_rows = t_rows;
+            else t_rows = o_rows;
+
+            var self = this,
+				a_rows = t_rows.slice(),
+				f_data = [];
+
+            if(this.options.sortLoading) {
+                self.showLoading();
+
+                setTimeout(function() {
+                    process();
+                }, this.options.sortLoading);
+            } else {
+                process();
+            }
+
+            function process() {
+                for(var i = 0, len = a_rows.length; i < len; i++) {
+                    f_data.push(a_rows[i].data);
+                }
+
+                if(columns.length == 0) {
+                	self.update(f_data);
+				} else {
+                    f_data.sort(function(a, b) {
+                        return multisort_recursive(a, b, columns, order_by, 0);
+                    });
+				}
+
+                // 데이터 초기화 및 입력, 그리고 로딩
+                self.update(f_data);
+                self.emit("multisort", [ f_data ]);
+                self.hideLoading();
+                a_rows = null;
+            }
+
+            function multisort_recursive(a, b, columns, order_by, index) {
+                var direction = (order_by[index].toUpperCase() == "DESC") ? 1 : 0,
+					key = columns[index],
+					is_numeric = !isNaN(+a[key] - +b[key]),
+					x = is_numeric ? +a[key] : a[key].toLowerCase(),
+					y = is_numeric ? +b[key] : b[key].toLowerCase();
+
+                if(x < y) {
+                    return direction == 0 ? -1 : 1;
+                }
+
+                if(x == y)  {
+                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
+                }
+
+                return direction == 0 ? 1 : -1;
+            }
+        }
+
+
 		/**
 		 * @method sort
 		 * Moves a row iat a specified index to the target index.
@@ -3494,13 +3612,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {String} order  "asc" or "desc"
 		 */
 		this.sort = function(index, order, e, isNotLoading) { // index는 컬럼 key 또는 컬럼 name
-			if(!this.options.fields || !this.options.sort || is_resize) return;
+			if(!this.options.fields || !this.options.sort || this.options.multiSort || is_resize) return;
 
 			var self = this,
 				column = head.getColumn(index);
 
 			if(typeof(column.name) == "string") {
-				column.order = (order) ? order : (column.order == "asc") ? "desc" : "asc";
+				column.order = (order) ? order : (column.order == "asc" || column.order == null) ? "desc" : "asc";
 				head.uit.setColumn(index, column);
 
 				if(this.options.sortLoading && !isNotLoading) {
@@ -3516,20 +3634,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
 			// 정렬 프로세싱 함수
 			function process() {
-				var qs = _.sort(rows);
-
-				if(column.order == "desc") {
-					qs.setCompare(function(a, b) {
-						return (getValue(a) > getValue(b)) ? true : false;
-					});
-				} else {
-					qs.setCompare(function(a, b) {
-						return (getValue(a) < getValue(b)) ? true : false;
-					});
-				}
-
-				// 정렬
-				qs.run();
+				rows.sort(function(a, b) {
+                    if(column.order == "desc") {
+                        return (getValue(a) > getValue(b)) ? true : false;
+                    } else {
+                        return (getValue(a) < getValue(b)) ? true : false;
+                    }
+				})
 
 				// 데이터 초기화 및 입력, 그리고 로딩
 				self.clear();
@@ -3577,6 +3688,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
             this.update(f_data);
             this.emit("filter", [ f_data ]);
+            a_rows = null;
         }
 
 		/**
@@ -4232,6 +4344,12 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			 * Sets the number of rows per page.
 			 */
 			bufferCount: 100,
+
+            /**
+             * @cfg {Boolean/Array} [multisort=false]
+             * Determines whether to use the table sort function.
+             */
+            multiSort: false,
 
 			/**
 			 * @cfg {Boolean/Array} [sort=false]

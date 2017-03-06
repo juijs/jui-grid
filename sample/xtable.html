@@ -7,21 +7,24 @@
 
 <link rel="stylesheet" href="../dist/grid.css" />
 <link rel="stylesheet" href="../dist/grid-jennifer.css" />
+<link rel="stylesheet" href="jui/dist/ui.css" />
+<link rel="stylesheet" href="jui/dist/ui-jennifer.css" />
 <script src="../lib/jquery-1.8.0.min.js"></script>
 <script src="../lib/core.js"></script>
+<script src="jui/dist/ui.js"></script>
 <script src="../dist/grid.js"></script>
 
 <script>
 var table_data = [
-    {"min":"<script>alert(1);/script>","max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0},
+    {"min":1,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0},
     {"min":0.004,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
-    {"min":0.062,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
-    {"min":0.03,"max":0.12,"count":6,"sumCpu":0,"hash":1888362476,"sd":0.033,"tpmc":0,"avgCpu":0,"failure":0,"rate":1.236,"sumTime":0.343,"name":"/oraclesql4.jsp","avgTime":0.057,"success":6},
+    {"min":1,"max":0.260,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
+    {"min":0.03,"max":0.10,"count":6,"sumCpu":0,"hash":1888362476,"sd":0.033,"tpmc":0,"avgCpu":0,"failure":0,"rate":1.236,"sumTime":0.343,"name":"/oraclesql4.jsp","avgTime":0.057,"success":6},
     {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
     {"min":0.004,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
-    {"min":0.062,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
+    {"min":1,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
     {"min":0.03,"max":0.12,"count":6,"sumCpu":0,"hash":1888362476,"sd":0.033,"tpmc":0,"avgCpu":0,"failure":0,"rate":1.236,"sumTime":0.343,"name":"/oraclesql4.jsp","avgTime":0.057,"success":6},
-    {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
+    {"min":1,"max":0.26,"count":6,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
     {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
     {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
     {"min":0.001,"max":0.035,"count":11,"sumCpu":0,"hash":-758408983,"sd":0.01,"tpmc":0,"avgCpu":0,"failure":11,"rate":0.187,"sumTime":0.052,"name":"/ignoresqlexp.jsp","avgTime":0.005,"success":0},
@@ -66,13 +69,42 @@ var table_data = [
     {"min":0.014,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
 ];
 
+for(var i = 0; i < 500000; i++) {
+    table_data.push({"min":0.014,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0});
+}
+
+function setSortEff(column, e, isBlack, isMulti) {
+    $(column.element).find("i").remove();
+
+    var color = (!isBlack) ? " icon-white" : "",
+        $icon = null;
+
+    if(column.order == "desc") {
+        $icon = $("<i class='icon-arrow1" + color + "'></i>");
+    } else if(column.order == "asc") {
+        $icon = $("<i class='icon-arrow3" + color + "'></i>");
+    }
+
+    if($icon != null) {
+        if(!isMulti) {
+            $icon.css({ "position": "static", "float": "right", "margin-left": "-20px" });
+        } else {
+            $icon.css({ "margin-left": "3px" });
+        }
+
+        $(column.element).append($icon);
+    }
+}
+
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     var body_width = $("body").width();
 
     xtable = xtableUI("#xtable", {
         fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 0, 1, 2, 3, 4, 5, "avgTime" ],
-        sort: true,
+//        sort: true,
+        multiSort: true,
+        sortEvent: true,
         sortLoading: true,
         //width: body_width + body_width * 0.15,
         //scrollWidth: body_width,
@@ -80,10 +112,13 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         bufferCount: 10,
         expand: true,
         resize: true,
-        colshow: [ 0, 2, 4, 6, 7 ],
-        xssFilter: [ "min" ],
-        rows: table_data,
+        colshow: [ 0, 1, 2, 4, 6, 7 ],
+//        xssFilter: [ "min" ],
         event: {
+            colclick: function(column, e) {
+                console.log(column)
+                setSortEff(column, e);
+            },
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);
             },
@@ -92,7 +127,8 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
             },
             select: function(row, e) {
                 //console.log(row);
-            }
+            },
+            sort: setSortEff
         },
         tpl : {
             expand: "<div></div>"

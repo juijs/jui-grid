@@ -9,8 +9,8 @@ jui.define("grid.column", [ "jquery" ], function($) {
         /** @property {HTMLElement} [element=null] TH element of a specified column */
         this.element = null;
 
-        /** @property {String} [order="asc"] Column sort state */
-        this.order = "asc";
+        /** @property {"asc"/"desc"/null} [order=null] Column sort state */
+        this.order = null;
 
         /** @property {Integer} [name=null] Column name */
         this.name = null;

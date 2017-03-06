@@ -831,7 +831,7 @@ jui.defineUI("grid.table", [ "jquery", "util.base", "ui.dropdown", "grid.base", 
             var column = this.getColumn(index);
 
             if(typeof(column.name) == "string") {
-                column.order = (order) ? order : (column.order == "asc") ? "desc" : "asc";
+                column.order = (order) ? order : (column.order == "asc" || column.order == null) ? "desc" : "asc";
 
                 this.uit.setColumn(index, column);
                 this.uit.sortRows(column.name, (column.order == "desc") ? true : false);
