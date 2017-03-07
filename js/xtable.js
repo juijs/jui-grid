@@ -61,7 +61,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function createTableList(self) {
 			var exceptOpts = [
 			   "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "multiSort"
+			   "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "msort"
 			];
 
 			var $root = $(self.root);
@@ -617,7 +617,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
         function setEventMultiSort(self) {
-            var sortIndexes = self.options.multiSort,
+            var sortIndexes = self.options.msort,
                 len = (sortIndexes === true) ? head.uit.getColumnCount() : sortIndexes.length,
 				sortedColumns = [],
 				sortedOrders = [];
@@ -657,8 +657,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 								}
 							}
 
-                            self.emit("multisort", [ column, e ]);
-                            self.multiSort(sortedColumns, sortedOrders);
+                            self.emit("msort", [ column, e ]);
+                            self.msort(sortedColumns, sortedOrders);
                             self.emit("colclick", [ column, e ]);
                         });
                     })(colKey, col);
@@ -689,7 +689,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			setScrollEvent(this, opts.scrollWidth, opts.scrollHeight);
 
 			// 멀티소트 이벤트 설정
-			if(opts.multiSort && opts.sortEvent) {
+			if(opts.msort && opts.sortEvent) {
                 setEventMultiSort(this);
 			}
 
@@ -962,8 +962,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			this.render();
 		}
 
-        this.multiSort = function(columns, order_by) {
-            if(!this.options.fields || !this.options.multiSort || this.options.sort) return;
+        this.msort = function(columns, order_by) {
+            if(!this.options.fields || !this.options.msort || this.options.sort) return;
             if(!_.typeCheck("array", columns) || !_.typeCheck("array", order_by) || columns.length != order_by.length) return;
 
             if(o_rows == null) o_rows = t_rows;
@@ -998,7 +998,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
                 // 데이터 초기화 및 입력, 그리고 로딩
                 self.update(f_data);
-                self.emit("multisortend");
+                self.emit("msortend");
                 self.hideLoading();
                 a_rows = null;
             }
@@ -1031,7 +1031,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * @param {String} order  "asc" or "desc"
 		 */
 		this.sort = function(index, order, e, isNotLoading) { // index는 컬럼 key 또는 컬럼 name
-			if(!this.options.fields || !this.options.sort || this.options.multiSort || is_resize) return;
+			if(!this.options.fields || !this.options.sort || this.options.msort || is_resize) return;
 
 			var self = this,
 				column = head.getColumn(index);
@@ -1765,10 +1765,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			bufferCount: 100,
 
             /**
-             * @cfg {Boolean/Array} [multisort=false]
+             * @cfg {Boolean/Array} [msort=false]
              * Determines whether to use the table sort function.
              */
-            multiSort: false,
+            msort: false,
 
 			/**
 			 * @cfg {Boolean/Array} [sort=false]
