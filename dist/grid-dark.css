@@ -439,13 +439,15 @@
   background: #8a8a8a;
   border: 1px solid #737373;
 }
-.jui .xtable.scroll > .head > .table.simple > thead > tr:first-child > th:first-child {
+.jui .xtable.scroll > .head .table.simple > thead > tr:first-child > th:first-child {
   border-left: 1px solid #5d5d5d;
 }
-.jui .xtable.scroll > .head > .table.simple > thead > tr:first-child > th:last-child {
+.jui .xtable.scroll > .head .table.simple > thead > tr:first-child > th:last-child {
   border-right: 1px solid #5d5d5d;
 }
 .jui .xtable.scroll > .body {
-  border-left: 1px solid #5d5d5d;
   border-bottom: 1px solid #5d5d5d;
+}
+.jui .xtable.scroll > .body .table.simple > tbody > tr > td:first-child {
+  border-left: 1px solid #5d5d5d;
 }

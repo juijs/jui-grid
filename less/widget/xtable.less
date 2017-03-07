@@ -41,40 +41,12 @@
 // X-Table Scroll
 // --------------------------------------------------
 .xtable.scroll {
-  //> .head {
-  //  > .table.classic, .table.expand {
-  //    .border-top-radius(0px);
-  //
-  //    > thead {
-  //      > tr:first-child > th {
-  //        &:first-child {
-  //          .border-top-left-radius(0px);
-  //        }
-  //
-  //        &:last-child {
-  //          .border-top-right-radius(0px);
-  //        }
-  //      }
-  //    }
-  //  }
-  //}
-
   > .body {
-    table {
+    .table.classic {
       .border-bottom-radius(0px);
 
       > tbody {
         > tr {
-          > td {
-            &:first-child {
-              border-left-width: 0px;
-            }
-
-            &:last-child {
-              border-right-width: 0px;
-            }
-          }
-
           &:last-child > td {
             &:first-child {
               .border-bottom-left-radius(0px);

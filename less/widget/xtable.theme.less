@@ -13,7 +13,7 @@
 // --------------------------------------------------
 .xtable.scroll {
   > .head {
-    > .table.simple {
+    .table.simple {
       > thead {
         > tr:first-child {
           > th:first-child {
@@ -29,7 +29,16 @@
   }
 
   > .body {
-    border-left: 1px solid @xtableScrollBorderColor;
     border-bottom: 1px solid @xtableScrollBorderColor;
+
+    .table.simple {
+      > tbody {
+        > tr {
+          > td:first-child {
+            border-left: 1px solid @xtableScrollBorderColor;
+          }
+        }
+      }
+    }
   }
 }
