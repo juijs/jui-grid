@@ -102,7 +102,6 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     xtable = xtableUI("#xtable", {
         fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 0, 1, 2, 3, 4, 5, "avgTime" ],
-//        sort: true,
         msort: true,
         sortEvent: true,
         sortLoading: true,
@@ -120,7 +119,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
                 setSortEff(column, e);
             },
             msortend: function() {
-                alert("multisortend");
+//                alert("multisortend");
             },
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);

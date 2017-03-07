@@ -3250,6 +3250,23 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
             }
         }
 
+        function recursiveMultiSort(a, b, columns, order_by, index) {
+            var direction = (order_by[index] == "desc") ? 1 : 0,
+                key = columns[index],
+                is_numeric = !isNaN(+a[key] - +b[key]),
+                x = is_numeric ? +a[key] : a[key].toLowerCase(),
+                y = is_numeric ? +b[key] : b[key].toLowerCase();
+
+            if(x < y) {
+                return direction == 0 ? -1 : 1;
+            }
+
+            if(x == y)  {
+                return columns.length-1 > index ? recursiveMultiSort(a,b,columns,order_by,index+1) : 0;
+            }
+
+            return direction == 0 ? 1 : -1;
+        }
 
 		this.init = function() {
 			var opts = this.options;
@@ -3574,7 +3591,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
                 	self.update(f_data);
 				} else {
                     f_data.sort(function(a, b) {
-                        return multisort_recursive(a, b, columns, order_by, 0);
+                        return recursiveMultiSort(a, b, columns, order_by, 0);
                     });
 				}
 
@@ -3583,24 +3600,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
                 self.emit("msortend");
                 self.hideLoading();
                 a_rows = null;
-            }
-
-            function multisort_recursive(a, b, columns, order_by, index) {
-                var direction = (order_by[index].toUpperCase() == "DESC") ? 1 : 0,
-					key = columns[index],
-					is_numeric = !isNaN(+a[key] - +b[key]),
-					x = is_numeric ? +a[key] : a[key].toLowerCase(),
-					y = is_numeric ? +b[key] : b[key].toLowerCase();
-
-                if(x < y) {
-                    return direction == 0 ? -1 : 1;
-                }
-
-                if(x == y)  {
-                    return columns.length-1 > index ? multisort_recursive(a,b,columns,order_by,index+1) : 0;
-                }
-
-                return direction == 0 ? 1 : -1;
             }
         }
 
@@ -3636,12 +3635,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			// 정렬 프로세싱 함수
 			function process() {
 				rows.sort(function(a, b) {
-                    if(column.order == "desc") {
-                        return (getValue(a) > getValue(b)) ? true : false;
-                    } else {
-                        return (getValue(a) < getValue(b)) ? true : false;
-                    }
-				})
+                    return recursiveMultiSort(a.data, b.data, [ column.name ], [ column.order ], 0);
+				});
 
 				// 데이터 초기화 및 입력, 그리고 로딩
 				self.clear();
@@ -3649,21 +3644,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				self.emit("sortend", [ column, e ]);
 				self.hideLoading();
 			}
-
-		    // 해당 컬럼에 해당하는 값 가져오기
-			function getValue(row) {
-		    	var value = row.data[column.name];
-
-                if(typeof(value) == "string") {
-                    return value.toLowerCase();
-                } else {
-                    if(!isNaN(value) && value != null) {
-                        return value;
-                    }
-                }
-
-    			return "";
-		    }
 		}
 
 		/**
