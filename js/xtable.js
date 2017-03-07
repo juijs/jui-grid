@@ -664,8 +664,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
             var direction = (order_by[index] == "desc") ? 1 : 0,
                 key = columns[index],
                 is_numeric = !isNaN(+a[key] - +b[key]),
-                x = is_numeric ? +a[key] : a[key].toLowerCase(),
-                y = is_numeric ? +b[key] : b[key].toLowerCase();
+				x = is_numeric ? +a[key] : a[key],
+                y = is_numeric ? +b[key] : b[key];
+
+            if(!is_numeric) {
+            	if(typeof(x) == "string") x = x.toLowerCase();
+            	if(typeof(y) == "string") y = y.toLowerCase();
+			}
 
             if(x < y) {
                 return direction == 0 ? -1 : 1;
