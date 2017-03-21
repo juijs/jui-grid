@@ -195,7 +195,8 @@
   height: 25px;
   background-repeat: no-repeat;
 }
-.jui .xtable.scroll > .body .table.classic {
+.jui .xtable.scroll > .body .table.classic,
+.jui .xtable.scroll > .body .table.expand {
   -webkit-border-bottom-right-radius: 0px;
   -moz-border-radius-bottomright: 0px;
   border-bottom-right-radius: 0px;
@@ -203,12 +204,14 @@
   -moz-border-radius-bottomleft: 0px;
   border-bottom-left-radius: 0px;
 }
-.jui .xtable.scroll > .body .table.classic > tbody > tr:last-child > td:first-child {
+.jui .xtable.scroll > .body .table.classic > tbody > tr:last-child > td:first-child,
+.jui .xtable.scroll > .body .table.expand > tbody > tr:last-child > td:first-child {
   -webkit-border-bottom-left-radius: 0px;
   -moz-border-radius-bottomleft: 0px;
   border-bottom-left-radius: 0px;
 }
-.jui .xtable.scroll > .body .table.classic > tbody > tr:last-child > td:last-child {
+.jui .xtable.scroll > .body .table.classic > tbody > tr:last-child > td:last-child,
+.jui .xtable.scroll > .body .table.expand > tbody > tr:last-child > td:last-child {
   -webkit-border-bottom-right-radius: 0px;
   -moz-border-radius-bottomright: 0px;
   border-bottom-right-radius: 0px;
