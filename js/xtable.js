@@ -1513,6 +1513,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			is_loading = false;
 		}
 
+        /**
+         * @method isLoading
+         */
+        this.isLoading = function() {
+            return is_loading;
+        }
+
 		/**
 		 * @method setCsv
 		 * Updates a table using a CVS string.
