@@ -3143,6 +3143,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		function resetVirtualScrollInfo(self) {
 			$(self.root).find(".body").scrollTop(0);
 			$(body.root).css({ top: "0px" });
+            $(body.root).parent().css({ height: "auto" });
 
 			vscroll_info = {
 				height: 0,
