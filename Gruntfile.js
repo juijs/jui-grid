@@ -46,6 +46,7 @@ module.exports = function(grunt) {
             dist: {
                 files: {
                     "dist/grid.min.css": "dist/grid.css",
+                    "dist/grid-classic.min.css": "dist/grid-classic.css",
                     "dist/grid-jennifer.min.css": "dist/grid-jennifer.css",
                     "dist/grid-dark.min.css": "dist/grid-dark.css"
                 }
@@ -56,6 +57,9 @@ module.exports = function(grunt) {
                 files: {
                     "dist/grid.css" : [
                         "less/main.less"
+                    ],
+                    "dist/grid-classic.css" : [
+                        "less/theme/classic.less"
                     ],
                     "dist/grid-jennifer.css" : [
                         "less/theme/jennifer.less"
