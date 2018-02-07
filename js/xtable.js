@@ -530,8 +530,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			}
 
 			var moveHeight = 0;
-			var real_row_height = 17;
-			var real_viewportHeight = (viewportHeight + real_row_height);
+			var real_viewportHeight = (viewportHeight + vscroll_info.height);
 			if (scrollTop >= scrollHeight - real_viewportHeight)  {
 				if (endRowHeight > real_viewportHeight) {
 					moveHeight = -Math.abs(endRowHeight - real_viewportHeight);
@@ -683,6 +682,18 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 
             return direction == 0 ? 1 : -1;
         }
+
+        function printLogForVsInfo(info) {
+			if(
+				info.start_index < 0 || isNaN(info.start_index) ||
+				info.end_index < 0 || isNaN(info.end_index) ||
+				info.current_row_index < 0 || isNaN(info.current_row_index) ||
+				info.scroll_count < 0 || isNaN(info.scroll_count) ||
+				info.prev_scroll_top < 0 || isNaN(info.prev_scroll_top)
+			) {
+				console.log(info);
+			}
+		}
 
 		this.init = function() {
 			var opts = this.options;
@@ -937,6 +948,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					start = vscroll_info.start_index;
 					end = vscroll_info.end_index;
 				}
+
+				printLogForVsInfo(vscroll_info);
 			}
 
 			// 마지막 페이지 처리
