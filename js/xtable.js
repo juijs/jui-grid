@@ -1237,9 +1237,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 				var row = t_rows[i];
 
 				if(("" + index) == row.index) {
-					vscroll_info.prev_scroll_top = 0;
-					vscroll_info.current_row_index = 0;
-
 					var scrollTop = i * vscroll_info.height,
 						scrollHeight = $viewport.height(),
 						distTop = _.typeCheck("integer", dist) ? dist : 0;
@@ -1247,6 +1244,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					if(scrollTop + distTop > scrollHeight) {
 						scrollTop += distTop;
 					}
+
+                    vscroll_info.prev_scroll_top = scrollTop;
+                    vscroll_info.current_row_index = 0;
 
 					$viewport.scrollTop(scrollTop);
 					this.clear();
