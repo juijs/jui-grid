@@ -3041,6 +3041,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 			var isDown = vscroll_info.prev_scroll_top < scrollTop;
 
 			var v_height = vscroll_info.height;
+
 			if (dist == 0) {
 				return;
 			}
@@ -3483,7 +3484,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Shows all child rows of a specified index.
 		 */
 		this.openAll = function(index) {
-			var list = this.getAll(index);
+			var list = [];
+
+			this.findAll(index, list);
 
 			if(list) {
 				for(var i = 0, len = list.length; i < len; i++) {
@@ -3501,7 +3504,9 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		 * Hides all child rows of a specified index.
 		 */
 		this.foldAll = function(index) {
-			var list = this.getAll(index);
+			var list = [];
+
+            this.findAll(index, list);
 
 			if(list) {
 				for(var i = 0, len = list.length; i < len; i++) {
@@ -3827,9 +3832,6 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 						scrollTop += distTop;
 					}
 
-                    vscroll_info.prev_scroll_top = scrollTop;
-                    vscroll_info.current_row_index = 0;
-
 					$viewport.scrollTop(scrollTop);
 					this.clear();
 					this.next();
@@ -3936,13 +3938,13 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		/**
-		 * @method getAll
+		 * @method findAll
 		 * Gets all rows of at the specified index including child rows.
 		 *
 		 * @param {Integer} index
-		 * @return {Array} rows
+		 * @param {Array} result
 		 */
-		this.getAll = function(index, _result) {
+		this.findAll = function(index, _result) {
 			var row = this.get(index);
 
 			if(row != null) {
@@ -3955,12 +3957,10 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					_result.push(child);
 
 					if(child.children.length > 0) {
-						return this.getAll(child.index, _result);
+						this.findAll(child.index, _result);
 					}
 				}
 			}
-
-			return _result;
 		}
 
 		/**
