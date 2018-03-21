@@ -257,7 +257,8 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 		}
 
 		function setScrollEvent(self, width, height) {
-			var opts = self.options;
+			var opts = self.options,
+				isRendering = false;
 
 			var $head = $(self.root).children(".head"),
 				$body = $(self.root).children(".body");
@@ -281,10 +282,18 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
 					}
 				} else if(opts.buffer == "vscroll") {
 					if(vscroll_info.prev_scroll_left == this.scrollLeft) {
-						renderVirtualScroll(self);
+						if(!isRendering) {
+                            isRendering = true;
 
-						self.next();
-						self.emit("scroll", e);
+							setTimeout(function () {
+                                renderVirtualScroll(self);
+
+                                self.next();
+                                self.emit("scroll", e);
+
+                                isRendering = false;
+                            }, 50);
+                        }
 					} else {
 						vscroll_info.prev_scroll_left = this.scrollLeft;
 					}
