@@ -1,6 +1,6 @@
 {
-  "name": "jui-grid",
-  "version": "2.0.4",
+  "name": "juijs-grid",
+  "version": "2.1.0",
   "description": "JUI grid can handle millions of data, and can display the data in a hierarchical structure.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -76,7 +76,7 @@
       "deps": [
         "jquery"
       ],
-      "exports": "jui-grid"
+      "exports": "juijs-grid"
     }
   }
 }

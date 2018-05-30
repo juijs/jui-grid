@@ -1,6 +1,6 @@
 {
-  "name": "jui-grid",
-  "version": "2.0.4",
+  "name": "juijs-grid",
+  "version": "2.1.0",
   "main": [
     "dist/grid.min.js",
     "dist/grid.min.css",

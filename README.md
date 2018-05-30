@@ -18,9 +18,9 @@ As the script works only with jQuery 1.8 or higher, it is necessary to load the 
 
 #### Installing in command
 ```
-npm install jui-grid
-bower install jui-grid
-jamjs install jui-grid
+npm install juijs-grid
+bower install juijs-grid
+jamjs install juijs-grid
 ```
 
 #### To build the project
