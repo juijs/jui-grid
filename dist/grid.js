@@ -2874,7 +2874,7 @@ jui.defineUI("grid.xtable", [ "jquery", "util.base", "ui.modal", "grid.table", "
                                 self.emit("scroll", e);
 
                                 isRendering = false;
-                            }, 50);
+                            }, 1);
                         }
 					} else {
 						vscroll_info.prev_scroll_left = this.scrollLeft;
