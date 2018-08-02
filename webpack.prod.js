@@ -6,7 +6,7 @@ module.exports = (theme) => {
     return {
         mode: 'production',
         entry: {
-            vendors: [ 'juijs' ],
+            vendors: [ 'jquery', 'juijs' ],
             'jui-grid': path.resolve(__dirname, 'src/bundles', `production.${theme}.js`)
         },
         output: {
