@@ -1,0 +1,49 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<META charset="UTF-8">
+<title></title>
+</head>
+
+<body class="jui">
+
+<input type="file" id="table_btn" /><br/><br/>
+<table id="table" class="table expand" style="width: 1024px;">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Min</th>
+        <th>Max</th>
+        <th>Count</th>
+        <th>Hash</th>
+        <th>Failure</th>
+        <th>SumTime</th>
+        <th>AvgTime</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script data-jui="#table" data-tpl="row" type="text/template">
+    <tr>
+        <td><?= row.seq ?></td>
+        <td><?= row.data["min,m"] ?></td>
+        <td><?= max ?> <i class="icon-edit"></i></td>
+        <td><?= count ?></td>
+        <td><?= hash ?></td>
+        <td><?= failure ?></td>
+        <td><?= sumTime ?></td>
+        <td><?= avgTime ?></td>
+        <td><?= name ?></td>
+    </tr>
+</script>
+
+<script data-jui="#table" data-tpl="expand" type="text/template">
+expand
+</script>
+
+</body>
+</html>

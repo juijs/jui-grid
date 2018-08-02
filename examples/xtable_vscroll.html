@@ -1,0 +1,141 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<META charset="UTF-8">
+<title>[JUI Library] - Grid</title>
+
+<link rel="stylesheet" href="../dist/jui-grid.classic.css" />
+<script src="../dist/vendors.js"></script>
+<script src="../dist/jui-grid.js"></script>
+
+<script>
+function getRandomData(count) {
+    var data = [];
+
+    for(var i = 0; i < count; i++) {
+        data.push({ "min":i,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0 })
+    }
+
+    return data;
+}
+
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
+    var xtable = xtableUI("#xtable", {
+        fields: [ null, "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
+        csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
+        sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
+        sortLoading: true,
+        width: 800,
+        scrollWidth: 750,
+        scrollHeight: 400,
+        rowHeight: 26,
+        buffer: "vscroll",
+        resize: true,
+        colshow: [ 0, 1, 2, 4, 7 ],
+        event: {
+            colmenu: function(column, e) {
+                this.toggleColumnMenu(e.pageX - 25);
+            },
+            colresize: function() {
+                console.log("resize");
+            },
+            select: function(row, e) {
+                //console.log(row);
+
+                if(row.children.length > 0) {
+                    if (row.type == "fold") {
+                        this.open(row.index);
+                    } else {
+                        this.fold(row.index);
+                    }
+                }
+            }
+        }
+    });
+
+    document.getElementById('btn').addEventListener('click', function() {
+        xtable.update(getRandomData(100000));
+        xtable.append("3", getRandomData(3));
+        xtable.append("3.1", getRandomData(2));
+    });
+
+    _.resize(function() {
+        xtable.scrollWidth($("body").width(), true);
+    });
+});
+
+</script>
+</head>
+<body class="jui" style="background-color: #fff;">
+
+<button id="btn">Run</button><br/><br/>
+
+<input type="file" id="xtable_btn" /><br/><br/>
+<div id="xtable" class="xtable scroll">
+    <table class="table classic">
+        <thead>
+        <tr>
+            <th width="100px"></th>
+            <th width="50%">Min</th>
+            <th>Max</th>
+            <th>Count</th>
+            <th>Hash</th>
+            <th>Failure</th>
+            <th>SumTime</th>
+            <th>AvgTime</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script data-jui="#xtable" data-tpl="menu" type="text/template">
+    <div class="dropdown">
+        <div class="anchor"></div>
+
+        <ul style="width: 150px">
+            <! for(var i = 0; i < columns.length; i++) { !>
+            <li>
+                <input type="checkbox" />  <!= columns[i] !>
+            </li>
+            <! } !>
+        </ul>
+    </div>
+</script>
+
+<script data-jui="#xtable" data-tpl="row" type="text/template">
+    <tr>
+        <td><!= row.seq !></td>
+        <td>
+
+            <span style="padding-left: <!= row.depth * 20 !>px">
+                <! if(row.children.length > 0) { !>
+                    <! if(row.type == "fold") { !>+<! } else { !>-<! } !>
+                <! } !>
+            </span>
+            <!= min !>
+        </td>
+        <td><!= max !></td>
+        <td><!= count !></td>
+        <td><!= hash !></td>
+        <td><!= failure !></td>
+        <td><!= sumTime !></td>
+        <td><!= avgTime !></td>
+        <td><!= name !></td>
+    </tr>
+</script>
+
+<script data-jui="#xtable" data-tpl="loading" type="text/template">
+    <div class="loading"></div>
+</script>
+
+<script data-jui="#xtable" data-tpl="none" type="text/template">
+    <tr>
+        <td colspan="8" class="none" align="center">Data does not exist.</td>
+    </tr>
+</script>
+
+</body>
+</html>

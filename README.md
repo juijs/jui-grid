@@ -4,8 +4,8 @@
 JUI library only requires the user to load a single package file.
 Access to the jui class must then be configured in the markup.
 ```html
-<link rel="stylesheet" href="dist/grid.min.css" />
-<link rel="stylesheet" href="dist/grid-jennifer.min.css" />
+<link rel="stylesheet" href="./lib/grid.min.css" />
+<link rel="stylesheet" href="./lib/grid-jennifer.min.css" />
 <body class="jui">...</body>
 ```
 
@@ -19,8 +19,6 @@ As the script works only with jQuery 1.8 or higher, it is necessary to load the 
 #### Installing in command
 ```
 npm install juijs-grid
-bower install juijs-grid
-jamjs install juijs-grid
 ```
 
 #### To build the project

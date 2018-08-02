@@ -1,0 +1,98 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<META charset="UTF-8">
+<title>[JUI Library] - Grid</title>
+
+<link rel="stylesheet" href="../dist/jui-grid.classic.css" />
+<script src="../dist/vendors.js"></script>
+<script src="../dist/jui-grid.js"></script>
+
+<script>
+var xtable;
+
+function updateTreeData(ui, depth) {
+    var key = "0",
+        data = [];
+
+    for(var i = 0; i < depth; i++) {
+        data.push({
+            index: key,
+            data: {
+                name: "Hong" + i,
+                age: Math.floor(Math.random() * 100)
+            },
+            type: "open"
+        });
+
+        key += ".0";
+    }
+
+    ui.updateTree(data);
+}
+
+function openAll() {
+    xtable.openAll("0");
+}
+
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
+    xtable = xtableUI("#xtable", {
+        fields: [ null, "name", "age" ],
+        sort: true,
+        scrollHeight: 400,
+        rowHeight: 26,
+        buffer: "vscroll",
+        resize: true,
+        event: {
+            select: function(row, e) {
+                if(row.type == "fold") {
+                    this.open(row.index);
+                } else {
+                    this.fold(row.index);
+                }
+            }
+        }
+    });
+
+    document.getElementById('btn').addEventListener('click', function() {
+        updateTreeData(xtable, 500);
+    });
+});
+
+</script>
+</head>
+<body class="jui" style="background-color: #fff;">
+
+<button id="btn">Run</button><br/><br/>
+<a href="javascript:openAll()">Open</a>
+<br/><br/>
+
+<div id="xtable" class="xtable scroll" style="width: 800px;">
+    <table class="table classic">
+        <thead>
+        <tr>
+            <th style="width: 200px;">Index</th>
+            <th>Column. Name</th>
+            <th style="width: 100px;">Column. Age</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script data-jui="#xtable" data-tpl="row" type="text/template">
+    <tr>
+        <td><!= row.index !></td>
+        <td style="padding-left: <!= 5 + (row.depth * 20) !>px">
+            <! if(row.children.length > 0) { !>
+                <! if(row.type == "open") { !>-<! } else { !>+<! } !>
+            <! } !>
+            <!= name !>
+        </td>
+        <td><!= age !></td>
+    </tr>
+</script>
+
+</body>
+</html>
