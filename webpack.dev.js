@@ -8,7 +8,7 @@ module.exports = (theme) => {
         mode: 'development',
         entry: {
             vendors: [ 'jquery', 'juijs' ],
-            'jui-grid': path.resolve(__dirname, 'src/bundles', 'index.js')
+            'jui-grid': path.resolve(__dirname, 'bundles', 'index.js')
         },
         output: {
             path: path.resolve(__dirname, 'out'),
@@ -59,8 +59,8 @@ module.exports = (theme) => {
                 filename: '[name].css'
             }),
             new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, 'src/bundles', 'index.html'),
-                filename: path.resolve(__dirname, 'out/index.html'),
+                template: path.resolve(__dirname, 'bundles', 'index.html'),
+                filename: path.resolve(__dirname, 'out', 'index.html'),
                 minify: {
                     removeComments: true,
                     collapseWhitespace: true,

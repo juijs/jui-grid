@@ -1,6 +1,6 @@
 import $ from 'jquery'
-import jui from '../main.js'
-import TableComp from '../components/table.js'
+import jui from '../src/main.js'
+import TableComp from '../src/components/table.js'
 import Styles from './index.less'
 
 jui.use(TableComp);
