@@ -1,6 +1,6 @@
 import $ from "jquery"
 import jui from "../main.js"
-import BaseComp from "./base/core.js"
+import BaseComp from "../base/core.js"
 
 jui.use(BaseComp);
 

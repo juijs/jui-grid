@@ -1,5 +1,5 @@
 import $ from "jquery"
-import jui from "../../main.js"
+import jui from "../main.js"
 import ColumnMod from "./column.js"
 import RowMod from "./row.js"
 

@@ -1,5 +1,5 @@
 import $ from "jquery"
-import jui from "../../main.js"
+import jui from "../main.js"
 
 export default {
     name: "grid.row",

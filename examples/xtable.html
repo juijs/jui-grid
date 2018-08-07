@@ -68,7 +68,7 @@ for(var i = 0; i < 500000; i++) {
     table_data.push({"min":0.014,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0});
 }
 
-jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
+jui.ready([ "jquery", "util.base", "grid.xtable" ], function($, _, xtableUI) {
     var xtable = xtableUI("#xtable", {
         fields: [ "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 0, 1, 2, 3, 4, 5, "avgTime" ],
