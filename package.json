@@ -1,6 +1,6 @@
 {
   "name": "juijs-grid",
-  "version": "2.1.4-es6",
+  "version": "2.1.5-es6",
   "sideEffects": false,
   "description": "JUI grid can handle millions of data, and can display the data in a hierarchical structure.",
   "scripts": {
@@ -67,7 +67,7 @@
   ],
   "dependencies": {
     "jquery": "^3.3.1",
-    "juijs": "2.1.6-es6"
+    "juijs": "2.1.10-es6"
   },
   "devDependencies": {
     "css-loader": "^1.0.0",
@@ -79,7 +79,7 @@
     "style-loader": "^0.21.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "url-loader": "^1.0.1",
-    "webpack": "^4.16.4",
+    "webpack": "^4.16.5",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
