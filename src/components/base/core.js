@@ -1,13 +1,13 @@
-import jui from 'juijs'
-import Column from './column.js'
-import Row from './row.js'
+import $ from "jquery"
+import jui from "../../main.js"
+import ColumnMod from "./column.js"
+import RowMod from "./row.js"
 
-jui.use([ Column, Row ]);
+jui.use(ColumnMod, RowMod);
 
 export default {
     name: "grid.base",
     component: function () {
-        const $ = jui.include("jquery");
         const _ = jui.include("util.base");
         const Column = jui.include("grid.column");
         const Row = jui.include("grid.row");

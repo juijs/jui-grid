@@ -1,13 +1,13 @@
-import jui from 'juijs'
-import BaseComp from './base.js'
+import $ from "jquery"
+import jui from "../main.js"
+import BaseComp from "./base/core.js"
 
-jui.use([ BaseComp ]);
+jui.use(BaseComp);
 
 export default {
     name: "grid.table",
     extend: "event",
     component: function () {
-        const $ = jui.include("jquery");
         const _ = jui.include("util.base");
         const dropdown = jui.include("ui.dropdown");
         const Base = jui.include("grid.base");
@@ -90,12 +90,12 @@ export default {
                     else this.checked = false;
 
                     self.addEvent(this, "click", function(e) {
-                        var ckCount = $(ddUi.root).find("input[type=checkbox]:checked").size();
+                        var isExist = $(ddUi.root).find("input[type=checkbox]:checked") != null;
 
                         if(this.checked) {
                             self.showColumn(i, e);
                         } else {
-                            if(ckCount > 0) {
+                            if(isExist) {
                                 self.hideColumn(i, e);
                             } else {
                                 this.checked = true;
@@ -521,7 +521,7 @@ export default {
             }
 
             function getScrollWidth() {
-                if($(".jui").size() > 0 && _.browser.webkit) {
+                if($(".jui") != null && _.browser.webkit) {
                     return 10;
                 }
 
@@ -1214,7 +1214,7 @@ export default {
                 $expand.insertAfter($(row.element).addClass("open"));
 
                 $(expandSel)
-                    .attr("colspan", $obj.thead.find("tr:last > th:visible").size())
+                    .attr("colspan", $obj.thead.find("tr:last > th:visible").length)
                     .html(this.tpl["expand"](obj));
 
                 // 스크롤 및 VO 적용

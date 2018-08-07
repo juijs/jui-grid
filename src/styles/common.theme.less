@@ -1,0 +1,28 @@
+.webkit-scrollbar() {
+  &::-webkit-scrollbar {
+    width: @baseScrollHandleSize;
+    height: @baseScrollHandleSize;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+    border-right: 1px solid @baseScrollBorderColor;
+    border-bottom: 1px solid @baseScrollBorderColor;
+  }
+
+  &::-webkit-scrollbar-track {
+    .btn-bgcolor-2(@baseScrollBackgroundColor1, @baseScrollBackgroundColor2, left);
+    border: 1px solid @baseScrollBorderColor;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: @baseScrollHandleBackgroundColor;
+    border: 1px solid @baseScrollHandleBorderColor;
+    .border-radius(@baseScrollHandleBorderRadius);
+
+    &:hover {
+      background: @baseScrollHandleHoverBackgroundColor;
+      border: 1px solid @baseScrollHandleHoverBorderColor;
+    }
+  }
+}

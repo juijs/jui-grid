@@ -1,8 +1,7 @@
 import $ from 'jquery'
-import jui from '../jui-grid.js'
+import jui from '../main.js'
 import TableComp from '../components/table.js'
-import Style from '../styles/main.less'
-import Theme from '../styles/theme/dark.less'
+import Styles from './index.less'
 
 jui.use(TableComp);
 

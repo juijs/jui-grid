@@ -1,9 +1,9 @@
-import jui from 'juijs'
+import $ from "jquery"
+import jui from "../../main.js"
 
 export default {
     name: "grid.row",
     component: function () {
-        const $ = jui.include("jquery");
         const _ = jui.include("util.base");
 
         var Base = function() {

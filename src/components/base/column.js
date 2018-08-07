@@ -1,10 +1,9 @@
-import jui from 'juijs'
+import $ from "jquery"
+import jui from "../../main.js"
 
 export default {
     name: "grid.column",
     component: function () {
-        const $ = jui.include("jquery");
-
         var Column = function(index) {
             /** @property {HTMLElement} [element=null] TH element of a specified column */
             this.element = null;

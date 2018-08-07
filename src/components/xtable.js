@@ -1,13 +1,13 @@
-import jui from 'juijs'
+import $ from "jquery"
+import jui from "../main.js"
 import TableComp from './table.js'
 
-jui.use([ TableComp ], true);
+jui.use(TableComp);
 
 export default {
     name: "grid.xtable",
     extend: "event",
     component: function () {
-        const $ = jui.include("jquery");
         const _ = jui.include("util.base");
         const modal = jui.include("ui.modal");
         const table = jui.include("grid.table");
