@@ -71,7 +71,7 @@ Below is the index.less file. You can only use the style you want to bundle.
         <td><!= avgTime !></td>
         <td><!= name !></td>
     </tr>
-</script>
+  </script>
 </body>
 ```
 
