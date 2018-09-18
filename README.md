@@ -1,75 +1,99 @@
-## Getting Started
+## Installation
 
-#### Loading resources
-JUI library only requires the user to load a single package file.
-Access to the jui class must then be configured in the markup.
-```html
-<link rel="stylesheet" href="./lib/grid.min.css" />
-<link rel="stylesheet" href="./lib/grid-jennifer.min.css" />
-<body class="jui">...</body>
-```
-
-As the script works only with jQuery 1.8 or higher, it is necessary to load the jQuery library first.
-```html
-<script src="lib/jquery-1.8.0.min.js"></script>
-<script src="lib/core.min.js"></script>
-<script src="dist/grid.min.js"></script>
-```
-
-#### Installing in command
-```
+### NPM
+```bash
 npm install juijs-grid
 ```
 
-#### To build the project
-Build using a grunt in JUI Library
-```
-grunt       // Build all processes
-grunt js    // Merge and Minifiy JavaScript files
-grunt css   // Compile LESS files
-grunt test  // Unit Tests
-```
-After the build output is shown below.
-```
-dist/grid.js
-dist/grid.min.js
-dist/grid.css
-dist/grid.min.css
-dist/grid-jennifer.css
-dist/grid-jennifer.min.css
-dist/grid-dark.css
-dist/grid-dark.min.css
+### Browser
+
+```html
+<link rel="stylesheet" href="../dist/jui-grid.classic.css" />
+<script src="../dist/vendors.js"></script>
+<script src="../dist/jui-grid.js"></script>
 ```
 
-## Documentation
+### ES Modules
 
-##### http://jui.io
-##### http://uiplay.jui.io
+The difference with the existing method is that you need to add the module directly using the 'use' function.
 
-## Maintainers
+```js
+import jui from 'juijs-grid'
+import TableComp from 'juijs-grid/src/components/table.js'
+import Styles from './index.less'
 
-Created by Alvin and Jayden, Yoha
+jui.use(TableComp);
+```
 
-## License
+Below is the index.less file. You can only use the style you want to bundle.
 
-MIT License 
+```less
+.jui {
+  @import "../node_modules/juijs-grid/src/styles/base/mixins.less";
+  @import "../node_modules/juijs-grid/src/styles/common.less";
+  @import "../node_modules/juijs-grid/src/styles/common.theme.less";
+  @import "../node_modules/juijs-grid/src/styles/table.less";
+  @import "../node_modules/juijs-grid/src/styles/table.theme.less";
+  @import "../node_modules/juijs-grid/src/styles/theme/classic.less";
+}
+```
 
-Copyright (C) 2016 (```JenniferSoft Inc.```)
+## Usage
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+```html
+<body class="jui">
+    <table id="table" class="table expand" style="width: 1024px;">
+      <thead>
+      <tr>
+          <th></th>
+          <th>Min</th>
+          <th>Max</th>
+          <th>Count</th>
+          <th>Hash</th>
+          <th>Failure</th>
+          <th>SumTime</th>
+          <th>AvgTime</th>
+          <th>Name</th>
+      </tr>
+      </thead>
+      <tbody>
+      </tbody>
+  </table>
+  <script data-jui="#table" data-tpl="row" type="text/template">
+    <tr>
+        <td><!= row.seq !></td>
+        <td><!= row.data["min,m"] !></td>
+        <td><!= max !> <i class="icon-edit"></i></td>
+        <td><!= count !></td>
+        <td><!= hash !></td>
+        <td><!= failure !></td>
+        <td><!= sumTime !></td>
+        <td><!= avgTime !></td>
+        <td><!= name !></td>
+    </tr>
+  </script>
+</body>
+```
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The UI component creation code is the same as the existing one.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+```js
+var table_data = [
+    {"min,m":0,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"","avgTime":21.55,"success":0},
+    {"min,m":1,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
+    {"min,m":2,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
+    {"min,m":3,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
+];
+
+jui.ready([ "grid.table" ], function(table) {
+    var obj = table("#table", {
+        fields: [ null, "min,m", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
+        sort: true,
+        resize: true,
+        scroll: true,
+        scrollHeight: 200
+    });
+    
+    obj.update(table_data);
+});
+```
