@@ -38,12 +38,12 @@ jui.ready([ "grid.table" ], function(tableUI) {
         {"min,m":0.014,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
     ];
 
-    var table_data = [
-        {"min,m":0,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"","avgTime":21.55,"success":0},
-        {"min,m":1,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
-        {"min,m":2,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
-        {"min,m":3,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
-    ];
+var table_data = [
+    {"min,m":0,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"","avgTime":21.55,"success":0},
+    {"min,m":1,"max":1.683,"count":32,"sumCpu":0,"hash":-1976684343,"sd":0.379,"tpmc":0,"avgCpu":0,"failure":27,"rate":16.321,"sumTime":4.529,"name":"/dup.jsp","avgTime":0.142,"success":5},
+    {"min,m":2,"max":0.273,"count":8,"sumCpu":0,"hash":1886515434,"sd":0.068,"tpmc":0,"avgCpu":0,"failure":0,"rate":4.544,"sumTime":1.261,"name":"/oraclesql2.jsp","avgTime":0.158,"success":8},
+    {"min,m":3,"max":0.014,"count":1,"sumCpu":0,"hash":1887438955,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":0.05,"sumTime":0.014,"name":"/oraclesql3.jsp","avgTime":0.014,"success":0}
+];
 
     var table = tableUI("#table", {
         fields: [ null, "min,m", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
