@@ -2,6 +2,7 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (theme) => {
     return {
@@ -49,7 +50,8 @@ module.exports = (theme) => {
             ]
         },
         plugins: [
-            new OptimizeCssAssetsPlugin()
+            new OptimizeCssAssetsPlugin(),
+            new BundleAnalyzerPlugin()
         ]
     }
 }

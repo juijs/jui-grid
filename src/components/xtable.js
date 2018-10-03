@@ -966,8 +966,6 @@ export default {
                         start = vscroll_info.start_index;
                         end = vscroll_info.end_index;
                     }
-
-                    printLogForVsInfo(vscroll_info);
                 }
 
                 // 마지막 페이지 처리
