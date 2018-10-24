@@ -1,8 +1,10 @@
 import $ from "jquery"
 import jui from "../main.js"
 import TableComp from './table.js'
+import DropdownComp from "juijs-ui/src/components/dropdown.js"
+import ModalComp from "juijs-ui/src/components/modal.js"
 
-jui.use(TableComp);
+jui.use(TableComp, DropdownComp, ModalComp);
 
 export default {
     name: "grid.xtable",

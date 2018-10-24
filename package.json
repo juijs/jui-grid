@@ -1,6 +1,6 @@
 {
   "name": "juijs-grid",
-  "version": "2.2.2-es6",
+  "version": "2.2.3-es6",
   "sideEffects": false,
   "description": "JUI grid can handle millions of data, and can display the data in a hierarchical structure.",
   "scripts": {

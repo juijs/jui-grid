@@ -1,8 +1,9 @@
 import $ from "jquery"
 import jui from "../main.js"
 import BaseComp from "../base/core.js"
+import DropdownComp from "juijs-ui/src/components/dropdown.js"
 
-jui.use(BaseComp);
+jui.use(BaseComp, DropdownComp);
 
 export default {
     name: "grid.table",
@@ -1284,7 +1285,7 @@ export default {
                             if(column.name != null) {
                                 var $edit = $(this).find("input.edit");
 
-                                if($edit.size() == 1) {
+                                if($edit.length == 1) {
                                     var value = $edit.val();
                                     data[column.name] = (!isNaN(value) && value != null && value != "") ? parseFloat(value) : value;
                                 }
