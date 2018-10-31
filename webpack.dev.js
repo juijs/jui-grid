@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (theme) => {
     return {
@@ -29,6 +30,14 @@ module.exports = (theme) => {
         },
         module: {
             rules: [{
+                test: /\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [ 'env' ]
+                    }
+                }]
+            }, {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     use: [{
@@ -45,9 +54,9 @@ module.exports = (theme) => {
                 test: /\.(png|jpg|gif)$/i,
                 use: [
                     {
-                        loader: 'url-loader',
+                        loader: 'file-loader',
                         options: {
-                            limit: 1024 * 10
+                            name: '[name].[ext]?[hash]'
                         }
                     }
                 ]
@@ -64,7 +73,8 @@ module.exports = (theme) => {
                     removeComments: true,
                     collapseWhitespace: true,
                 }
-            })
+            }),
+            new BundleAnalyzerPlugin()
         ],
         devServer: {
             port: 3000,

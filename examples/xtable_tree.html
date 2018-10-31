@@ -37,7 +37,7 @@ function openAll() {
     xtable.openAll("0");
 }
 
-jui.ready([ "jquery", "util.base", "grid.xtable" ], function($, _, xtableUI) {
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     xtable = xtableUI("#xtable", {
         fields: [ null, "name", "age" ],
         sort: true,

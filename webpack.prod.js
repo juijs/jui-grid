@@ -2,7 +2,6 @@ const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (theme) => {
     return {
@@ -20,6 +19,14 @@ module.exports = (theme) => {
         },
         module: {
             rules: [{
+                test: /\.js$/,
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [ 'env' ]
+                    }
+                }]
+            }, {
                 test: /\.less$/,
                 use: ExtractTextPlugin.extract({
                     use: [{
@@ -35,7 +42,7 @@ module.exports = (theme) => {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 1024 * 10
+                            limit: 1024 * 1024
                         }
                     }
                 ]
@@ -50,8 +57,7 @@ module.exports = (theme) => {
             ]
         },
         plugins: [
-            new OptimizeCssAssetsPlugin(),
-            new BundleAnalyzerPlugin()
+            new OptimizeCssAssetsPlugin()
         ]
     }
 }
