@@ -160,8 +160,6 @@ export default {
                 if(self.options.scroll) { // 스크롤 이벤트 처리
                     setScrollEvent(self);
                 }
-
-                self.setVo();
             }
 
             function setEventRows(self, rows) {
@@ -575,8 +573,6 @@ export default {
 
                 if(opts.data.length > 0) {
                     this.update(opts.data);
-                } else {
-                    this.setVo(); // 데이터가 있을 경우에는 VO 세팅을 별도로 함
                 }
 
                 if(opts.width > 0) {
@@ -1218,9 +1214,8 @@ export default {
                     .attr("colspan", $obj.thead.find("tr:last > th:visible").length)
                     .html(this.tpl["expand"](obj));
 
-                // 스크롤 및 VO 적용
+                // 스크롤 적용
                 this.scroll();
-                this.setVo();
 
                 // 커스텀 이벤트 호출
                 expandedIndex = index;
