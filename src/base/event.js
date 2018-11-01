@@ -1,10 +1,14 @@
 import $ from "jquery"
 import jui from "juijs"
+import jbinder from "./jbinder"
 
 export default {
     name: "event",
     extend: "core",
     component: function () {
+        // TODO: 기존 코드 호환성을 위한 jQuery 플러그인, 차후에 삭제할 것
+        $.fn.jbinder = jbinder;
+
         var _ = jui.include("util.base");
         var UIManager = jui.include("manager");
         var UICollection = jui.include("collection");
