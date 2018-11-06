@@ -183,7 +183,7 @@ export default {
                         mainObj.init.prototype.listen = new DOMEventListener();
 
                         $("script").each(function (i) {
-                            if (selector == $(this).data("jui") || selector == $(this).data("vo") || selector instanceof HTMLElement) {
+                            if (selector == $(this).data("jui") || selector == $(this).data("vo")) {
                                 let tplName = $(this).data("tpl");
 
                                 if (tplName == "") {
