@@ -4,4 +4,6 @@ import XTableComp from '../src/components/xtable.js'
 
 jui.use(TableComp, XTableComp);
 
-window.jui = window.JUI = jui;
+if(typeof(window) == "object") {
+    window.jui = window.JUI = jui;
+}
