@@ -50,7 +50,7 @@ module.exports = (theme) => {
         },
         optimization: {
             minimizer: [
-                new UglifyJsPlugin(),
+                // new UglifyJsPlugin(),
                 new ExtractTextPlugin({
                     filename: `[name].${theme}.css`
                 })
