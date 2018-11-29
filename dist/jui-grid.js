@@ -2316,13 +2316,7 @@ var _juijs = __webpack_require__(2);
 
 var _juijs2 = _interopRequireDefault(_juijs);
 
-var _event = __webpack_require__(11);
-
-var _event2 = _interopRequireDefault(_event);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_juijs2.default.use(_event2.default);
 
 exports.default = _juijs2.default;
 
@@ -2343,7 +2337,7 @@ var _table = __webpack_require__(3);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _xtable = __webpack_require__(12);
+var _xtable = __webpack_require__(11);
 
 var _xtable2 = _interopRequireDefault(_xtable);
 
@@ -3669,278 +3663,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _juijs = __webpack_require__(2);
-
-var _juijs2 = _interopRequireDefault(_juijs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-    name: "event",
-    extend: "core",
-    component: function component() {
-        var _ = _juijs2.default.include("util.base");
-        var UIManager = _juijs2.default.include("manager");
-        var UICollection = _juijs2.default.include("collection");
-
-        var DOMEventListener = function DOMEventListener() {
-            var list = [];
-
-            function settingEventAnimation(e) {
-                var pfx = ["webkit", "moz", "MS", "o", ""];
-
-                for (var p = 0; p < pfx.length; p++) {
-                    var type = e.type;
-
-                    if (!pfx[p]) type = type.toLowerCase();
-                    (0, _jquery2.default)(e.target).on(pfx[p] + type, e.callback);
-                }
-
-                list.push(e);
-            }
-
-            function settingEvent(e) {
-                if (e.callback && !e.children) {
-                    (0, _jquery2.default)(e.target).on(e.type, e.callback);
-                } else {
-                    (0, _jquery2.default)(e.target).on(e.type, e.children, e.callback);
-                }
-
-                list.push(e);
-            }
-
-            function settingEventTouch(e) {
-                if (e.callback && !e.children) {
-                    (0, _jquery2.default)(e.target).on(getEventTouchType(e.type), e.callback);
-                } else {
-                    (0, _jquery2.default)(e.target).on(getEventTouchType(e.type), e.children, e.callback);
-                }
-
-                list.push(e);
-            }
-
-            function getEventTouchType(type) {
-                return {
-                    "click": "touchstart",
-                    "dblclick": "touchend",
-                    "mousedown": "touchstart",
-                    "mousemove": "touchmove",
-                    "mouseup": "touchend"
-                }[type];
-            }
-
-            this.add = function (args) {
-                var e = { target: args[0], type: args[1] };
-
-                if (_.typeCheck("function", args[2])) {
-                    e = _jquery2.default.extend(e, { callback: args[2] });
-                } else if (_.typeCheck("string", args[2])) {
-                    e = _jquery2.default.extend(e, { children: args[2], callback: args[3] });
-                }
-
-                var eventTypes = _.typeCheck("array", e.type) ? e.type : [e.type];
-
-                for (var i = 0; i < eventTypes.length; i++) {
-                    e.type = eventTypes[i];
-
-                    if (e.type.toLowerCase().indexOf("animation") != -1) settingEventAnimation(e);else {
-                        // body, window, document 경우에만 이벤트 중첩이 가능
-                        if (e.target != "body" && e.target != window && e.target != document) {
-                            (0, _jquery2.default)(e.target).off(e.type);
-                        }
-
-                        if (_.isTouch) {
-                            settingEventTouch(e);
-                        } else {
-                            settingEvent(e);
-                        }
-                    }
-                }
-            };
-
-            this.trigger = function (selector, type) {
-                (0, _jquery2.default)(selector).trigger(_.isTouch ? getEventTouchType(type) : type);
-            };
-
-            this.get = function (index) {
-                return list[index];
-            };
-
-            this.getAll = function () {
-                return list;
-            };
-
-            this.size = function () {
-                return list.length;
-            };
-        };
-
-        /**
-         * @class event
-         * Later the jquery dependency should be removed.
-         *
-         * @alias UIEvent
-         * @extends core
-         * @requires jquery
-         * @requires util.base
-         * @requires manager
-         * @requires collection
-         * @deprecated
-         */
-        var UIEvent = function UIEvent() {
-            var vo = null;
-
-            /**
-             * @method find
-             * Get the child element of the root element
-             *
-             * @param {String/HTMLElement} Selector
-             * @returns {*|jQuery}
-             */
-            this.find = function (selector) {
-                return (0, _jquery2.default)(this.root).find(selector);
-            };
-
-            /**
-             * @method addEvent
-             * Defines a browser event of a DOM element
-             *
-             * @param {String/HTMLElement} selector
-             * @param {String} type Dom event type
-             * @param {Function} callback
-             */
-            this.addEvent = function () {
-                this.listen.add(arguments);
-            };
-
-            /**
-             * @method addTrigger
-             * Generates an applicable event to a DOM element
-             *
-             * @param {String/HTMLElement} Selector
-             * @param {String} Dom event type
-             */
-            this.addTrigger = function (selector, type) {
-                this.listen.trigger(selector, type);
-            };
-
-            /**
-             * @method setVo
-             * Dynamically defines the template method of a UI
-             *
-             * @deprecated
-             */
-            this.setVo = function () {
-                // @Deprecated
-                if (!this.options.vo) return;
-
-                if (vo != null) vo.reload();
-                vo = (0, _jquery2.default)(this.selector).jbinder();
-
-                this.bind = vo;
-            };
-
-            /**
-             * @method destroy
-             * Removes all events set in a UI obejct and the DOM element
-             *
-             */
-            this.destroy = function () {
-                for (var i = 0; i < this.listen.size(); i++) {
-                    var obj = this.listen.get(i);
-                    (0, _jquery2.default)(obj.target).off(obj.type);
-                }
-
-                // 생성된 메소드 메모리에서 제거
-                if (this.__proto__) {
-                    for (var key in this.__proto__) {
-                        delete this.__proto__[key];
-                    }
-                }
-            };
-        };
-
-        UIEvent.build = function (UI) {
-
-            return function (selector, options) {
-                var list = [],
-                    $root = (0, _jquery2.default)(selector || "<div />");
-
-                $root.each(function (index) {
-                    list[index] = _juijs2.default.createUIObject(UI, $root.selector, index, this, options, function (mainObj, opts) {
-                        /** @property {Object} listen Dom events */
-                        mainObj.init.prototype.listen = new DOMEventListener();
-
-                        (0, _jquery2.default)("script").each(function (i) {
-                            if (selector == (0, _jquery2.default)(this).data("jui") || selector == (0, _jquery2.default)(this).data("vo") || selector instanceof HTMLElement) {
-                                var tplName = (0, _jquery2.default)(this).data("tpl");
-
-                                if (tplName == "") {
-                                    throw new Error("JUI_CRITICAL_ERR: 'data-tpl' property is required");
-                                }
-
-                                opts.tpl[tplName] = (0, _jquery2.default)(this).html();
-                            }
-                        });
-                    });
-                });
-
-                UIManager.add(new UICollection(UI.type, selector, options, list));
-
-                if (list.length == 0) {
-                    return null;
-                } else if (list.length == 1) {
-                    return list[0];
-                }
-
-                return list;
-            };
-        };
-
-        UIEvent.init = function (UI) {
-            var uiObj = null;
-
-            if ((typeof UI === "undefined" ? "undefined" : _typeof(UI)) === "object") {
-                uiObj = UIEvent.build(UI);
-                UIManager.addClass({ type: UI.type, "class": uiObj });
-            }
-
-            return uiObj;
-        };
-
-        UIEvent.setup = function () {
-            return {
-                /**
-                 * @cfg {Object} [vo=null]
-                 * Configures a binding object of a markup
-                 *
-                 * @deprecated
-                 */
-                vo: null
-            };
-        };
-
-        return UIEvent;
-    }
-};
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
@@ -3957,7 +3679,7 @@ var _dropdown = __webpack_require__(4);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _modal = __webpack_require__(13);
+var _modal = __webpack_require__(12);
 
 var _modal2 = _interopRequireDefault(_modal);
 
@@ -5908,7 +5630,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
