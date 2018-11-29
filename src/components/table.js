@@ -1,9 +1,24 @@
 import $ from "jquery"
 import jui from "../main.js"
+import JBinder from "../base/binder.js";
 import BaseComp from "../base/core.js"
 import DropdownComp from "juijs-ui/src/components/dropdown.js"
 
 jui.use(BaseComp, DropdownComp);
+
+$.fn.jbinder = function(options) {
+    var result = [], opts = $.extend({
+        target: null,
+        attr: "data-bind"
+    }, options);
+
+    $(this).each(function(i) {
+        var binder = new JBinder(this, opts);
+        result[i] = (opts.target != null) ? $.extend(opts.target, binder) : binder;
+    });
+
+    return (result.length == 1) ? result[0] : result;
+}
 
 export default {
     name: "grid.table",
@@ -30,7 +45,7 @@ export default {
             var $obj = null, ddUi = null; // table/thead/tbody 구성요소, 컬럼 설정 UI (Dropdown)
             var selectedIndex = null, editableIndex = null, dragIndex = null, expandedIndex = null, checkedIndexes = {}; // TODO: 로우 객체 기반으로 변경하기 (#8)
             var is_resize = false;
-
+            var vo = null;
 
             function getExpandHtml(self) {
                 return "<tr class='expand' style='display: none;'><td id='EXPAND_" + self.timestamp + "'></td></tr>";
@@ -160,6 +175,8 @@ export default {
                 if(self.options.scroll) { // 스크롤 이벤트 처리
                     setScrollEvent(self);
                 }
+
+                self.setVo(); // TODO: 차후에 제거해야 함
             }
 
             function setEventRows(self, rows) {
@@ -573,6 +590,8 @@ export default {
 
                 if(opts.data.length > 0) {
                     this.update(opts.data);
+                } else {
+                    this.setVo(); // TODO: 차후에 제거해야 함
                 }
 
                 if(opts.width > 0) {
@@ -1216,6 +1235,8 @@ export default {
 
                 // 스크롤 적용
                 this.scroll();
+                // TODO: 차후에 제거해야 함
+                this.setVo();
 
                 // 커스텀 이벤트 호출
                 expandedIndex = index;
@@ -1448,6 +1469,21 @@ export default {
 
                 return selectedIndex || editableIndex;
             }
+
+            /**
+             * @method setVo
+             * Dynamically defines the template method of a UI
+             *
+             * @deprecated
+             */
+            this.setVo = function() {
+                if(!this.options.vo) return;
+
+                if(vo != null) vo.reload();
+                vo = $(this.selector).jbinder();
+
+                this.bind = vo;
+            }
         }
 
         UI.setup = function() {
@@ -1573,10 +1609,12 @@ export default {
                 moveRow: false,
 
                 /**
-                 * @cfg {Boolean} [animate=false]
+                 * @cfg {Object} [vo=null]
+                 * Configures a binding object of a markup
+                 *
                  * @deprecated
                  */
-                animate: false
+                vo: false
             }
         }
 
