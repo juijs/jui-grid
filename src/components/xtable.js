@@ -1842,7 +1842,14 @@ export default {
                  * @cfg {Boolean} [xssFilter=false]
                  * Activate the xss filter to set the column value.
                  */
-                xssFilter: false
+                xssFilter: false,
+
+                /**
+                 * @cfg {Object} [animate=false]
+                 *
+                 * @deprecated
+                 */
+                animate: false
             }
         }
 

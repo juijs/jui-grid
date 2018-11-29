@@ -1609,12 +1609,19 @@ export default {
                 moveRow: false,
 
                 /**
-                 * @cfg {Object} [vo=null]
+                 * @cfg {Object} [vo=false]
                  * Configures a binding object of a markup
                  *
                  * @deprecated
                  */
-                vo: false
+                vo: false,
+
+                /**
+                 * @cfg {Object} [animate=false]
+                 *
+                 * @deprecated
+                 */
+                animate: false
             }
         }
 
