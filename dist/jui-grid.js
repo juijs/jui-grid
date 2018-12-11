@@ -136,11 +136,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _binder = __webpack_require__(7);
+var _binder = __webpack_require__(8);
 
 var _binder2 = _interopRequireDefault(_binder);
 
-var _core = __webpack_require__(8);
+var _core = __webpack_require__(9);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -284,7 +284,7 @@ exports.default = {
                     // 마지막 TD는 스크롤 사이즈를 차감
                     if ((0, _jquery2.default)(colInfo.element).css("display") == "none") {} else {
                         if (!isLastCheck) {
-                            thWidth = thWidth - getScrollWidth();
+                            thWidth = thWidth - _.scrollWidth();
                             isLastCheck = true;
                         }
                     }
@@ -665,7 +665,7 @@ exports.default = {
 
                     // 스크롤 옵션일 경우, 별도 처리
                     if (self.options.scroll) {
-                        var colLastWidth = (0, _jquery2.default)(colNext.element).outerWidth() - (col.index == self.uit.getColumnCount() - 2 ? getScrollWidth() : 0);
+                        var colLastWidth = (0, _jquery2.default)(colNext.element).outerWidth() - (col.index == self.uit.getColumnCount() - 2 ? _.scrollWidth() : 0);
 
                         (0, _jquery2.default)(col.list[0]).outerWidth((0, _jquery2.default)(col.element).outerWidth());
                         (0, _jquery2.default)(colNext.list[0]).outerWidth(colLastWidth);
@@ -681,14 +681,6 @@ exports.default = {
                 if (!isChecked) {
                     self.uncheckAll();
                 }
-            }
-
-            function getScrollWidth() {
-                if ((0, _jquery2.default)(".jui") != null && _.browser.webkit) {
-                    return 10;
-                }
-
-                return _.scrollWidth();
             }
 
             this.init = function () {
@@ -2327,6 +2319,16 @@ exports.default = _juijs2.default;
 "use strict";
 
 
+__webpack_require__(14);
+__webpack_require__(7);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _main = __webpack_require__(1);
@@ -2337,7 +2339,7 @@ var _table = __webpack_require__(3);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _xtable = __webpack_require__(11);
+var _xtable = __webpack_require__(12);
 
 var _xtable2 = _interopRequireDefault(_xtable);
 
@@ -2350,7 +2352,7 @@ if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) == "object")
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2725,7 +2727,7 @@ function ViewData(type, elem) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2743,11 +2745,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _column = __webpack_require__(9);
+var _column = __webpack_require__(10);
 
 var _column2 = _interopRequireDefault(_column);
 
-var _row = __webpack_require__(10);
+var _row = __webpack_require__(11);
 
 var _row2 = _interopRequireDefault(_row);
 
@@ -3275,7 +3277,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3339,7 +3341,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3653,7 +3655,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3679,7 +3681,7 @@ var _dropdown = __webpack_require__(4);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _modal = __webpack_require__(12);
+var _modal = __webpack_require__(13);
 
 var _modal2 = _interopRequireDefault(_modal);
 
@@ -3949,8 +3951,7 @@ exports.default = {
             }
 
             function setScrollEvent(self, width, height) {
-                var opts = self.options,
-                    isRendering = false;
+                var opts = self.options;
 
                 var $head = (0, _jquery2.default)(self.root).children(".head"),
                     $body = (0, _jquery2.default)(self.root).children(".body");
@@ -3975,18 +3976,20 @@ exports.default = {
                         }
                     } else if (opts.buffer == "vscroll") {
                         if (vscroll_info.prev_scroll_left == this.scrollLeft) {
-                            if (!isRendering) {
-                                isRendering = true;
+                            var process = self.next();
 
-                                setTimeout(function () {
-                                    renderVirtualScroll(self);
+                            process.then(function () {
+                                renderVirtualScroll(self, function (isLast) {
+                                    if (!isLast) {
+                                        vscroll_info.start_index = 0;
+                                        vscroll_info.end_index -= vscroll_info.start_index;
+                                    }
 
                                     self.next();
-                                    self.emit("scroll", e);
+                                });
 
-                                    isRendering = false;
-                                }, 1);
-                            }
+                                self.emit("scroll", e);
+                            });
                         } else {
                             vscroll_info.prev_scroll_left = this.scrollLeft;
                         }
@@ -4149,7 +4152,7 @@ exports.default = {
                 return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
             }
 
-            function renderVirtualScroll(self) {
+            function renderVirtualScroll(self, callback) {
                 var $viewport = (0, _jquery2.default)(self.root).children(".body");
                 var viewportHeight = self.options.scrollHeight,
                     scrollTop = $viewport.scrollTop(),
@@ -4158,7 +4161,6 @@ exports.default = {
                 // calculate
                 var dist = Math.abs(vscroll_info.prev_scroll_top - scrollTop);
                 var isDown = vscroll_info.prev_scroll_top < scrollTop;
-
                 var v_height = vscroll_info.height;
 
                 if (dist == 0) {
@@ -4241,11 +4243,14 @@ exports.default = {
                 vscroll_info.prev_scroll_top = scrollTop;
 
                 // set real content height
-                $viewport.css({ "max-height": endRowHeight });
                 (0, _jquery2.default)(body.root).css({ top: vscroll_info.prev_scroll_top + moveHeight + "px" });
 
                 vscroll_info.start_index = startIndex;
                 vscroll_info.end_index = endIndex + 1;
+
+                // 스크롤 처음과 끝 처리
+                if (scrollTop == 0) callback(false);
+                if (scrollTop / scrollHeight > 0.99) callback(true);
             }
 
             function setVirtualScrollInfo(self) {
@@ -4653,6 +4658,7 @@ exports.default = {
                 // 마지막 페이지 처리
                 end = end > t_rows.length ? t_rows.length : end;
 
+                console.log(start, end);
                 if (end <= t_rows.length) {
                     var tmpDataList = [];
 
@@ -4673,6 +4679,16 @@ exports.default = {
                         if (tmpDataList.length > 0) page++;
                     }
                 }
+
+                return new Promise(function (resolve, reject) {
+                    if (window.devicePixelRatio > 1) {
+                        setTimeout(function () {
+                            resolve();
+                        }, 1);
+                    } else {
+                        resolve();
+                    }
+                });
             };
 
             /**
@@ -5630,7 +5646,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5908,6 +5924,12 @@ exports.default = {
         return UI;
     }
 };
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

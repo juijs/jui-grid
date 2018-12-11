@@ -137,7 +137,7 @@ export default {
                     if($(colInfo.element).css("display") == "none") {}
                     else {
                         if(!isLastCheck) {
-                            thWidth = thWidth - getScrollWidth();
+                            thWidth = thWidth - _.scrollWidth();
                             isLastCheck = true;
                         }
                     }
@@ -518,7 +518,7 @@ export default {
 
                     // 스크롤 옵션일 경우, 별도 처리
                     if(self.options.scroll) {
-                        var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? getScrollWidth() : 0);
+                        var colLastWidth = $(colNext.element).outerWidth() - ((col.index == self.uit.getColumnCount() - 2) ? _.scrollWidth() : 0);
 
                         $(col.list[0]).outerWidth($(col.element).outerWidth());
                         $(colNext.list[0]).outerWidth(colLastWidth);
@@ -534,14 +534,6 @@ export default {
                 if(!isChecked) {
                     self.uncheckAll();
                 }
-            }
-
-            function getScrollWidth() {
-                if($(".jui") != null && _.browser.webkit) {
-                    return 10;
-                }
-
-                return _.scrollWidth();
             }
 
             this.init = function() {

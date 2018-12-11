@@ -1,0 +1,231 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<META charset="UTF-8">
+<title>[JUI Library] - Grid</title>
+<head>
+<link rel="stylesheet" href="../dist/jui-grid.classic.css" />
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/juijs@2.2.1-es6/dist/jui-core.js"></script>
+<script src="../dist/jui-grid.js"></script>
+
+<script>
+
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
+    var xtable = xtableUI("#xtable", {
+        scrollWidth: 1280,
+        width: 13000
+    });
+});
+
+</script>
+</head>
+<body class="jui" style="background-color: #fff;">
+
+<div id="xtable" class="xtable">
+    <table class="table classic">
+        <thead>
+        <tr>
+            <th rowspan="2" width="10px;" style="text-align:center"></th>
+            <th rowspan="2" width="33px;" style="text-align:center">선택</th>
+            <th rowspan="2" width="50px;" style="text-align:center">연도</th>
+            <th rowspan="2" width="70px;" style="text-align:center">연말정산<br>구분</th>
+            <th rowspan="2" width="60px;" style="text-align:center">사번</th>
+            <th rowspan="2" width="70px;" style="text-align:center">성명</th>
+            <th rowspan="2" width="90px;" style="text-align:center">입사일</th>
+            <th rowspan="2" width="57px;" style="text-align:center">세대주<br>여부</th>
+            <th rowspan="2" width="74px;" style="text-align:center">거주구분</th>
+            <th rowspan="2" width="66px" style="text-align:center">내외<br>국인<br>구분</th>
+            <th rowspan="2" width="55px;" style="text-align:center">외국인<br>단일세율<br>적용</th>
+            <th rowspan="2" width="60px;" style="text-align:center">거주국가</th>
+            <th rowspan="2" width="50px;" style="text-align:center">국적</th>
+            <th rowspan="2" width="90px;" style="text-align:center">귀속연도부터</th>
+            <th rowspan="2" width="90px;" style="text-align:center">귀속연도까지</th>
+            <th colspan="4" width="360px;" style="text-align:center">종근무지</th>
+            <th colspan="4" width="360px;" style="text-align:center">주근무지</th>
+            <th colspan="4" width="360px;" style="text-align:center">전체</th>
+            <th colspan="2" width="180px;" style="text-align:center">비과세</th>
+            <th colspan="2" width="180px;" style="text-align:center">감면소득</th>
+            <th colspan="2" width="180px;" style="text-align:center"> 비과세</th>
+            <th colspan="2" width="180px;" style="text-align:center">감면속득</th>
+            <th rowspan="2" width="90px;" style="text-align:center">총급여</th>
+            <th rowspan="2" width="90px;" style="text-align:center">근로소득공제</th>
+            <th rowspan="2" width="90px;" style="text-align:center">근로소득금액</th>
+            <th colspan="4" width="360px;" style="text-align:center">기본공제</th>
+            <th colspan="6" width="540px;" style="text-align:center">추가공제</th>
+            <th rowspan="2" width="90px;" style="text-align:center">국민연금<br>보험료공제</th>
+            <th colspan="4" width="360px;" style="text-align:center">공적연금<br>보험료 공제</th>
+            <th colspan="2" width="180px;" style="text-align:center">보험료</th>
+            <th colspan="2" width="180px;" style="text-align:center">주택임차차입금<br>원리금상환액</th>
+            <th colspan="3" width="270px;" style="text-align:center">2011년 이전<br>차입분</th>
+            <th colspan="2" width="180px;" style="text-align:center">2012년 이후<br>차입분(15년이상)</th>
+            <th colspan="3" width="270px;" style="text-align:center">15년 이후</th>
+            <th width="90px;" style="text-align:center">10년~15년</th>
+            <th rowspan="2" width="90px;" style="text-align:center">기부금(이월분)</th>
+            <th rowspan="2" width="90px;" style="text-align:center">특별공제계</th>
+            <th rowspan="2" width="90px;" style="text-align:center">차감소득금액</th>
+            <th rowspan="2" width="90px;" style="text-align:center">개인연금저축</th>
+            <th rowspan="2" width="90px;" style="text-align:center">소기업소상<br>공인공제부금</th>
+            <th colspan="3" width="270px;" style="text-align:center">주택마련저축<br>소득공제</th>
+            <th rowspan="2" width="90px;" style="text-align:center">투자조합 출자등</th>
+            <th rowspan="2" width="90px;" style="text-align:center">신용카드등<br>사용액</th>
+            <th rowspan="2" width="90px;" style="text-align:center">우리사주<br>조합출연금</th>
+            <th colspan="2" width="180px;" style="text-align:center">우리사주<br>조합기부금</th>
+            <th rowspan="2" width="90px;" style="text-align:center">목돈안드는<br>전세<br>이자상환액</th>
+            <th rowspan="2" width="90px;" style="text-align:center">장기집합투자<br>증권저축</th>
+            <th rowspan="2" width="90px;" style="text-align:center">그밖의<br>소득공제계</th>
+            <th rowspan="2" width="90px;" style="text-align:center">소득공제종합<br>한도초과액</th>
+            <th rowspan="2" width="90px;" style="text-align:center">산출세액</th>
+            <th colspan="5" width="450px;" style="text-align:center">세액감면</th>
+            <th rowspan="2" width="90px;" style="text-align:center">근로소득</th>
+            <th rowspan="2" width="90px;" style="text-align:center">자녀</th>
+            <th colspan="2" width="180px;" style="text-align:center">과학기술인공제</th>
+            <th colspan="2" width="180px;" style="text-align:center">근로자퇴직급여<br>보장법에따른<br>퇴직급여</th>
+            <th colspan="2" width="180px;" style="text-align:center">연금저축</th>
+            <th colspan="2" width="180px;" style="text-align:center">보장성보험료</th>
+            <th colspan="2" width="180px;" style="text-align:center">보장성보험료<br>(장애인전용)</th>
+            <th colspan="2" width="180px;" style="text-align:center">의료비</th>
+            <th colspan="2" width="180px;" style="text-align:center">교육비</th>
+            <th colspan="2" width="180px;" style="text-align:center">10만원 이하</th>
+            <th colspan="2" width="180px;" style="text-align:center">10만원 초과</th>
+            <th colspan="2" width="180px;" style="text-align:center">법정기부금</th>
+            <th colspan="2" width="180px;" style="text-align:center">우리사주<br>조합기부금</th>
+            <th colspan="2" width="180px;" style="text-align:center">지정기부금<br>(종교단체외)</th>
+            <th colspan="2" width="180px;" style="text-align:center">지정기부금<br>(종교단체)</th>
+            <th rowspan="2" width="90px;" style="text-align:center">특별세액공제계</th>
+            <th rowspan="2" width="90px;" style="text-align:center">표준세액공제</th>
+            <th rowspan="2" width="90px;" style="text-align:center">납세자 조합공제</th>
+            <th rowspan="2" width="90px;" style="text-align:center">주택차입금</th>
+            <th rowspan="2" width="90px;" style="text-align:center">외국납부</th>
+            <th colspan="2" width="180px;" style="text-align:center">월세</th>
+            <th rowspan="2" width="90px;" style="text-align:center">세액공제 계</th>
+            <th colspan="4" width="360px;" style="text-align:center">결정세액</th>
+            <th colspan="4" width="360px;" style="text-align:center">종근무지 기납부 세액</th>
+            <th colspan="4" width="360px;" style="text-align:center">주근무지 기납부 세액</th>
+            <th colspan="4" width="360px;" style="text-align:center">차감징수 세액</th>
+        </tr>
+        <tr>
+            <th width="90px;" style="text-align:center">급여</th>
+            <th width="90px;" style="text-align:center">상여</th>
+            <th width="90px;" style="text-align:center">인정상여</th>
+            <th width="90px;" style="text-align:center">합계</th>
+            <th width="90px;" style="text-align:center">급여</th>
+            <th width="90px;" style="text-align:center">상여</th>
+            <th width="90px;" style="text-align:center">인정상여</th>
+            <th width="90px;" style="text-align:center">합계</th>
+            <th width="90px;" style="text-align:center">급여</th>
+            <th width="90px;" style="text-align:center">상여</th>
+            <th width="90px;" style="text-align:center">인정상여</th>
+            <th width="90px;" style="text-align:center">합계</th>
+
+            <th width="90px;" style="text-align:center">명세작성(O)</th>
+            <th width="90px;" style="text-align:center">명세작성(X)</th>
+            <th width="90px;" style="text-align:center">명세작성(O)</th>
+            <th width="90px;" style="text-align:center">명세작성(X)</th>
+            <th width="90px;" style="text-align:center">명세작성(O)</th>
+            <th width="90px;" style="text-align:center">명세작성(X)</th>
+            <th width="90px;" style="text-align:center">명세작성(O)</th>
+            <th width="90px;" style="text-align:center">명세작성(X)</th>
+
+            <th width="90px;" style="text-align:center">본인</th>
+            <th width="90px;" style="text-align:center">배우자</th>
+            <th width="90px;" style="text-align:center">부양가족인원</th>
+            <th width="90px;" style="text-align:center">부양가족</th>
+            <th width="90px;" style="text-align:center">경로우대인원</th>
+            <th width="90px;" style="text-align:center">경로우대</th>
+            <th width="90px;" style="text-align:center">장애인인원</th>
+            <th width="90px;" style="text-align:center">장애인</th>
+            <th width="90px;" style="text-align:center">부녀자</th>
+            <th width="90px;" style="text-align:center">한부모공제</th>
+
+            <th width="90px;" style="text-align:center">공무원연금</th>
+            <th width="90px;" style="text-align:center">군인연금</th>
+            <th width="90px;" style="text-align:center">사립학교<br>교직원연금</th>
+            <th width="90px;" style="text-align:center">별정우체국<br>연금</th>
+            <th width="90px;" style="text-align:center">건강보험료<br>(노인장기요양<br>보험료포함)</th>
+            <th width="90px;" style="text-align:center">고용보험료</th>
+            <th width="90px;" style="text-align:center">대출기관</th>
+            <th width="90px;" style="text-align:center">거주자</th>
+            <th width="90px;" style="text-align:center">15년 미만</th>
+            <th width="90px;" style="text-align:center">15년~29년</th>
+            <th width="90px;" style="text-align:center">30년 이상</th>
+            <th width="90px;" style="text-align:center">고정금리 이면서<br>비거치상환대출</th>
+            <th width="90px;" style="text-align:center">그 밖의<br>대출</th>
+
+            <th width="90px;" style="text-align:center">고정금리 이면서<br>비거치상환대출</th>
+            <th width="90px;" style="text-align:center">고정금리 혹은<br>비거치상환대출</th>
+            <th width="90px;" style="text-align:center">그 밖의<br>대출</th>
+            <th width="90px;" style="text-align:center">고정금리 혹은<br>비거치상환대출</th>
+
+            <th width="90px;" style="text-align:center">청약저축</th>
+            <th width="90px;" style="text-align:center">주택청약<br>종합저축</th>
+            <th width="90px;" style="text-align:center">근로자<br>주택마련저축</th>
+            <th width="90px;" style="text-align:center">우리사주조합<br>기부금</th>
+            <th width="90px;" style="text-align:center">고용유지<br>중소기업<br>근로자</th>
+            <th width="90px;" style="text-align:center">소득세법</th>
+            <th width="90px;" style="text-align:center">조세특례<br>제한법</th>
+            <th width="90px;" style="text-align:center">조세특례<br>제한법<br>제30조</th>
+            <th width="90px;" style="text-align:center">조세조약</th>
+            <th width="90px;" style="text-align:center">감면세액계</th>
+
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+            <th width="90px;" style="text-align:center">공제대상금액</th>
+            <th width="90px;" style="text-align:center">세액공제액</th>
+
+            <th width="90px;" style="text-align:center">소득세</th>
+            <th width="90px;" style="text-align:center">주민세</th>
+            <th width="90px;" style="text-align:center">농어촌특별세</th>
+            <th width="90px;" style="text-align:center">합계</th>
+            <th width="90px;" style="text-align:center">소득세</th>
+            <th width="90px;" style="text-align:center">주민세</th>
+            <th width="90px;" style="text-align:center">농어촌특별세</th>
+            <th width="90px;" style="text-align:center">합계</th>
+            <th width="90px;" style="text-align:center">소득세</th>
+            <th width="90px;" style="text-align:center">주민세</th>
+            <th width="90px;" style="text-align:center">농어촌특별세</th>
+            <th width="90px;" style="text-align:center">합계</th>
+            <th width="90px;" style="text-align:center">소득세</th>
+            <th width="90px;" style="text-align:center">주민세</th>
+            <th width="90px;" style="text-align:center">농어촌특별세</th>
+            <th width="90px;" style="text-align:center">합계</th>
+
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script data-jui="#xtable" data-tpl="none" type="text/template">
+    <tr>
+        <td colspan="200" class="none" align="center">Data does not exist.</td>
+    </tr>
+</script>
+
+</body>
+</html>

@@ -2,47 +2,77 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<META charset="UTF-8">
+<META charset="UTF-8"></META>
 <title></title>
 </head>
 
 <body class="jui">
 
-<input type="file" id="table_btn" /><br/><br/>
-<table id="table" class="table expand" style="width: 1024px;">
-    <thead>
-    <tr>
-        <th></th>
-        <th>Min</th>
-        <th>Max</th>
-        <th>Count</th>
-        <th>Hash</th>
-        <th>Failure</th>
-        <th>SumTime</th>
-        <th>AvgTime</th>
-        <th>Name</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<button id="btn">Run</button><br/><br/>
 
-<script data-jui="#table" data-tpl="row" type="text/template">
+<div id="xtable" class="xtable scroll">
+    <table class="table simple headline">
+        <thead>
+        <tr>
+            <th width="100px"></th>
+            <th width="50%">Min</th>
+            <th>Max</th>
+            <th>Count</th>
+            <th>Hash</th>
+            <th>Failure</th>
+            <th>SumTime</th>
+            <th>AvgTime</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script data-jui="#xtable" data-tpl="menu" type="text/template">
+    <div class="dropdown">
+        <div class="anchor"></div>
+
+        <ul style="width: 150px">
+            <! for(var i = 0; i < columns.length; i++) { !>
+            <li>
+                <input type="checkbox" />  <!= columns[i] !>
+            </li>
+            <! } !>
+        </ul>
+    </div>
+</script>
+
+<script data-jui="#xtable" data-tpl="row" type="text/template">
     <tr>
-        <td><?= row.seq ?></td>
-        <td><?= row.data["min,m"] ?></td>
-        <td><?= max ?> <i class="icon-edit"></i></td>
-        <td><?= count ?></td>
-        <td><?= hash ?></td>
-        <td><?= failure ?></td>
-        <td><?= sumTime ?></td>
-        <td><?= avgTime ?></td>
-        <td><?= name ?></td>
+        <td><!= row.seq !></td>
+        <td>
+
+            <span style="padding-left: <!= row.depth * 20 !>px">
+                <! if(row.children.length > 0) { !>
+                    <! if(row.type == "fold") { !>+<! } else { !>-<! } !>
+                <! } !>
+            </span>
+            <!= min !>
+        </td>
+        <td><!= max !></td>
+        <td><!= count !></td>
+        <td><!= hash !></td>
+        <td><!= failure !></td>
+        <td><!= sumTime !></td>
+        <td><!= avgTime !></td>
+        <td><!= name !></td>
     </tr>
 </script>
 
-<script data-jui="#table" data-tpl="expand" type="text/template">
-expand
+<script data-jui="#xtable" data-tpl="loading" type="text/template">
+    <div class="loading"></div>
+</script>
+
+<script data-jui="#xtable" data-tpl="none" type="text/template">
+    <tr>
+        <td colspan="8" class="none" align="center">Data does not exist.</td>
+    </tr>
 </script>
 
 </body>

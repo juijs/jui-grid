@@ -263,8 +263,7 @@ export default {
             }
 
             function setScrollEvent(self, width, height) {
-                var opts = self.options,
-                    isRendering = false;
+                var opts = self.options;
 
                 var $head = $(self.root).children(".head"),
                     $body = $(self.root).children(".body");
@@ -288,18 +287,21 @@ export default {
                         }
                     } else if(opts.buffer == "vscroll") {
                         if(vscroll_info.prev_scroll_left == this.scrollLeft) {
-                            if(!isRendering) {
-                                isRendering = true;
+                            var process = self.next();
 
-                                setTimeout(function () {
-                                    renderVirtualScroll(self);
+                            process.then(function() {
+                                renderVirtualScroll(self, function(isLast) {
+                                    if(!isLast) {
+                                        vscroll_info.start_index = 0;
+                                        vscroll_info.end_index -= vscroll_info.start_index;
+                                    }
 
                                     self.next();
-                                    self.emit("scroll", e);
+                                });
 
-                                    isRendering = false;
-                                }, 1);
-                            }
+                                self.emit("scroll", e);
+                            });
+
                         } else {
                             vscroll_info.prev_scroll_left = this.scrollLeft;
                         }
@@ -463,7 +465,7 @@ export default {
                 return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
             }
 
-            function renderVirtualScroll(self) {
+            function renderVirtualScroll(self, callback) {
                 var $viewport = $(self.root).children(".body");
                 var viewportHeight = self.options.scrollHeight,
                     scrollTop = $viewport.scrollTop(),
@@ -472,7 +474,6 @@ export default {
                 // calculate
                 var dist = Math.abs(vscroll_info.prev_scroll_top - scrollTop);
                 var isDown = vscroll_info.prev_scroll_top < scrollTop;
-
                 var v_height = vscroll_info.height;
 
                 if (dist == 0) {
@@ -557,11 +558,14 @@ export default {
                 vscroll_info.prev_scroll_top = scrollTop;
 
                 // set real content height
-                $viewport.css({ "max-height": endRowHeight });
                 $(body.root).css({ top: (vscroll_info.prev_scroll_top + moveHeight) + "px" });
 
                 vscroll_info.start_index = startIndex;
                 vscroll_info.end_index = endIndex + 1;
+
+                // 스크롤 처음과 끝 처리
+                if (scrollTop == 0) callback(false);
+                if (scrollTop / scrollHeight > 0.99) callback(true);
             }
 
             function setVirtualScrollInfo(self) {
@@ -973,6 +977,7 @@ export default {
                 // 마지막 페이지 처리
                 end = (end > t_rows.length) ? t_rows.length : end;
 
+                console.log(start, end)
                 if(end <= t_rows.length) {
                     var tmpDataList = [];
 
@@ -993,6 +998,16 @@ export default {
                         if (tmpDataList.length > 0) page++;
                     }
                 }
+
+                return new Promise(function(resolve, reject) {
+                    if(window.devicePixelRatio > 1) {
+                        setTimeout(function() {
+                            resolve();
+                        }, 1);
+                    } else {
+                        resolve();
+                    }
+                });
             }
 
             /**
