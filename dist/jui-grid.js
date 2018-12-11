@@ -3976,18 +3976,9 @@ exports.default = {
                         }
                     } else if (opts.buffer == "vscroll") {
                         if (vscroll_info.prev_scroll_left == this.scrollLeft) {
-                            var process = self.next();
+                            renderVirtualScroll(this.scrollTop);
 
-                            process.then(function () {
-                                renderVirtualScroll(self, function (isLast) {
-                                    if (!isLast) {
-                                        vscroll_info.start_index = 0;
-                                        vscroll_info.end_index -= vscroll_info.start_index;
-                                    }
-
-                                    self.next();
-                                });
-
+                            self.next().then(function () {
                                 self.emit("scroll", e);
                             });
                         } else {
@@ -4152,112 +4143,28 @@ exports.default = {
                 return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
             }
 
-            function renderVirtualScroll(self, callback) {
-                var $viewport = (0, _jquery2.default)(self.root).children(".body");
-                var viewportHeight = self.options.scrollHeight,
-                    scrollTop = $viewport.scrollTop(),
-                    scrollHeight = $viewport[0].scrollHeight;
-
-                // calculate
-                var dist = Math.abs(vscroll_info.prev_scroll_top - scrollTop);
-                var isDown = vscroll_info.prev_scroll_top < scrollTop;
-                var v_height = vscroll_info.height;
-
-                if (dist == 0) {
-                    return;
+            function renderVirtualScroll(scrollTop) {
+                if (scrollTop >= vscroll_info.max_scroll_top) {
+                    scrollTop = vscroll_info.max_scroll_top;
                 }
 
-                var isBlock = false;
-                if (dist < viewportHeight) {
-                    isBlock = true;
-
-                    // move short dist
-                    if (dist !== 0) {
-
-                        if (dist < v_height) {
-                            var distIndex = Math.ceil(dist / v_height);
-                        } else {
-                            var distIndex = Math.floor(dist / v_height);
-                        }
-
-                        if (isDown == false) {
-                            vscroll_info.current_row_index -= distIndex;
-                        } else {
-                            vscroll_info.current_row_index += distIndex;
-                        }
-                    }
-                } else {
-                    // move long dist
-                    var rate = scrollTop / (scrollHeight - viewportHeight),
-                        limit = Math.floor(vscroll_info.count - vscroll_info.scroll_count);
-
-                    vscroll_info.current_row_index = Math.ceil(limit * rate);
-                }
-
-                // traverse real content
-                var startIndex = vscroll_info.current_row_index,
-                    endIndex = startIndex,
-                    endRowHeight = v_height;
-
-                while (endRowHeight < viewportHeight && endIndex < vscroll_info.count) {
-                    endIndex++;
-                    endRowHeight += v_height;
-                }
-
-                // 전체 표시 길이가 높이 보다 작을 때
-                if (endRowHeight < viewportHeight) {
-                    // 전체 content 자체가 작다면
-                    if (viewportHeight > vscroll_info.content_height) {} else {
-                        // 목록이 긴데 마지막이 짧다면
-                        var hiddenRowCount = Math.ceil(Math.abs(viewportHeight - endRowHeight) / v_height);
-
-                        startIndex -= hiddenRowCount;
-                        endRowHeight += hiddenRowCount * v_height;
-                    }
-                }
-
-                if (startIndex < 0) {
-                    vscroll_info.prev_scroll_top = 0;
-                    return;
-                }
-
-                // 시작지점으로 스크롤탑 다시 보정.
-                if (isBlock) {
-                    if (endIndex !== vscroll_info.count - 1) {
-                        scrollTop = Math.ceil(startIndex / vscroll_info.count * scrollHeight);
-
-                        $viewport.scrollTop(scrollTop);
-                        scrollTop = $viewport.scrollTop();
-                    }
-                }
-
-                var moveHeight = 0;
-                var real_viewportHeight = viewportHeight + vscroll_info.height;
-                if (scrollTop >= scrollHeight - real_viewportHeight) {
-                    if (endRowHeight > real_viewportHeight) {
-                        moveHeight = -Math.abs(endRowHeight - real_viewportHeight);
-                    }
-                }
-
-                // save prev scroll top
-                vscroll_info.prev_scroll_top = scrollTop;
-
-                // set real content height
-                (0, _jquery2.default)(body.root).css({ top: vscroll_info.prev_scroll_top + moveHeight + "px" });
-
-                vscroll_info.start_index = startIndex;
-                vscroll_info.end_index = endIndex + 1;
-
-                // 스크롤 처음과 끝 처리
-                if (scrollTop == 0) callback(false);
-                if (scrollTop / scrollHeight > 0.99) callback(true);
+                (0, _jquery2.default)(body.root).css({ top: scrollTop + "px" });
+                vscroll_info.start_index = parseInt(scrollTop * vscroll_info.index_rate);
+                vscroll_info.end_index = vscroll_info.start_index + vscroll_info.scroll_count;
             }
 
             function setVirtualScrollInfo(self) {
+                var screenCount = self.options.scrollHeight / self.options.rowHeight;
+
                 vscroll_info.height = self.options.rowHeight;
+                vscroll_info.scroll_height = self.options.scrollHeight;
+                vscroll_info.content_height = t_rows.length * self.options.rowHeight;
+
                 vscroll_info.count = t_rows.length;
-                vscroll_info.scroll_count = Math.floor(self.options.scrollHeight / vscroll_info.height);
-                vscroll_info.content_height = vscroll_info.count * vscroll_info.height;
+                vscroll_info.scroll_count = Math.ceil(screenCount); // 나누어 떨어지지 않으면 +1 한다.
+
+                vscroll_info.max_scroll_top = vscroll_info.content_height - vscroll_info.scroll_height;
+                vscroll_info.index_rate = (vscroll_info.count - vscroll_info.scroll_count) / vscroll_info.max_scroll_top;
 
                 (0, _jquery2.default)(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
             }
@@ -4269,14 +4176,14 @@ exports.default = {
 
                 vscroll_info = {
                     height: 0,
+                    scroll_height: 0,
                     content_height: 0,
                     count: 0,
                     scroll_count: 0,
-                    prev_scroll_left: 0,
-                    prev_scroll_top: 0,
-                    current_row_index: 0,
+                    max_scroll_top: 0,
                     start_index: 0,
                     end_index: 0,
+                    prev_scroll_left: 0,
                     is_focus: true
                 };
             }
@@ -4387,12 +4294,6 @@ exports.default = {
                 }
 
                 return direction == 0 ? 1 : -1;
-            }
-
-            function printLogForVsInfo(info) {
-                if (info.start_index < 0 || isNaN(info.start_index) || info.end_index < 0 || isNaN(info.end_index) || info.current_row_index < 0 || isNaN(info.current_row_index) || info.scroll_count < 0 || isNaN(info.scroll_count) || info.prev_scroll_top < 0 || isNaN(info.prev_scroll_top)) {
-                    console.log(info);
-                }
             }
 
             this.init = function () {
@@ -4658,7 +4559,6 @@ exports.default = {
                 // 마지막 페이지 처리
                 end = end > t_rows.length ? t_rows.length : end;
 
-                console.log(start, end);
                 if (end <= t_rows.length) {
                     var tmpDataList = [];
 

@@ -22,12 +22,12 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
         width: 800,
-        // scrollWidth: 750,
-        scrollHeight: 400,
+        // scrollWidth: 600,
+        scrollHeight: 290,
         rowHeight: 25,
         buffer: "vscroll",
         resize: true,
-        colshow: [ 0, 1, 2, 4, 7 ],
+        colshow: [ 0, 1, 2, 4, 7, 8 ],
         event: {
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);
@@ -50,7 +50,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     });
 
     document.getElementById('btn').addEventListener('click', function() {
-        xtable.update(getRandomData(7777));
+        xtable.update(getRandomData(333));
         xtable.append("3", getRandomData(3));
         xtable.append("3.1", getRandomData(2));
     });
