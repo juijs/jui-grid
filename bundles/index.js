@@ -16,7 +16,7 @@ function getRandomData(count) {
 }
 
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
-    var xtable = xtableUI("#xtable", {
+    window.xtable = xtableUI("#xtable", {
         fields: [ null, "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],

@@ -36,6 +36,7 @@ export default {
             var iParser = _.index();
             var vscroll_info = null;
             var xss_filter_keys = null;
+            var row_height = 0; // 최초 렌더링시 row_height를 구한다. 만약에 구하지 못하면 options.rowHeight 값으로 대체한다.
 
             function createRows(data, no, pRow, type) {
                 var tmp_rows = [];
@@ -263,11 +264,17 @@ export default {
             }
 
             function setScrollEvent(self, width, height) {
-                var opts = self.options;
+                var opts = self.options,
+                    lastScrollTop = 0,
+                    isScrolling = false;
 
                 var $head = $(self.root).children(".head"),
                     $body = $(self.root).children(".body");
 
+                // 스크롤 rAF 실행
+                updateScrollStatus(self);
+
+                // 스크롤 이벤트 설정
                 self.addEvent($body, "scroll", function(e) {
                     // 컬럼 메뉴는 스크롤시 무조건 숨기기
                     self.hideColumnMenu();
@@ -286,14 +293,23 @@ export default {
                             self.emit("scroll", e);
                         }
                     } else if(opts.buffer == "vscroll") {
-                        if(vscroll_info.prev_scroll_left == this.scrollLeft) {
-                            renderVirtualScroll(this.scrollTop);
-
-                            self.next().then(function() {
-                                self.emit("scroll", e);
-                            });
-                        } else {
+                        // 가로 스크롤 위치 갱신하기
+                        if(vscroll_info.prev_scroll_left != this.scrollLeft) {
                             vscroll_info.prev_scroll_left = this.scrollLeft;
+                        } else {
+                            // TODO: 세로 스크롤 처리를 rAF로 변경하면서 로직을 제거했음
+                            // "크롬+레티나+마우스"를 사용하지 않을 경우에 대한 예외처리
+                            if(!!window.chrome && window.devicePixelRatio != 1 && getScrollBarWidth(self) != 1) {
+                                if(!isScrolling) {
+                                    isScrolling = true;
+                                    $body.hide();
+
+                                    setTimeout(function() {
+                                        $body.show();
+                                        isScrolling = false;
+                                    }, 1);
+                                }
+                            }
                         }
                     }
 
@@ -311,7 +327,7 @@ export default {
                     self.addEvent(document, "keydown", function (e) {
                         if(vscroll_info.is_focus) {
                             var top = $body.scrollTop(),
-                                tick = self.options.rowHeight;
+                                tick = getRowHeight(self);
 
                             if (e.which == 38 || e.which == 40) {
                                 $body.scrollTop(top + ((e.which == 38) ? -tick : tick));
@@ -321,6 +337,30 @@ export default {
                             }
                         }
                     });
+                }
+
+                // 가상스크롤 rAF 처리
+                function updateScrollStatus(self) {
+                    var raf = window.requestAnimationFrame ||
+                        window.webkitRequestAnimationFrame ||
+                        window.mozRequestAnimationFrame ||
+                        window.msRequestAnimationFrame ||
+                        window.oRequestAnimationFrame;
+
+                    var scrollTop = $body.scrollTop();
+
+                    if(lastScrollTop === scrollTop) {
+                        raf(function() { updateScrollStatus(self); });
+                        return;
+                    } else {
+                        lastScrollTop = scrollTop;
+
+                        renderVirtualScroll(scrollTop);
+                        self.next();
+                        self.emit("scroll");
+
+                        raf(function() { updateScrollStatus(self); });
+                    }
                 }
             }
 
@@ -466,11 +506,11 @@ export default {
             }
 
             function setVirtualScrollInfo(self) {
-                var screenCount = self.options.scrollHeight / self.options.rowHeight;
+                var screenCount = self.options.scrollHeight / getRowHeight(self);
 
-                vscroll_info.height = self.options.rowHeight;
+                vscroll_info.height = getRowHeight(self);
                 vscroll_info.scroll_height = self.options.scrollHeight;
-                vscroll_info.content_height = t_rows.length * self.options.rowHeight;
+                vscroll_info.content_height = t_rows.length * vscroll_info.height;
 
                 vscroll_info.count = t_rows.length;
                 vscroll_info.scroll_count = Math.ceil(screenCount); // 나누어 떨어지지 않으면 +1 한다.
@@ -605,6 +645,10 @@ export default {
                 }
 
                 return direction == 0 ? 1 : -1;
+            }
+
+            function getRowHeight(self) {
+                return row_height == 0 ? self.options.rowHeight : row_height;
             }
 
             this.init = function() {
@@ -890,15 +934,14 @@ export default {
                     }
                 }
 
-                return new Promise(function(resolve, reject) {
-                    if(window.devicePixelRatio > 1) {
-                        setTimeout(function() {
-                            resolve();
-                        }, 1);
-                    } else {
-                        resolve();
+                // 최초에 한번만 row_height 구하기
+                if(row_height == 0 && body.count() > 0) {
+                    var row = body.get(0);
+
+                    if(row && row.element) {
+                        row_height = $(row.element).outerHeight();
                     }
-                });
+                }
             }
 
             /**
