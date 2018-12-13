@@ -496,6 +496,8 @@ export default {
             }
 
             function renderVirtualScroll(scrollTop) {
+                if(vscroll_info == null) return;
+
                 if(scrollTop >= vscroll_info.max_scroll_top) {
                     scrollTop = vscroll_info.max_scroll_top;
                 }
