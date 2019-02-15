@@ -22,7 +22,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
         width: 800,
-        // scrollWidth: 600,
+        scrollWidth: 600,
         scrollHeight: 290,
         rowHeight: 25,
         buffer: "vscroll",
