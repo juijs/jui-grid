@@ -97,7 +97,7 @@ export default {
                 setTableBodyStyle(self, body); // X-Table 생성 및 마크업 설정
 
                 // 공통 테이블 스타일 정의
-                setTableAllStyle(self, head, body);
+                setTableAllStyle(self);
 
                 // TODO: XSS 필터 대상 컬럼 설정 리펙토링 필요
                 if(self.options.xssFilter) {
@@ -131,7 +131,7 @@ export default {
                     return options;
                 }
 
-                function setTableAllStyle(self, head, body) {
+                function setTableAllStyle(self) {
                     var opts = self.options;
 
                     if(opts.scrollWidth > 0) {
@@ -644,6 +644,10 @@ export default {
             }
 
             function updateColumnWidthWhenResize(self) {
+                // 가로스크롤 모드와 테이블 넓이가 고정되어 있을 때는 동작하지 않음
+                if(self.options.width > 0 ||
+                    self.options.scrollWidth > 0) return;
+
                 var tableWidth = $(self.root).outerWidth(),
                     cols = head.listColumn(),
                     bodyCols = body.listColumn();

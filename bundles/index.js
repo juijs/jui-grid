@@ -21,8 +21,8 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
-        width: 800,
-        scrollWidth: 600,
+        // width: 800,
+        // scrollWidth: 600,
         scrollHeight: 290,
         rowHeight: 25,
         buffer: "vscroll",
@@ -55,7 +55,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
         xtable.append("3.1", getRandomData(2));
     });
 
-    _.resize(function() {
-        xtable.scrollWidth($("body").width(), true);
-    });
+    // _.resize(function() {
+    //     xtable.scrollWidth($("body").width(), true);
+    // });
 });
