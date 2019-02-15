@@ -97,7 +97,7 @@ export default {
                 setTableBodyStyle(self, body); // X-Table 생성 및 마크업 설정
 
                 // 공통 테이블 스타일 정의
-                setTableAllStyle(self, head, body);
+                setTableAllStyle(self);
 
                 // TODO: XSS 필터 대상 컬럼 설정 리펙토링 필요
                 if(self.options.xssFilter) {
@@ -131,7 +131,7 @@ export default {
                     return options;
                 }
 
-                function setTableAllStyle(self, head, body) {
+                function setTableAllStyle(self) {
                     var opts = self.options;
 
                     if(opts.scrollWidth > 0) {
@@ -190,6 +190,7 @@ export default {
 
                     for(var j = cols.length - 1; j >= 0; j--) {
                         var hw = $(cols[j].element).outerWidth();
+                        var rate = hw / $(self.root).outerWidth();
 
                         if(self.options.buffer != "page" && cols[j].type == "show" && !isLast) {
                             if(_.browser.msie) {
@@ -202,6 +203,10 @@ export default {
                         } else {
                             $(cols[j].element).outerWidth(hw);
                             $(bodyCols[j].element).outerWidth(hw);
+                            cols[j].width = hw;
+                            bodyCols[j].width = hw;
+                            cols[j].rate = rate;
+                            bodyCols[j].rate = rate;
                         }
                     }
 
@@ -265,8 +270,7 @@ export default {
 
             function setScrollEvent(self, width, height) {
                 var opts = self.options,
-                    lastScrollTop = 0,
-                    isScrolling = false;
+                    lastScrollTop = 0;
 
                 var $head = $(self.root).children(".head"),
                     $body = $(self.root).children(".body");
@@ -296,20 +300,6 @@ export default {
                         // 가로 스크롤 위치 갱신하기
                         if(vscroll_info.prev_scroll_left != this.scrollLeft) {
                             vscroll_info.prev_scroll_left = this.scrollLeft;
-                        } else {
-                            // TODO: 세로 스크롤 처리를 rAF로 변경하면서 로직을 제거했음
-                            // "크롬+레티나+마우스"를 사용하지 않을 경우에 대한 예외처리
-                            if(!!window.chrome && window.devicePixelRatio != 1 && getScrollBarWidth(self) != 1) {
-                                if(!isScrolling) {
-                                    isScrolling = true;
-                                    $body.hide();
-
-                                    setTimeout(function() {
-                                        $body.show();
-                                        isScrolling = false;
-                                    }, 1);
-                                }
-                            }
                         }
                     }
 
@@ -651,6 +641,24 @@ export default {
 
             function getRowHeight(self) {
                 return row_height == 0 ? self.options.rowHeight : row_height;
+            }
+
+            function updateColumnWidthWhenResize(self) {
+                // 가로스크롤 모드와 테이블 넓이가 고정되어 있을 때는 동작하지 않음
+                if(self.options.width > 0 ||
+                    self.options.scrollWidth > 0) return;
+
+                var tableWidth = $(self.root).outerWidth(),
+                    cols = head.listColumn(),
+                    bodyCols = body.listColumn();
+
+                cols.forEach(function(col, i) {
+                    if(col.type == "show" && col.rate > 0) {
+                        var colWidth = parseInt(col.rate * tableWidth);
+                        $(cols[i].element).outerWidth(colWidth);
+                        $(bodyCols[i].element).outerWidth(colWidth);
+                    }
+                });
             }
 
             this.init = function() {
@@ -1132,6 +1140,8 @@ export default {
              * Resets the inner scroll and columns of a table.
              */
             this.resize = function() {
+                updateColumnWidthWhenResize(this);
+
                 head.resizeColumns();
                 head.resize();
                 head.emit("colresize");
