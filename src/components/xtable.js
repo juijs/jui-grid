@@ -279,18 +279,18 @@ export default {
                 updateScrollStatus(self);
 
                 // 스크롤 이벤트 설정
-                self.addEvent($body, "scroll", function(e) {
+                $body[0].addEventListener("scroll", function(e) {
                     // 컬럼 메뉴는 스크롤시 무조건 숨기기
                     self.hideColumnMenu();
 
                     // 가로 스크롤
                     if(width > 0) {
-                        $head.scrollLeft(this.scrollLeft);
+                        $head[0].scrollLeft = this.scrollLeft;
                     }
 
                     if(opts.buffer == "scroll") { // 무조건 scroll 타입일 때
                         var scrollTop = this.scrollTop + height,
-                            scrollHeight = $body.get(0).scrollHeight;
+                            scrollHeight = $body[0].scrollHeight;
 
                         if (scrollTop >= scrollHeight * 0.9) {
                             self.next();
@@ -929,10 +929,12 @@ export default {
                     for(var i = start; i < end; i++) {
                         var r = t_rows[i];
 
-                        r.seq = i + 1;
-                        r.reload(head.uit.getColumn(), null, xss_filter_keys);
+                        if(r) {
+                            r.seq = i + 1;
+                            r.reload(head.uit.getColumn(), null, xss_filter_keys);
 
-                        tmpDataList.push(r);
+                            tmpDataList.push(r);
+                        }
                     }
 
                     body.append(tmpDataList);
