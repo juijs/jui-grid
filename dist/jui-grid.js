@@ -3982,7 +3982,7 @@ exports.default = {
                         }
                     }
 
-                    return false;
+                    e.stopPropagation();
                 });
 
                 // 스크롤 키보드 이벤트 설정
