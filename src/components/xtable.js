@@ -190,7 +190,6 @@ export default {
 
                     for(var j = cols.length - 1; j >= 0; j--) {
                         var hw = $(cols[j].element).outerWidth();
-                        var rate = hw / $(self.root).outerWidth();
 
                         if(self.options.buffer != "page" && cols[j].type == "show" && !isLast) {
                             if(_.browser.msie) {
@@ -201,14 +200,8 @@ export default {
 
                             isLast = true;
                         } else {
-                            if(hw > 0) {
-                                $(cols[j].element).outerWidth(hw);
-                                $(bodyCols[j].element).outerWidth(hw);
-                                cols[j].width = hw;
-                                bodyCols[j].width = hw;
-                                cols[j].rate = rate;
-                                bodyCols[j].rate = rate;
-                            }
+                            $(cols[j].element).outerWidth(hw);
+                            $(bodyCols[j].element).outerWidth(hw);
                         }
                     }
 
@@ -643,27 +636,6 @@ export default {
 
             function getRowHeight(self) {
                 return row_height == 0 ? self.options.rowHeight : row_height;
-            }
-
-            function updateColumnWidthWhenResize(self) {
-                // 가로스크롤 모드와 테이블 넓이가 고정되어 있을 때는 동작하지 않음
-                if(self.options.width > 0 ||
-                    self.options.scrollWidth > 0) return;
-
-                var tableWidth = $(self.root).outerWidth(),
-                    cols = head.listColumn(),
-                    bodyCols = body.listColumn();
-
-                cols.forEach(function(col, i) {
-                    if(col.type == "show" && col.rate > 0) {
-                        var colWidth = parseInt(col.rate * tableWidth);
-
-                        if(colWidth > 0) {
-                            $(cols[i].element).outerWidth(colWidth);
-                            $(bodyCols[i].element).outerWidth(colWidth);
-                        }
-                    }
-                });
             }
 
             this.init = function() {
@@ -1147,8 +1119,6 @@ export default {
              * Resets the inner scroll and columns of a table.
              */
             this.resize = function() {
-                updateColumnWidthWhenResize(this);
-
                 head.resizeColumns();
                 head.resize();
                 head.emit("colresize");
