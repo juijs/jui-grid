@@ -3879,12 +3879,14 @@ exports.default = {
 
                             isLast = true;
                         } else {
-                            (0, _jquery2.default)(cols[j].element).outerWidth(hw);
-                            (0, _jquery2.default)(bodyCols[j].element).outerWidth(hw);
-                            cols[j].width = hw;
-                            bodyCols[j].width = hw;
-                            cols[j].rate = rate;
-                            bodyCols[j].rate = rate;
+                            if (hw > 0) {
+                                (0, _jquery2.default)(cols[j].element).outerWidth(hw);
+                                (0, _jquery2.default)(bodyCols[j].element).outerWidth(hw);
+                                cols[j].width = hw;
+                                bodyCols[j].width = hw;
+                                cols[j].rate = rate;
+                                bodyCols[j].rate = rate;
+                            }
                         }
                     }
 
@@ -4333,8 +4335,11 @@ exports.default = {
                 cols.forEach(function (col, i) {
                     if (col.type == "show" && col.rate > 0) {
                         var colWidth = parseInt(col.rate * tableWidth);
-                        (0, _jquery2.default)(cols[i].element).outerWidth(colWidth);
-                        (0, _jquery2.default)(bodyCols[i].element).outerWidth(colWidth);
+
+                        if (colWidth > 0) {
+                            (0, _jquery2.default)(cols[i].element).outerWidth(colWidth);
+                            (0, _jquery2.default)(bodyCols[i].element).outerWidth(colWidth);
+                        }
                     }
                 });
             }

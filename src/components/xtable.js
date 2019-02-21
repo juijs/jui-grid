@@ -201,12 +201,14 @@ export default {
 
                             isLast = true;
                         } else {
-                            $(cols[j].element).outerWidth(hw);
-                            $(bodyCols[j].element).outerWidth(hw);
-                            cols[j].width = hw;
-                            bodyCols[j].width = hw;
-                            cols[j].rate = rate;
-                            bodyCols[j].rate = rate;
+                            if(hw > 0) {
+                                $(cols[j].element).outerWidth(hw);
+                                $(bodyCols[j].element).outerWidth(hw);
+                                cols[j].width = hw;
+                                bodyCols[j].width = hw;
+                                cols[j].rate = rate;
+                                bodyCols[j].rate = rate;
+                            }
                         }
                     }
 
@@ -655,8 +657,11 @@ export default {
                 cols.forEach(function(col, i) {
                     if(col.type == "show" && col.rate > 0) {
                         var colWidth = parseInt(col.rate * tableWidth);
-                        $(cols[i].element).outerWidth(colWidth);
-                        $(bodyCols[i].element).outerWidth(colWidth);
+
+                        if(colWidth > 0) {
+                            $(cols[i].element).outerWidth(colWidth);
+                            $(bodyCols[i].element).outerWidth(colWidth);
+                        }
                     }
                 });
             }
