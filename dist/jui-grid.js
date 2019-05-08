@@ -3836,7 +3836,8 @@ exports.default = {
                             (0, _jquery2.default)(body.root).wrap("<div class='body' style='max-height: " + scrollHeight + "px'><div></div></div>");
 
                             (0, _jquery2.default)(body.root).parent().parent().css({
-                                "overflow-y": "scroll"
+                                "overflow-y": "scroll",
+                                "transform": "translateZ(0)"
                             });
                         } else {
                             (0, _jquery2.default)(body.root).wrap("<div class='body' style='max-height: " + scrollHeight + "px'></div>");
@@ -4013,8 +4014,14 @@ exports.default = {
                         raf(function () {
                             updateScrollStatus(self);
                         });
+                        $body.css({ "will-change": "auto" });
+                        $body.find("tbody").css({ "will-change": "auto", "filter": "blur(0px)" });
+
                         return;
                     } else {
+                        $body.css({ "will-change": "transform" });
+                        $body.find("tbody").css({ "will-change": "contents", "filter": "blur(2px)" });
+
                         lastScrollTop = scrollTop;
 
                         renderVirtualScroll(scrollTop);
