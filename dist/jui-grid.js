@@ -4020,7 +4020,7 @@ exports.default = {
                         return;
                     } else {
                         $body.css({ "will-change": "transform" });
-                        $body.find("tbody").css({ "will-change": "contents", "filter": "blur(2px)" });
+                        $body.find("tbody").css({ "will-change": "contents", "filter": "blur(1px)" });
 
                         lastScrollTop = scrollTop;
 
