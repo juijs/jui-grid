@@ -618,12 +618,32 @@ export default {
                 }
             }
 
+            function getHierarchyValue(data, key) {
+                if (key.indexOf(".") != -1) {
+                    var tokens = key.split("."),
+                        newData = data[tokens.shift()];
+
+                    if (tokens.length == 1) {
+                        return newData[tokens[0]];
+                    }
+
+                    return getHierarchyValue(newData, tokens.join("."));
+                }
+
+                return data[key];
+            }
+
             function recursiveMultiSort(a, b, columns, order_by, index) {
                 var direction = (order_by[index] == "desc") ? 1 : 0,
                     key = columns[index],
-                    is_numeric = !isNaN(+a[key] - +b[key]),
-                    x = is_numeric ? +a[key] : a[key],
-                    y = is_numeric ? +b[key] : b[key];
+                    aValue = getHierarchyValue(a, key),
+                    bValue = getHierarchyValue(b, key);
+
+                console.log(aValue, bValue)
+
+                var is_numeric = !isNaN(+aValue - +bValue),
+                    x = is_numeric ? +aValue : aValue,
+                    y = is_numeric ? +bValue : bValue;
 
                 if(!is_numeric) {
                     if(typeof(x) == "string") x = x.toLowerCase();

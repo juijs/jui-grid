@@ -136,11 +136,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _binder = __webpack_require__(7);
+var _binder = __webpack_require__(8);
 
 var _binder2 = _interopRequireDefault(_binder);
 
-var _core = __webpack_require__(8);
+var _core = __webpack_require__(9);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -2319,6 +2319,16 @@ exports.default = _juijs2.default;
 "use strict";
 
 
+__webpack_require__(14);
+__webpack_require__(7);
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _main = __webpack_require__(1);
@@ -2329,7 +2339,7 @@ var _table = __webpack_require__(3);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _xtable = __webpack_require__(11);
+var _xtable = __webpack_require__(12);
 
 var _xtable2 = _interopRequireDefault(_xtable);
 
@@ -2342,7 +2352,7 @@ if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) == "object")
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2717,7 +2727,7 @@ function ViewData(type, elem) {
 }
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2735,11 +2745,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _column = __webpack_require__(9);
+var _column = __webpack_require__(10);
 
 var _column2 = _interopRequireDefault(_column);
 
-var _row = __webpack_require__(10);
+var _row = __webpack_require__(11);
 
 var _row2 = _interopRequireDefault(_row);
 
@@ -3267,7 +3277,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3331,7 +3341,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3645,7 +3655,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3671,7 +3681,7 @@ var _dropdown = __webpack_require__(4);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _modal = __webpack_require__(12);
+var _modal = __webpack_require__(13);
 
 var _modal2 = _interopRequireDefault(_modal);
 
@@ -4297,12 +4307,32 @@ exports.default = {
                 }
             }
 
+            function getHierarchyValue(data, key) {
+                if (key.indexOf(".") != -1) {
+                    var tokens = key.split("."),
+                        newData = data[tokens.shift()];
+
+                    if (tokens.length == 1) {
+                        return newData[tokens[0]];
+                    }
+
+                    return getHierarchyValue(newData, tokens.join("."));
+                }
+
+                return data[key];
+            }
+
             function recursiveMultiSort(a, b, columns, order_by, index) {
                 var direction = order_by[index] == "desc" ? 1 : 0,
                     key = columns[index],
-                    is_numeric = !isNaN(+a[key] - +b[key]),
-                    x = is_numeric ? +a[key] : a[key],
-                    y = is_numeric ? +b[key] : b[key];
+                    aValue = getHierarchyValue(a, key),
+                    bValue = getHierarchyValue(b, key);
+
+                console.log(aValue, bValue);
+
+                var is_numeric = !isNaN(+aValue - +bValue),
+                    x = is_numeric ? +aValue : aValue,
+                    y = is_numeric ? +bValue : bValue;
 
                 if (!is_numeric) {
                     if (typeof x == "string") x = x.toLowerCase();
@@ -5575,7 +5605,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5853,6 +5883,12 @@ exports.default = {
         return UI;
     }
 };
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

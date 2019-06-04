@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import jui from '../src/main.js'
 import XTableComp from '../src/components/xtable.js'
 import './index.less'
@@ -9,7 +8,7 @@ function getRandomData(count) {
     var data = [];
 
     for(var i = 0; i < count; i++) {
-        data.push({ "min":i,"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0 })
+        data.push({ "min":{value: i},"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0 })
     }
 
     return data;
@@ -17,9 +16,9 @@ function getRandomData(count) {
 
 jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     window.xtable = xtableUI("#xtable", {
-        fields: [ null, "min", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
+        fields: [ null, "min.value", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
-        sort: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
+        sort: [ "min.value", 2, 3, 4, 5, 6, "avgTime" ],
         sortLoading: true,
         width: 800,
         scrollWidth: 600,
