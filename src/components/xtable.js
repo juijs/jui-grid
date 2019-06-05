@@ -639,8 +639,6 @@ export default {
                     aValue = getHierarchyValue(a, key),
                     bValue = getHierarchyValue(b, key);
 
-                console.log(aValue, bValue)
-
                 var is_numeric = !isNaN(+aValue - +bValue),
                     x = is_numeric ? +aValue : aValue,
                     y = is_numeric ? +bValue : bValue;
