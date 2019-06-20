@@ -4014,6 +4014,7 @@ exports.default = {
                         raf(function () {
                             updateScrollStatus(self);
                         });
+
                         $body.css({ "will-change": "auto" });
                         $body.find("tbody").css({ "will-change": "auto", "filter": "blur(0px)" });
 
@@ -4177,6 +4178,14 @@ exports.default = {
                 vscroll_info.end_index = vscroll_info.start_index + vscroll_info.scroll_count;
             }
 
+            /**
+             * 가상 스크롤 관련 계산식을 구하는 함수
+             * 실행되는 조건은 다음과 같음
+             *  - 데이터가 업데이트 되었을 때
+             *  - 테이블 스크롤 높이가 변경되었을 때
+             *
+             * @param self
+             */
             function setVirtualScrollInfo(self) {
                 var screenCount = self.options.scrollHeight / getRowHeight(self);
 
@@ -4187,7 +4196,8 @@ exports.default = {
                 vscroll_info.count = t_rows.length;
                 vscroll_info.scroll_count = Math.ceil(screenCount); // 나누어 떨어지지 않으면 +1 한다.
 
-                vscroll_info.max_scroll_top = vscroll_info.content_height - vscroll_info.scroll_height;
+                var maxScrollTop = vscroll_info.content_height - vscroll_info.scroll_height;
+                vscroll_info.max_scroll_top = maxScrollTop >= 0 ? maxScrollTop : 0;
                 vscroll_info.index_rate = (vscroll_info.count - vscroll_info.scroll_count) / vscroll_info.max_scroll_top;
 
                 (0, _jquery2.default)(body.root).parent().height(vscroll_info.content_height > 0 ? vscroll_info.content_height : "auto");
@@ -4239,9 +4249,10 @@ exports.default = {
                     t_rows = rows;
                 }
 
+                // 데이터가 갱신되면 가상 스크롤 계산식을 수정해야 한다.
                 if (self.options.buffer == "vscroll") {
-                    // 가상 스크롤 설정
                     setVirtualScrollInfo(self);
+                    renderVirtualScroll(0);
                 }
             }
 
@@ -4871,10 +4882,12 @@ exports.default = {
             this.scrollHeight = function (h) {
                 if (this.options.buffer == "page") return;
 
-                (0, _jquery2.default)(this.root).find(".body").css("max-height", h + "px");
+                (0, _jquery2.default)(this.root).find(".body").css("max-height", h + "px").scrollTop(0);
                 this.setOption("scrollHeight", h);
 
-                setScrollEvent(this, this.options.scrollWidth, h);
+                // 기존의 로우 그릴 수 있는 형태로 계산하기
+                calculateRows(this, true);
+                this.next();
             };
 
             /**
@@ -4905,9 +4918,6 @@ exports.default = {
                         }
 
                         $viewport.scrollTop(scrollTop);
-                        this.clear();
-                        this.next();
-
                         break;
                     }
                 }

@@ -49,7 +49,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     });
 
     document.getElementById('btn').addEventListener('click', function() {
-        xtable.update(getRandomData(333));
+        xtable.update(getRandomData(33333));
         xtable.append("3", getRandomData(3));
         xtable.append("3.1", getRandomData(2));
     });
