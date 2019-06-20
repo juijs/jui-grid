@@ -4252,7 +4252,6 @@ exports.default = {
                 // 데이터가 갱신되면 가상 스크롤 계산식을 수정해야 한다.
                 if (self.options.buffer == "vscroll") {
                     setVirtualScrollInfo(self);
-                    renderVirtualScroll(0);
                 }
             }
 
@@ -4408,8 +4407,14 @@ exports.default = {
                 }
             };
 
-            this.render = function (isTree) {
+            this.render = function (isTree, isInit) {
                 calculateRows(this, isTree);
+
+                // 가상스크롤을 사용할 때, 데이터가 업데이트 될 경우에 대한 처리
+                if (isInit === true && this.options.buffer == "vscroll") {
+                    renderVirtualScroll(0);
+                }
+
                 this.next();
             };
 
@@ -4458,7 +4463,7 @@ exports.default = {
                 this.reset();
                 rows = createRows(dataList, 0, null);
 
-                this.render();
+                this.render(false, true);
                 this.emit("update");
                 head.emit("colresize");
 
@@ -4495,7 +4500,7 @@ exports.default = {
                     }
                 }
 
-                this.render(true);
+                this.render(true, true);
                 this.emit("updateTree");
             };
 
@@ -4513,7 +4518,7 @@ exports.default = {
                     appendChildRows(row, data);
 
                     this.clear();
-                    this.render(true);
+                    this.render(true, true);
                     this.emit("append");
                 }
             };
@@ -4887,6 +4892,12 @@ exports.default = {
 
                 // 기존의 로우 그릴 수 있는 형태로 계산하기
                 calculateRows(this, true);
+
+                // 가상스크롤 위치 초기화
+                if (this.options.buffer == "vscroll") {
+                    renderVirtualScroll(0);
+                }
+
                 this.next();
             };
 
@@ -4918,6 +4929,9 @@ exports.default = {
                         }
 
                         $viewport.scrollTop(scrollTop);
+                        this.clear();
+                        this.next();
+
                         break;
                     }
                 }
