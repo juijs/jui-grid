@@ -5354,6 +5354,13 @@ exports.default = {
                 if (!select_row) return null;
                 return select_row.index;
             };
+
+            /**
+             * @method setTpl
+             */
+            this.setTpl = function (name, html) {
+                head.setTpl(name, html);
+            };
         };
 
         UI.setup = function () {
