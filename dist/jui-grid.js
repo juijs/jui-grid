@@ -3958,7 +3958,6 @@ exports.default = {
 
                 // 스크롤 이벤트 설정
                 $body[0].addEventListener("scroll", (0, _lodash2.default)(function (e) {
-                    console.log("scroll");
                     // 컬럼 메뉴는 스크롤시 무조건 숨기기
                     self.hideColumnMenu();
 
