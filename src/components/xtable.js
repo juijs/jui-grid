@@ -301,7 +301,7 @@ export default {
                     }
 
                     e.stopPropagation();
-                }, 100, { leading: false, trailing: false }));
+                }, 100));
                 
                 // 스크롤 키보드 이벤트 설정
                 if(opts.buffer == "vscroll") {
