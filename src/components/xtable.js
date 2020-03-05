@@ -1,4 +1,5 @@
 import $ from "jquery"
+import throttle from "lodash.throttle";
 import jui from "../main.js"
 import TableComp from './table.js'
 import DropdownComp from "juijs-ui/src/components/dropdown.js"
@@ -275,7 +276,8 @@ export default {
                 updateScrollStatus(self);
 
                 // 스크롤 이벤트 설정
-                $body[0].addEventListener("scroll", function(e) {
+                $body[0].addEventListener("scroll", throttle(function(e) {
+                    console.log("scroll")
                     // 컬럼 메뉴는 스크롤시 무조건 숨기기
                     self.hideColumnMenu();
 
@@ -300,8 +302,8 @@ export default {
                     }
 
                     e.stopPropagation();
-                });
-
+                }, 100, { leading: false, trailing: false }));
+                
                 // 스크롤 키보드 이벤트 설정
                 if(opts.buffer == "vscroll") {
                     $(self.root).hover(function() {
