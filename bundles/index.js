@@ -8,7 +8,7 @@ function getRandomData(count) {
     var data = [];
 
     for(var i = 0; i < count; i++) {
-        data.push({ "min":{value: i},"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"/db2sql.jsp","avgTime":21.55,"success":0 })
+        data.push({ "min":{value: i},"max":21.55,"count":1,"sumCpu":0,"hash":1495461794,"sd":0,"tpmc":0,"avgCpu":0,"failure":1,"rate":77.66,"sumTime":21.55,"name":"<b>/db2sql.jsp</b>","avgTime":21.55,"success":0 })
     }
 
     return data;
@@ -49,7 +49,7 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
     });
 
     document.getElementById('btn').addEventListener('click', function() {
-        xtable.update(getRandomData(33333));
+        xtable.update(getRandomData(333));
         xtable.append("3", getRandomData(3));
         xtable.append("3.1", getRandomData(2));
     });
