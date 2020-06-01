@@ -44,8 +44,8 @@ table.table {
       > .msg {
         width: 100%;
         text-align: center;
-        font-size: 16px;
-        font-weight: bold;
+        font-size: 14px;
+        font-weight: 500;
       }
     }
 
@@ -64,7 +64,6 @@ table.table {
   }
 
   .table.normal;
-  .table.border;
 }
 
 // Table Size
@@ -103,21 +102,6 @@ table.table {
 
   > tbody > tr > td {
     padding: 8px 9px;
-  }
-}
-
-
-// Table Border
-// --------------------------------------------------
-.table.border {
-  > tbody > tr > td {
-    border-left-width: 1px;
-  }
-}
-
-.table.borderless {
-  > tbody > tr > td:not(:first-child) {
-    border-left-width: 0;
   }
 }
 

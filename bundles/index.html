@@ -82,7 +82,7 @@
 	<p>
 		Basic table style
 		
-		<table class="table classic hover">
+		<table class="table classic hover large">
 			<thead>
 				<tr>
 					<th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
@@ -92,7 +92,7 @@
 				<tr>
 					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
 				</tr>
-				<tr>
+				<tr class="selected">
 					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
 				</tr>
 				<tr>
@@ -108,7 +108,46 @@
 	<p>
 		A table style that provides an extended area.
 		
-		<table class="table expand hover">
+		<table class="table large vborderless">
+			<thead>
+				<tr>
+					<th style="width: 30px">&nbsp;</th>
+					<th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><i class="icon-left"></i></td>
+					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+				</tr>
+				<tr>
+					<td><i class="icon-left"></i></td>
+					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+				</tr>
+				<tr class="open">
+					<td><i class="icon-right"></i></td>
+					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+				</tr>
+				<tr class="expand">
+					<td colspan="6">
+						<div style="height: 156px; background: #f2f2f2;"></div>
+					</td>
+				</tr>
+				<tr>
+					<td><i class="icon-left"></i></td>
+					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+				</tr>
+			</tbody>
+		</table>
+	</p>
+</section>
+
+<section>
+	<h2>Inner table</h2>
+	<p>
+		A table style that provides an extended area.
+		
+		<table class="table large vborderless">
 			<thead>
 				<tr>
 					<th style="width: 30px">&nbsp;</th>
@@ -125,39 +164,6 @@
 					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
 				</tr>
 				<tr class="expand">
-					<td colspan="6">ABCDE</td>
-				</tr>
-				<tr>
-					<td><i class="icon-left"></i></td>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
-				</tr>
-			</tbody>
-		</table>
-	</p>
-</section>
-
-<section>
-	<h2>Inner table</h2>
-	<p>
-		A table style that provides an extended area.
-		
-		<table class="table expand">
-			<thead>
-				<tr>
-					<th style="width: 30px">&nbsp;</th>
-					<th>A</th><th>B</th><th>C</th><th>D</th><th>E</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><i class="icon-left"></i></td>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
-				</tr>
-				<tr class="open">
-					<td><i class="icon-right"></i></td>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
-				</tr>
-				<tr class="content">
 					<td colspan="6">
 						
 						<div>
@@ -236,13 +242,9 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
-				</tr>
-				<tr>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
-				</tr>
-				<tr>
-					<td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+					<td colspan="5" class="none" align="center">
+						<div class="msg">Data does not exist.</div>
+					</td>
 				</tr>
 			</tbody>
 		</table>

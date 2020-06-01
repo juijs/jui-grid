@@ -2,100 +2,174 @@
 // --------------------------------------------------
 
 table.table {
-  border-bottom: 1px solid @tableClassicBorderColor;
-
+  background: @tableBackgroundColor;
+  
   > thead {
+    box-shadow: @tableThBoxShadow;
+
     > tr {
       > th {
-        color: @tableClassicColumnFontColor;
-        border-top: 1px solid @tableClassicColumnBorderColor;
-        border-bottom: 1px solid @tableClassicColumnBorderColor;
+        color: @tableThTdFontColor;
+        border-top: 1px solid @tableThTdBorderColor;
+        border-bottom: 1px solid @tableThTdBorderColor;
   
         &:first-child {
-          border-left: 1px solid @tableClassicColumnBorderColor;
+          border-left: 1px solid @tableThTdBorderColor;
         }
   
         &:last-child {
-          border-right: 1px solid @tableClassicColumnBorderColor;
+          border-right: 1px solid @tableThTdBorderColor;
         }
       }
     }
-    
   }
 
   > tbody {
     > tr {
-      background: @tableClassicRowBackgroundColor;
-
       > td {
-        color: @tableClassicCellFontColor;
-        border-top: 1px solid @tableClassicCellBorderColor1;
-        border-bottom: 1px solid @tableClassicCellBorderColor2;
-        border-left: 1px solid @tableClassicCellBorderColor2;
-
-        &:first-child {
-          border-left: 1px solid @tableClassicCellBorderColor3;
-        }
-
-        &:last-child {
-          border-right: 1px solid @tableClassicCellBorderColor3;
-        }
-      }
-
-      > td.none {
-        background: @tableClassicNoneCellBackgroundColor;
-
-        > .msg {
-          text-shadow: @tableClassicNoneCellMessageTextShadow;
-        }
-      }
-
-      &:last-child > td {
-        border-bottom-width: 0px;
+        color: @tableThTdFontColor;
       }
 
       &.selected {
-        background: @tableClassicSelectedRowBackgroundColor;
+        background: @tableTdSelectedBackgroundColor !important;
 
         > td {
-          color: @tableClassicSelectedRowFontColor;
+          color: @tableTdSelectedFontColor;
+          
+          &:not(:last-child) {
+            border-right: 1px solid @tableTdSelectedBackgroundColor;
+          }
         }
       }
 
       &.checked {
-        background: @tableClassicCheckedRowBackgroundColor;
+        background: @tableTdSelectedBackgroundColor !important;
 
         > td {
-          color: @tableClassicCheckedRowFontColor;
+          color: @tableTdSelectedFontColor;
         }
       }
     }
-
-    .expand-row();
   }
 
-  // Table Style - White - Stripe
+  // Table Styles
   // --------------------------------------------------
 
   &.table.stripe {
-    tr:nth-child(even) {
-      background: @tableClassicStripeRowBackgroundColor;
+    > tbody {
+      > tr:nth-child(even) {
+        background: @tableTdStripeBackgroundColor;
+      }
+    }
+  }
+  &.table.stripeless {
+    > tbody {
+      > tr:nth-child(even) {
+        background: @tableBackgroundColor !important;
+      }
     }
   }
 
-  &.table.stripeless {
+  &.table.border {
+    > tbody {
+      tr {
+        td {
+          border-bottom: 1px solid @tableThTdBorderColor;
+        }
+      }
+
+      tr + tr.open {
+        td {
+          border-top-width: 0px !important;
+        }
+      }
+    }
+  }
+  &.table.borderless {
+    > tbody {
+      tr {
+        td {
+          border-bottom: 1px solid transparent;
+        }
+
+        .expand-row(0px solid transparent);
+      }
+
+      tr + tr.open {
+        td {
+          border-top-width: 1px !important;
+        }
+      }
+    }
+  }
+
+  &.table.vborder {
     tr {
-      background: @tableClassicStripelessRowBackgroundColor !important;
+      th:not(:last-child), td:not(:last-child) {
+        border-right: 1px solid @tableThTdBorderColor;
+      }
+
+      .expand-row(1px solid @tableTdExpandBorderColor);
+    }
+  }
+  &.table.vborderless {
+    tr {
+      th:not(:last-child), td:not(:last-child) {
+        border-right: 1px solid transparent;
+      }
+
+      .expand-row(1px solid @tableTdExpandBorderColor);
     }
   }
 
   .table.stripe;
+  .table.border;
+  .table.vborder;
 }
 .table.hover {
   > tbody > tr:hover:not(.selected):not(.dragtarget) {
-    background: @tableClassicHoverRowBackgroundColor;
+    background: @tableTdHoverBackgroundColor;
   }
 }
+
+
+// Table Expanded-Row
+// --------------------------------------------------
+.expand-row(@borderColor) {
+  &.open {
+    background: @tableBackgroundColor !important;
+    box-shadow: @tableTdExpandBoxShadow;
+
+    > td {
+      border-top: 1px solid @tableThTdBorderColor;
+      border-bottom: @borderColor !important;
+
+      &:first-child {
+        border-left: 2px solid @tableTdExpandPointBorderColor !important;
+      }
+      &:last-child {
+        border-right: 1px solid @tableThTdBorderColor !important;
+      }
+    }
+  }
+  &.expand {
+    background: @tableBackgroundColor !important;
+    box-shadow: @tableTdExpandBoxShadow;
+
+    > td {
+      border-bottom: 1px solid @tableThTdBorderColor;
+      padding: 25px 42px;
+
+      &:first-child {
+        border-left: 2px solid @tableTdExpandPointBorderColor !important;
+      }
+      &:last-child {
+        border-right: 1px solid @tableThTdBorderColor !important;
+      }
+    }
+  }
+}
+
 
 // Table Input-Cell
 // --------------------------------------------------
@@ -173,30 +247,6 @@ table.table {
         height: 2px !important;
         background: @tableDragLineRowBackgroundColor !important;
       }
-    }
-  }
-}
-
-// Table Expend Row
-// --------------------------------------------------
-.expand-row() {
-  tr.open, tr.expand {
-    .btn-bgcolor-2(@tableExpandRowBackgroundColor, @tableExpandRowBackgroundColor) !important;
-
-    &:hover {
-      .btn-bgcolor-2(@tableExpandRowBackgroundColor, @tableExpandRowBackgroundColor) !important;
-    }
-  }
-
-  tr.open > td {
-    font-weight: bold;
-  }
-
-  tr.expand > td {
-    background: @tableExpandRowBackgroundColor;
-
-    &:hover {
-      background: @tableExpandRowBackgroundColor;
     }
   }
 }
