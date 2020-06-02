@@ -486,7 +486,7 @@ export default {
             }
 
             function getScrollBarWidth(self) {
-                return self.options.buffer == "page" ? 0 : _.scrollWidth() + 1;
+                return self.options.buffer == "page" ? 0 : _.scrollWidth();
             }
 
             function renderVirtualScroll(scrollTop) {

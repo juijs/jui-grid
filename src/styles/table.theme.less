@@ -122,6 +122,24 @@ table.table {
     }
   }
 
+  &.table.outline {
+    > tbody {
+      tr {
+        td:first-child {
+          &:not(.open) {
+            border-left: 1px solid @tableThTdBorderColor;
+          }
+        }
+
+        td:last-child {
+          &:not(.open) {
+            border-right: 1px solid @tableThTdBorderColor;
+          }
+        }
+      }
+    }
+  }
+
   .table.stripe;
   .table.border;
   .table.vborder;
