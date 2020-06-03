@@ -7,16 +7,16 @@ table.table {
   > thead {
     > tr {
       > th {
-        color: @tableThTdFontColor;
-        border-top: 1px solid @tableThTdBorderColor;
-        border-bottom: 1px solid @tableThTdBorderColor;
+        color: @tableThFontColor;
+        border-top: 1px solid @tableThBorderColor;
+        border-bottom: 1px solid @tableThBorderColor;
   
         &:first-child {
-          border-left: 1px solid @tableThTdBorderColor;
+          border-left: 1px solid @tableThBorderColor;
         }
   
         &:last-child {
-          border-right: 1px solid @tableThTdBorderColor;
+          border-right: 1px solid @tableThBorderColor;
         }
       }
     }
@@ -25,7 +25,7 @@ table.table {
   > tbody {
     > tr {
       > td {
-        color: @tableThTdFontColor;
+        color: @tableTdFontColor;
       }
 
       &.selected {
@@ -72,7 +72,7 @@ table.table {
     > tbody {
       tr {
         td {
-          border-bottom: 1px solid @tableThTdBorderColor;
+          border-bottom: 1px solid @tableTdBorderColor;
         }
       }
 
@@ -102,11 +102,22 @@ table.table {
   }
 
   &.table.vborder {
-    tr {
-      th:not(:last-child), td:not(:last-child) {
-        border-right: 1px solid @tableThTdBorderColor;
+    > thead {
+      tr {
+        th:not(:last-child), td:not(:last-child) {
+          border-right: 1px solid @tableThBorderColor;
+        }
       }
-
+    }
+    > tbody {
+      tr {
+        th:not(:last-child), td:not(:last-child) {
+          border-right: 1px solid @tableTdBorderColor;
+        }
+      }
+    }
+    
+    tr {
       .expand-row(1px solid @tableTdExpandBorderColor);
     }
   }
@@ -125,13 +136,13 @@ table.table {
       tr {
         td:first-child {
           &:not(.open) {
-            border-left: 1px solid @tableThTdBorderColor;
+            border-left: 1px solid @tableTdBorderColor;
           }
         }
 
         td:last-child {
           &:not(.open) {
-            border-right: 1px solid @tableThTdBorderColor;
+            border-right: 1px solid @tableTdBorderColor;
           }
         }
       }
@@ -143,6 +154,9 @@ table.table {
   .table.vborder;
 }
 .table.hover {
+  > thead th:hover {
+    color: @tableThHoverFontColor;
+  }
   > tbody > tr:hover:not(.selected):not(.dragtarget) {
     background: @tableTdHoverBackgroundColor;
   }
@@ -157,14 +171,14 @@ table.table {
     box-shadow: @tableTdExpandBoxShadow;
 
     > td {
-      border-top: 1px solid @tableThTdBorderColor;
+      border-top: 1px solid @tableTdBorderColor;
       border-bottom: @borderColor !important;
 
       &:first-child {
         border-left: 2px solid @tableTdExpandPointBorderColor !important;
       }
       &:last-child {
-        border-right: 1px solid @tableThTdBorderColor !important;
+        border-right: 1px solid @tableTdBorderColor !important;
       }
     }
   }
@@ -173,14 +187,14 @@ table.table {
     box-shadow: @tableTdExpandBoxShadow;
 
     > td {
-      border-bottom: 1px solid @tableThTdBorderColor;
+      border-bottom: 1px solid @tableTdBorderColor;
       padding: 25px 42px;
 
       &:first-child {
         border-left: 2px solid @tableTdExpandPointBorderColor !important;
       }
       &:last-child {
-        border-right: 1px solid @tableThTdBorderColor !important;
+        border-right: 1px solid @tableTdBorderColor !important;
       }
     }
   }
