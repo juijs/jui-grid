@@ -136,11 +136,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _binder = __webpack_require__(8);
+var _binder = __webpack_require__(7);
 
 var _binder2 = _interopRequireDefault(_binder);
 
-var _core = __webpack_require__(9);
+var _core = __webpack_require__(8);
 
 var _core2 = _interopRequireDefault(_core);
 
@@ -2319,16 +2319,6 @@ exports.default = _juijs2.default;
 "use strict";
 
 
-__webpack_require__(16);
-__webpack_require__(7);
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _main = __webpack_require__(1);
@@ -2339,7 +2329,7 @@ var _table = __webpack_require__(3);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _xtable = __webpack_require__(12);
+var _xtable = __webpack_require__(11);
 
 var _xtable2 = _interopRequireDefault(_xtable);
 
@@ -2352,7 +2342,7 @@ if ((typeof window === 'undefined' ? 'undefined' : _typeof(window)) == "object")
 }
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2727,7 +2717,7 @@ function ViewData(type, elem) {
 }
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2745,11 +2735,11 @@ var _main = __webpack_require__(1);
 
 var _main2 = _interopRequireDefault(_main);
 
-var _column = __webpack_require__(10);
+var _column = __webpack_require__(9);
 
 var _column2 = _interopRequireDefault(_column);
 
-var _row = __webpack_require__(11);
+var _row = __webpack_require__(10);
 
 var _row2 = _interopRequireDefault(_row);
 
@@ -3277,7 +3267,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3341,7 +3331,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3655,7 +3645,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3669,7 +3659,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _lodash = __webpack_require__(13);
+var _lodash = __webpack_require__(12);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -3685,7 +3675,7 @@ var _dropdown = __webpack_require__(4);
 
 var _dropdown2 = _interopRequireDefault(_dropdown);
 
-var _modal = __webpack_require__(15);
+var _modal = __webpack_require__(14);
 
 var _modal2 = _interopRequireDefault(_modal);
 
@@ -5638,7 +5628,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6081,10 +6071,10 @@ function toNumber(value) {
 }
 
 module.exports = throttle;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(14)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(13)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6114,7 +6104,7 @@ try {
 module.exports = g;
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6392,12 +6382,6 @@ exports.default = {
         return UI;
     }
 };
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
