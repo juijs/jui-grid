@@ -3760,7 +3760,7 @@ exports.default = {
             }
 
             function createTableList(self) {
-                var exceptOpts = ["buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder", "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "msort"];
+                var exceptOpts = ["buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder", "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "msort", "vscrollKeydownEvent"];
 
                 var $root = (0, _jquery2.default)(self.root);
 

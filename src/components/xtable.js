@@ -69,7 +69,7 @@ export default {
             function createTableList(self) {
                 var exceptOpts = [
                     "buffer", "bufferCount", "csvCount", "sortLoading", "sortCache", "sortIndex", "sortOrder",
-                    "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "msort"
+                    "event", "rows", "scrollWidth", "width", "rowHeight", "xssFilter", "msort", "vscrollKeydownEvent"
                 ];
 
                 var $root = $(self.root);
