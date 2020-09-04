@@ -304,7 +304,7 @@ export default {
                 }, 100));
                 
                 // 스크롤 키보드 이벤트 설정
-                if(opts.buffer == "vscroll") {
+                if(opts.buffer == "vscroll" && opts.vscrollKeydownEvent) {
                     $(self.root).hover(function() {
                         vscroll_info.is_focus = true;
                     }, function() {
@@ -322,6 +322,8 @@ export default {
                                 var newTick = tick * vscroll_info.scroll_count;
                                 $body.scrollTop(top + ((e.which == 33) ? -newTick : newTick));
                             }
+
+                            e.preventDefault();
                         }
                     });
                 }
@@ -1845,7 +1847,12 @@ export default {
                  *
                  * @deprecated
                  */
-                animate: false
+                animate: false,
+
+                /**
+                 * @cfg {Boolean} [vscrollKeydownEvent=true]
+                 */
+                vscrollKeydownEvent: true
             }
         }
 
