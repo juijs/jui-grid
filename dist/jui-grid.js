@@ -4014,8 +4014,6 @@ exports.default = {
                                 var newTick = tick * vscroll_info.scroll_count;
                                 $body.scrollTop(top + (e.which == 33 ? -newTick : newTick));
                             }
-
-                            e.preventDefault();
                         }
                     });
                 }
