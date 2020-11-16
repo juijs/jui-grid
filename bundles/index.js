@@ -4,10 +4,11 @@ import XTableComp from '../src/components/xtable.js'
 import graph from 'juijs-chart';
 import ClassicTheme from 'juijs-chart/src/theme/classic';
 import StackBar from './stackbar2';
+import Range from './range';
 import './index.less'
 
 jui.use(XTableComp);
-graph.use(ClassicTheme, StackBar)
+graph.use(ClassicTheme, StackBar, Range)
 
 function getRandomData(count) {
     var data = [];
@@ -19,7 +20,7 @@ function getRandomData(count) {
     return data;
 }
 
-function createBarChart(elem) {
+function createBarChart(elem, domain) {
     return graph.create('chart.builder', elem, {
         theme : "classic",
         width: '100%',
@@ -27,7 +28,7 @@ function createBarChart(elem) {
         padding: 0,
         axis : {
             data : [
-                { blank: 0, method: 0, sql: 10, externalCall: 0, batchJob: 10 },
+                { blank: 10, method: 0, sql: 10, externalCall: 0, batchJob: 10 },
             ],
             y : {
                 domain : [ '' ],
@@ -35,7 +36,7 @@ function createBarChart(elem) {
             },
             x : {
                 type : 'range',
-                domain : [0, 20],
+                domain : domain,
                 hide: true
             }
         },
@@ -54,10 +55,43 @@ function createBarChart(elem) {
     });
 }
 
-jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
-    
-    // console.log(chartObj.svg.toDataURI())
+function createGrid(elem, domain) {
+    return graph.create('chart.builder', elem, {
+        theme : "classic",
+        width: '100%',
+        height : 14,
+        padding: 0,
+        axis : {
+            x : {
+                type : 'range',
+                domain : domain,
+                line: 'solid'
+            },
+            y : {
+                domain : [''],
+                hide: true
+            }
+        },
+        brush: [{
+            type: 'range',
+            domain : domain,
+            splitCount: 10
+        }],
+        style: {
+            gridXAxisBorderWidth : 0,
+            gridYAxisBorderWidth : 0,
+            gridTickBorderSize : 0,
+            gridTickBorderWidth : 0,
+            gridTickPadding : 0,
+            gridXFontSize: 0,
+            gridBorderWidth: 0,
+        }
+    });
+}
 
+const domain = [0, 100];
+
+jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {    
     window.xtable = xtableUI("#xtable", {
         fields: [ null, "min.value", "max", "count", "hash", "failure", "sumTime", "avgTime", "name" ],
         csvNumber: [ 1, 2, 3, 4, 5, 6, "avgTime" ],
@@ -74,9 +108,6 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
             colmenu: function(column, e) {
                 this.toggleColumnMenu(e.pageX - 25);
             },
-            colresize: function() {
-                console.log("resize");
-            },
             select: function(row, e) {
                 //console.log(row);
 
@@ -88,13 +119,28 @@ jui.ready([ "util.base", "grid.xtable" ], function(_, xtableUI) {
                     }
                 }
             },
+            colresize: function(col) {
+                console.log("resize", col, this.grid);
+
+                if (!col && !this.grid) {
+                    const newElem = document.createElement('span');
+                    newElem.style = 'display: inline-block; width: 100%;';
+                    $(this.root).children('.head').find("th.chart").append(newElem);
+                    this.grid = createGrid(newElem, domain);
+                }
+                
+                if (col && col.name === 'max') {
+                    this.next();
+                    this.grid.render();
+                }
+            },
             next: function(rows) {
                 rows.forEach(row => {
                     const newElem = document.createElement('span');
                     newElem.style = 'display: inline-block; width: 100%;';
 
                     $(row.element).children('td.chart').append(newElem);
-                    createBarChart(newElem);
+                    createBarChart(newElem, domain);
                 });
             }
         }
