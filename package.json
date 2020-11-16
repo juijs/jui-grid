@@ -67,9 +67,10 @@
   ],
   "dependencies": {
     "jquery": "^3.4.1",
-    "lodash.throttle": "^4.1.1",
     "juijs": "^2.3.0",
-    "juijs-ui": "^2.3.3"
+    "juijs-chart": "^2.6.9",
+    "juijs-ui": "^2.3.3",
+    "lodash.throttle": "^4.1.1"
   },
   "devDependencies": {
     "babel": "^6.23.0",

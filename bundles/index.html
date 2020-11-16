@@ -10,13 +10,15 @@
 
 <button id="btn">Run</button><br/><br/>
 
+<div id="chart"></div>
+<br/>
 <div id="xtable" class="xtable">
 	<table class="table">
 		<thead>
 		<tr>
-			<th width="100px"></th>
-			<th width="50%" class="sorted">Min</th>
-			<th>Max</th>
+			<th width="50px"></th>
+			<th width="30%" class="sorted">Min</th>
+			<th width="30%">Max</th>
 			<th>Count</th>
 			<th>Hash</th>
 			<th>Failure</th>
@@ -55,7 +57,7 @@
             </span>
             <!= min.value !>
         </td>
-        <td><!= max !></td>
+        <td class="chart"></td>
         <td><!= count !></td>
         <td><!= hash !></td>
         <td><!= failure !></td>

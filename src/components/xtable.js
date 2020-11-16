@@ -963,6 +963,8 @@ export default {
                     if(this.options.buffer != "vscroll") {
                         this.emit("next", [ page ]);
                         if (tmpDataList.length > 0) page++;
+                    } else {
+                        this.emit('next', [ tmpDataList ]);
                     }
                 }
 
