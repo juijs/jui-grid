@@ -40,7 +40,7 @@ module.exports = (theme) => {
                     fallback: "style-loader"
                 })
             }, {
-                test: /\.(png|jpg|gif)$/i,
+                test: /\.(ttf|eot|svg|woff|png|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 use: [
                     {
                         loader: 'url-loader',
