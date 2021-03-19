@@ -22,6 +22,16 @@ table.table {
         &.sorted {
           color: @tableThHoverFontColor;
         }
+
+        [class^="icon-"], [class*=" icon-"] {
+          &.icon-asc {
+            background-image: url(@tableSortingIconUrl);
+          }
+          &.icon-desc {
+            background-image: url(@tableSortingIconUrl);
+            transform: rotate(180deg);
+          }
+        }
       }
     }
   }
